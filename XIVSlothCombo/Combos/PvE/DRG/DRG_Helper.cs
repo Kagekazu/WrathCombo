@@ -237,7 +237,6 @@ internal partial class DRG
             Nastrond,
             MirageDive,
             WyrmwindThrust,
-            RiseOfTheDragon,
             Starcross,
             Variant.VariantRampart,
             All.TrueNorth
@@ -247,7 +246,8 @@ internal partial class DRG
         [
             Jump,
             HighJump,
-            DragonfireDive
+            DragonfireDive,
+            RiseOfTheDragon 
         ];
 
         internal static uint SlowLock => Stardiver;
