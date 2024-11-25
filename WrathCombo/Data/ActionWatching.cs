@@ -212,10 +212,21 @@ namespace WrathCombo.Data
         public static bool HasDoubleWeaved()
         {
             if (CombatActions.Count < 2) return false;
-            var lastAction = CombatActions.Last();
-            var secondLastAction = CombatActions[^2];
 
-            return (GetAttackType(lastAction) == GetAttackType(secondLastAction) && GetAttackType(lastAction) == ActionAttackType.Ability);
+            uint lastAction = CombatActions.Last();
+            uint secondLastAction = CombatActions[^2];
+
+            return GetAttackType(lastAction) == GetAttackType(secondLastAction) &&
+                   GetAttackType(lastAction) == ActionAttackType.Ability;
+        }
+
+        public static bool HasWeaved()
+        {
+            if (CombatActions.Count < 1) return false;
+
+            uint lastAction = CombatActions.Last();
+
+            return GetAttackType(lastAction) == ActionAttackType.Ability;
         }
 
 
