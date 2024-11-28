@@ -178,45 +178,59 @@ internal partial class SGE
 
         protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
         {
+            Status? sustainedDamage = FindTargetEffect(Variant.Debuffs.SustainedDamage);
+            uint PhlegmaID = OriginalHook(Phlegma);
+            uint ToxikonID = OriginalHook(Toxikon);
+
             if (DyskrasiaList.Contains(actionID))
                 if (!HasEffect(Buffs.Eukrasia))
                 {
-                    // Variant Rampart
-                    if (IsEnabled(CustomComboPreset.SGE_DPS_Variant_Rampart) &&
-                        IsEnabled(Variant.VariantRampart) &&
-                        IsOffCooldown(Variant.VariantRampart) &&
-                        CanSpellWeave(actionID))
-                        return Variant.VariantRampart;
+                    if (CanSpellWeave(ActionWatching.LastSpell))
+                    {
+                        // Variant Rampart
+                        if (IsEnabled(CustomComboPreset.SGE_DPS_Variant_Rampart) &&
+                            IsEnabled(Variant.VariantRampart) &&
+                            IsOffCooldown(Variant.VariantRampart))
+                            return Variant.VariantRampart;
 
-                    // Variant Spirit Dart
-                    Status? sustainedDamage = FindTargetEffect(Variant.Debuffs.SustainedDamage);
+                        // Variant Spirit Dart
+                        if (IsEnabled(CustomComboPreset.SGE_DPS_Variant_SpiritDart) &&
+                            IsEnabled(Variant.VariantSpiritDart) &&
+                            (sustainedDamage is null || sustainedDamage.RemainingTime <= 3))
+                            return Variant.VariantSpiritDart;
 
-                    if (IsEnabled(CustomComboPreset.SGE_DPS_Variant_SpiritDart) &&
-                        IsEnabled(Variant.VariantSpiritDart) &&
-                        (sustainedDamage is null || sustainedDamage?.RemainingTime <= 3) &&
-                        CanSpellWeave(actionID))
-                        return Variant.VariantSpiritDart;
+                        // Lucid Dreaming
+                        if (IsEnabled(CustomComboPreset.SGE_AoE_DPS_Lucid) &&
+                            ActionReady(All.LucidDreaming) &&
+                            LocalPlayer.CurrentMp <= Config.SGE_AoE_DPS_Lucid)
+                            return All.LucidDreaming;
 
-                    // Lucid Dreaming
-                    if (IsEnabled(CustomComboPreset.SGE_AoE_DPS_Lucid) &&
-                        ActionReady(All.LucidDreaming) && CanSpellWeave(Dosis) &&
-                        LocalPlayer.CurrentMp <= Config.SGE_AoE_DPS_Lucid)
-                        return All.LucidDreaming;
+                        // Psyche
+                        if (IsEnabled(CustomComboPreset.SGE_AoE_DPS_Psyche))
+                            if (ActionReady(Psyche) &&
+                                HasBattleTarget() &&
+                                InActionRange(Psyche))
+                                return Psyche;
 
-                    // Rhizomata
-                    if (IsEnabled(CustomComboPreset.SGE_AoE_DPS_Rhizo) && CanSpellWeave(Dosis) &&
-                        ActionReady(Rhizomata) && Gauge.Addersgall <= Config.SGE_AoE_DPS_Rhizo)
-                        return Rhizomata;
+                        // Rhizomata
+                        if (IsEnabled(CustomComboPreset.SGE_AoE_DPS_Rhizo) &&
+                            ActionReady(Rhizomata) && Gauge.Addersgall <= Config.SGE_AoE_DPS_Rhizo)
+                            return Rhizomata;
 
-                    //Soteria
-                    if (IsEnabled(CustomComboPreset.SGE_AoE_DPS_Soteria) && CanSpellWeave(ActionWatching.LastSpell) &&
-                        ActionReady(Soteria) && HasEffect(Buffs.Kardia))
-                        return Soteria;
+                        //Soteria
+                        if (IsEnabled(CustomComboPreset.SGE_AoE_DPS_Soteria) &&
+                            ActionReady(Soteria) && HasEffect(Buffs.Kardia))
+                            return Soteria;
+
+                        // Addersgall Protection
+                        if (IsEnabled(CustomComboPreset.SGE_AoE_DPS_AddersgallProtect) &&
+                            ActionReady(Druochole) && Gauge.Addersgall >= Config.SGE_AoE_DPS_AddersgallProtect)
+                            return Druochole;
+                    }
 
                     // Addersgall Protection
                     if (IsEnabled(CustomComboPreset.SGE_AoE_DPS_AddersgallProtect) &&
-                        CanSpellWeave(ActionWatching.LastSpell) &&
-                        ActionReady(Druochole) && Gauge.Addersgall >= Config.SGE_AoE_DPS_AddersgallProtect)
+                        Gauge.Addersting == 3 && HasEffect(Buffs.EukrasianPrognosis))
                         return Druochole;
 
                     //Eukrasia for DoT
@@ -232,9 +246,9 @@ internal partial class SGE
                             float dotDebuff = Math.Max(GetDebuffRemainingTime(dotDebuffID),
                                 GetDebuffRemainingTime(Debuffs.EukrasianDyskrasia));
 
-                            float
+                            const float
                                 refreshtimer =
-                                    3; //Will revisit if it's really needed....SGE_ST_DPS_EDosis_Adv ? Config.SGE_ST_DPS_EDosisThreshold : 3;
+                                    4; //Will revisit if it's really needed....SGE_ST_DPS_EDosis_Adv ? Config.SGE_ST_DPS_EDosisThreshold : 3;
 
                             if (dotDebuff <= refreshtimer &&
                                 GetTargetHPPercent() >
@@ -242,36 +256,17 @@ internal partial class SGE
                                 return Eukrasia;
                         }
 
-                    // Psyche
-                    if (IsEnabled(CustomComboPreset.SGE_AoE_DPS_Psyche))
-                        if (ActionReady(Psyche) &&
-                            HasBattleTarget() &&
-                            InActionRange(Psyche) &&
-                            CanSpellWeave(actionID))
-                            return Psyche;
-
                     //Phlegma
-                    if (IsEnabled(CustomComboPreset.SGE_AoE_DPS_Phlegma))
-                    {
-                        uint PhlegmaID = OriginalHook(Phlegma);
-
-                        if (ActionReady(PhlegmaID) &&
-                            HasBattleTarget() &&
-                            InActionRange(PhlegmaID))
-                            return PhlegmaID;
-                    }
+                    if (IsEnabled(CustomComboPreset.SGE_AoE_DPS_Phlegma) &&
+                        ActionReady(PhlegmaID) && HasBattleTarget() &&
+                        InActionRange(PhlegmaID))
+                        return PhlegmaID;
 
                     //Toxikon
-                    if (IsEnabled(CustomComboPreset.SGE_AoE_DPS_Toxikon))
-                    {
-                        uint ToxikonID = OriginalHook(Toxikon);
-
-                        if (ActionReady(ToxikonID) &&
-                            HasBattleTarget() &&
-                            InActionRange(ToxikonID) &&
-                            Gauge.HasAddersting())
-                            return ToxikonID;
-                    }
+                    if (IsEnabled(CustomComboPreset.SGE_AoE_DPS_Toxikon) &&
+                        ActionReady(ToxikonID) && HasBattleTarget() &&
+                        InActionRange(ToxikonID) && Gauge.HasAddersting())
+                        return ToxikonID;
                 }
 
             return actionID;
@@ -291,6 +286,7 @@ internal partial class SGE
 
         protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
         {
+            uint phlegma = OriginalHook(Phlegma);
             bool ActionFound = actionID is Dosis2 || (!Config.SGE_ST_DPS_Adv && DosisList.ContainsKey(actionID));
 
             if (ActionFound)
@@ -305,32 +301,40 @@ internal partial class SGE
                     if (SGEOpener.DoFullOpener(ref actionID))
                         return actionID;
 
-                // Lucid Dreaming
-                if (IsEnabled(CustomComboPreset.SGE_ST_DPS_Lucid) &&
-                    All.CanUseLucid(actionID, Config.SGE_ST_DPS_Lucid))
-                    return All.LucidDreaming;
+                if (CanSpellWeave(ActionWatching.LastSpell))
+                {
+                    // Lucid Dreaming
+                    if (IsEnabled(CustomComboPreset.SGE_ST_DPS_Lucid) &&
+                        All.CanUseLucid(actionID, Config.SGE_ST_DPS_Lucid))
+                        return All.LucidDreaming;
 
-                // Variant
-                if (IsEnabled(CustomComboPreset.SGE_DPS_Variant_Rampart) &&
-                    IsEnabled(Variant.VariantRampart) &&
-                    IsOffCooldown(Variant.VariantRampart) &&
-                    CanSpellWeave(actionID))
-                    return Variant.VariantRampart;
+                    // Variant
+                    if (IsEnabled(CustomComboPreset.SGE_DPS_Variant_Rampart) &&
+                        IsEnabled(Variant.VariantRampart) &&
+                        IsOffCooldown(Variant.VariantRampart))
+                        return Variant.VariantRampart;
 
-                // Rhizomata
-                if (IsEnabled(CustomComboPreset.SGE_ST_DPS_Rhizo) && CanSpellWeave(actionID) &&
-                    ActionReady(Rhizomata) && Gauge.Addersgall <= Config.SGE_ST_DPS_Rhizo)
-                    return Rhizomata;
+                    // Psyche
+                    if (IsEnabled(CustomComboPreset.SGE_ST_DPS_Psyche) &&
+                        ActionReady(Psyche) &&
+                        InCombat())
+                        return Psyche;
 
-                //Soteria
-                if (IsEnabled(CustomComboPreset.SGE_ST_DPS_Soteria) && CanSpellWeave(ActionWatching.LastSpell) &&
-                    ActionReady(Soteria) && HasEffect(Buffs.Kardia))
-                    return Soteria;
+                    // Rhizomata
+                    if (IsEnabled(CustomComboPreset.SGE_ST_DPS_Rhizo) &&
+                        ActionReady(Rhizomata) && Gauge.Addersgall <= Config.SGE_ST_DPS_Rhizo)
+                        return Rhizomata;
 
-                // Addersgall Protection
-                if (IsEnabled(CustomComboPreset.SGE_ST_DPS_AddersgallProtect) && CanSpellWeave(Dosis) &&
-                    ActionReady(Druochole) && Gauge.Addersgall >= Config.SGE_ST_DPS_AddersgallProtect)
-                    return Druochole;
+                    //Soteria
+                    if (IsEnabled(CustomComboPreset.SGE_ST_DPS_Soteria) &&
+                        ActionReady(Soteria) && HasEffect(Buffs.Kardia))
+                        return Soteria;
+
+                    // Addersgall Protection
+                    if (IsEnabled(CustomComboPreset.SGE_ST_DPS_AddersgallProtect) &&
+                        ActionReady(Druochole) && Gauge.Addersgall >= Config.SGE_ST_DPS_AddersgallProtect)
+                        return Druochole;
+                }
 
                 if (HasBattleTarget() && !HasEffect(Buffs.Eukrasia))
 
@@ -358,7 +362,9 @@ internal partial class SGE
                             if (TraitLevelChecked(Traits.OffensiveMagicMasteryII))
                                 dotDebuff = Math.Max(dotDebuff, GetDebuffRemainingTime(Debuffs.EukrasianDyskrasia));
 
-                            float refreshtimer = Config.SGE_ST_DPS_EDosis_Adv ? Config.SGE_ST_DPS_EDosisThreshold : 3;
+                            float refreshtimer = Config.SGE_ST_DPS_EDosis_Adv 
+                                ? Config.SGE_ST_DPS_EDosisThreshold 
+                                : 6;
 
                             if (dotDebuff <= refreshtimer &&
                                 GetTargetHPPercent() > Config.SGE_ST_DPS_EDosisHPPer)
@@ -366,26 +372,19 @@ internal partial class SGE
                         }
 
                     // Phlegma
-                    if (IsEnabled(CustomComboPreset.SGE_ST_DPS_Phlegma) && InCombat())
-                    {
-                        uint phlegma = OriginalHook(Phlegma);
-
-                        if (InActionRange(phlegma) && ActionReady(phlegma)) return phlegma;
-                    }
-
-                    // Psyche
-                    if (IsEnabled(CustomComboPreset.SGE_ST_DPS_Psyche) &&
-                        ActionReady(Psyche) &&
-                        InCombat() &&
-                        CanSpellWeave(actionID))
-                        return Psyche;
+                    if (IsEnabled(CustomComboPreset.SGE_ST_DPS_Phlegma) && InCombat() &&
+                        InActionRange(phlegma) && ActionReady(phlegma) &&
+                        (!LevelChecked(Psyche) ||
+                         (LevelChecked(Psyche) &&
+                          ((GetCooldownRemainingTime(Psyche) >= 37 &&
+                            GetRemainingCharges(phlegma) == GetMaxCharges(phlegma)) ||
+                           ActionReady(Psyche) ||
+                           JustUsed(Psyche)))))
+                        return phlegma;
 
                     // Movement Options
                     if (IsEnabled(CustomComboPreset.SGE_ST_DPS_Movement) && InCombat() && IsMoving)
                     {
-                        // Psyche
-                        if (Config.SGE_ST_DPS_Movement[3] && ActionReady(Psyche)) return Psyche;
-
                         // Toxikon
                         if (Config.SGE_ST_DPS_Movement[0] && LevelChecked(Toxikon) && Gauge.HasAddersting())
                             return OriginalHook(Toxikon);
@@ -528,9 +527,8 @@ internal partial class SGE
                     int index = Config.SGE_AoE_Heals_Priority.IndexOf(prio);
                     int config = SGEHelper.GetMatchingConfigAoE(index, out uint spell, out bool enabled);
 
-                    if (enabled)
-                        if (ActionReady(spell))
-                            return spell;
+                    if (enabled && ActionReady(spell)) 
+                        return spell;
                 }
 
                 if (IsEnabled(CustomComboPreset.SGE_AoE_Heal_EPrognosis) && LevelChecked(Eukrasia) &&
