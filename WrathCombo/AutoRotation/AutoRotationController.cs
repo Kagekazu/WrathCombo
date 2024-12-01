@@ -29,7 +29,7 @@ namespace WrathCombo.AutoRotation
         static bool LockedST = false;
         static bool LockedAoE = false;
 
-        static Func<IBattleChara, bool> RezQuery => x => x.IsDead && CustomComboFunctions.FindEffectOnMember(2648, x) == null && CustomComboFunctions.FindEffectOnMember(148, x) == null && x.IsTargetable() && CustomComboFunctions.TimeSpentDead(x.GameObjectId).TotalSeconds > 2;
+        static Func<IBattleChara, bool> RezQuery => x => x.IsDead && CustomComboFunctions.FindEffectOnMember(2648, x) == null && CustomComboFunctions.FindEffectOnMember(148, x) == null && x.IsTargetable && CustomComboFunctions.TimeSpentDead(x.GameObjectId).TotalSeconds > 2;
 
         internal static void Run()
         {
@@ -147,7 +147,7 @@ namespace WrathCombo.AutoRotation
 
             if (regenSpell != 0 && Svc.Targets.FocusTarget != null && (!CustomComboFunctions.MemberHasEffect(regenBuff, Svc.Targets.FocusTarget, true, out var regen) || regen?.RemainingTime <= 5f))
             {
-                var query = Svc.Objects.Where(x => !x.IsDead && x.ObjectKind == Dalamud.Game.ClientState.Objects.Enums.ObjectKind.BattleNpc).Cast<IBattleNpc>().Where(x => x.BattleNpcKind == Dalamud.Game.ClientState.Objects.Enums.BattleNpcSubKind.Enemy && x.IsTargetable());
+                var query = Svc.Objects.Where(x => !x.IsDead && x.ObjectKind == Dalamud.Game.ClientState.Objects.Enums.ObjectKind.BattleNpc).Cast<IBattleNpc>().Where(x => x.BattleNpcKind == Dalamud.Game.ClientState.Objects.Enums.BattleNpcSubKind.Enemy && x.IsTargetable);
                 if (!query.Any())
                     return;
 
@@ -459,7 +459,7 @@ namespace WrathCombo.AutoRotation
             {
                 if (outAct is SGE.Druochole && !attributes.AutoAction.IsHeal)
                 {
-                    if (CustomComboFunctions.GetPartyMembers().Where(x => !x.IsDead && x.IsTargetable() && CustomComboFunctions.IsInLineOfSight(x) && CustomComboFunctions.GetTargetDistance(x) < 30).OrderBy(x => CustomComboFunctions.GetTargetHPPercent(x)).TryGetFirst(out newtarget))
+                    if (CustomComboFunctions.GetPartyMembers().Where(x => !x.IsDead && x.IsTargetable && CustomComboFunctions.IsInLineOfSight(x) && CustomComboFunctions.GetTargetDistance(x) < 30).OrderBy(x => CustomComboFunctions.GetTargetHPPercent(x)).TryGetFirst(out newtarget))
                         return true;
                 }
 
