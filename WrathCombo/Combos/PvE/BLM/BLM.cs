@@ -131,8 +131,9 @@ internal static partial class BLM
                             : Foul;
                 }
 
-                if (ActionReady(Blizzard3))
-                    return Blizzard3;
+                return LevelChecked(Blizzard3)
+                    ? Blizzard3
+                    : Transpose;
             }
 
             if (Gauge.InUmbralIce)
@@ -193,8 +194,9 @@ internal static partial class BLM
                     curMp is MP.MaxMP && HasEffect(Buffs.Firestarter))
                     return Transpose;
 
-                if (LevelChecked(Fire3))
-                    return Fire3;
+                return LevelChecked(Fire3)
+                    ? Fire3
+                    : Transpose;
             }
 
             if (Blizzard3.LevelChecked())
@@ -352,8 +354,9 @@ internal static partial class BLM
                             : Foul;
                 }
 
-                if (ActionReady(Blizzard3))
-                    return Blizzard3;
+                return LevelChecked(Blizzard3)
+                    ? Blizzard3
+                    : Transpose;
             }
 
             if (Gauge.InUmbralIce)
@@ -421,8 +424,9 @@ internal static partial class BLM
                     curMp is MP.MaxMP && HasEffect(Buffs.Firestarter))
                     return Transpose;
 
-                if (LevelChecked(Fire3))
-                    return Fire3;
+                return LevelChecked(Fire3)
+                    ? Fire3
+                    : Transpose;
             }
 
             if (Blizzard3.LevelChecked())
