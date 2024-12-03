@@ -150,19 +150,20 @@ internal class All
 
         protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
         {
-            if (actionID is LowBlow or PLD.ShieldBash)
+            switch (actionID)
             {
-                if (CanInterruptEnemy() && ActionReady(Interject))
+                case LowBlow or PLD.ShieldBash when CanInterruptEnemy() && ActionReady(Interject):
                     return Interject;
 
-                if (ActionReady(LowBlow))
+                case LowBlow or PLD.ShieldBash when ActionReady(LowBlow):
                     return LowBlow;
 
-                if (actionID == PLD.ShieldBash && IsOnCooldown(LowBlow))
+                case LowBlow or PLD.ShieldBash when actionID == PLD.ShieldBash && IsOnCooldown(LowBlow):
+                    return actionID;
+
+                default:
                     return actionID;
             }
-
-            return actionID;
         }
     }
 
@@ -185,20 +186,24 @@ internal class All
 
         protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
         {
-            if (actionID is WHM.Raise or AST.Ascend or SGE.Egeiro
-                || (actionID is SCH.Resurrection && LocalPlayer.ClassJob.Value.RowId is SCH.JobID))
+            switch (actionID)
             {
-                if (ActionReady(Swiftcast))
-                    return Swiftcast;
+                case WHM.Raise or AST.Ascend or SGE.Egeiro:
+                case SCH.Resurrection when LocalPlayer.ClassJob.Value.RowId is SCH.JobID:
+                {
+                    if (ActionReady(Swiftcast))
+                        return Swiftcast;
 
-                if (actionID == WHM.Raise && IsEnabled(CustomComboPreset.WHM_ThinAirRaise) &&
-                    ActionReady(WHM.ThinAir) && !HasEffect(WHM.Buffs.ThinAir))
-                    return WHM.ThinAir;
+                    if (actionID == WHM.Raise && IsEnabled(CustomComboPreset.WHM_ThinAirRaise) &&
+                        ActionReady(WHM.ThinAir) && !HasEffect(WHM.Buffs.ThinAir))
+                        return WHM.ThinAir;
 
-                return actionID;
+                    return actionID;
+                }
+
+                default:
+                    return actionID;
             }
-
-            return actionID;
         }
     }
 
@@ -221,18 +226,23 @@ internal class All
 
         protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
         {
-            if (actionID is BLU.AngelWhisper or RDM.Verraise
-                || (actionID is SMN.Resurrection && LocalPlayer.ClassJob.RowId is SMN.JobID))
+            switch (actionID)
             {
-                if (HasEffect(Buffs.Swiftcast) || HasEffect(RDM.Buffs.Dualcast))
-                    return actionID;
+                case BLU.AngelWhisper or RDM.Verraise:
+                case SMN.Resurrection when LocalPlayer.ClassJob.RowId is SMN.JobID:
+                {
+                    if (HasEffect(Buffs.Swiftcast) || HasEffect(RDM.Buffs.Dualcast))
+                        return actionID;
 
-                if (IsOffCooldown(Swiftcast))
-                    return Swiftcast;
+                    if (IsOffCooldown(Swiftcast))
+                        return Swiftcast;
 
-                if (LocalPlayer.ClassJob.RowId is RDM.JobID &&
-                    ActionReady(RDM.Vercure))
-                    return RDM.Vercure;
+                    if (LocalPlayer.ClassJob.RowId is RDM.JobID &&
+                        ActionReady(RDM.Vercure))
+                        return RDM.Vercure;
+
+                    break;
+                }
             }
 
             return actionID;
