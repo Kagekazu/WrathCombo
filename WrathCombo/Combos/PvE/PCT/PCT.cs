@@ -76,11 +76,7 @@ namespace WrathCombo.Combos.PvE
         internal class PCT_ST_SimpleMode : CustomCombo
         {
             protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.PCT_ST_SimpleMode;
-            internal static PCTOpenerLogicLvl100 PCTOpenerLvl100 = new();
-            internal static PCTOpenerLogicLvl92 PCTOpenerLvl92 = new();
-            internal static PCTOpenerLogicLvl90 PCTOpenerLvl90 = new();
-            internal static PCTOpenerLogicLvl80 PCTOpenerLvl80 = new();
-            internal static PCTOpenerLogicLvl70 PCTOpenerLvl70 = new();
+
 
             protected override uint Invoke(uint actionID, uint lastComboActionID, float comboTime, byte level)
             {
@@ -117,10 +113,10 @@ namespace WrathCombo.Combos.PvE
                     // Lvl 100 Opener
                     if (StarPrism.LevelChecked())
                     {
-                        if (PCTOpenerLvl100.DoFullOpener(ref actionID))
+                        if (PCTOpener.FullOpener(ref actionID))
                             return actionID;
                     }
-                    // Lvl 92 Opener
+                    /* Lvl 92 Opener
                     else if (!StarPrism.LevelChecked() && RainbowDrip.LevelChecked())
                     {
                         if (PCTOpenerLvl92.DoFullOpener(ref actionID))
@@ -144,6 +140,7 @@ namespace WrathCombo.Combos.PvE
                         if (PCTOpenerLvl70.DoFullOpener(ref actionID))
                             return actionID;
                     }
+                    */
                     
                     // General Weaves
                     if (InCombat() && canWeave)
@@ -338,11 +335,6 @@ namespace WrathCombo.Combos.PvE
         internal class PCT_ST_AdvancedMode : CustomCombo
         {
             protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.PCT_ST_AdvancedMode;
-            internal static PCTOpenerLogicLvl100 PCTOpenerLvl100 = new();
-            internal static PCTOpenerLogicLvl92 PCTOpenerLvl92 = new();
-            internal static PCTOpenerLogicLvl90 PCTOpenerLvl90 = new();
-            internal static PCTOpenerLogicLvl80 PCTOpenerLvl80 = new();
-            internal static PCTOpenerLogicLvl70 PCTOpenerLvl70 = new();
 
             protected override uint Invoke(uint actionID, uint lastComboActionID, float comboTime, byte level)
             {
@@ -387,10 +379,10 @@ namespace WrathCombo.Combos.PvE
                         // Lvl 100 Opener
                         if (StarPrism.LevelChecked())
                         {
-                            if (PCTOpenerLvl100.DoFullOpener(ref actionID))
+                            if (PCTOpener.FullOpener(ref actionID))
                                 return actionID;
                         }
-                        // Lvl 92 Opener
+                        /* Lvl 92 Opener
                         else if (!StarPrism.LevelChecked() && RainbowDrip.LevelChecked())
                         {
                             if (PCTOpenerLvl92.DoFullOpener(ref actionID))
@@ -414,6 +406,7 @@ namespace WrathCombo.Combos.PvE
                             if (PCTOpenerLvl70.DoFullOpener(ref actionID))
                                 return actionID;
                         }
+                        */
                     }
 
                     // General Weaves
