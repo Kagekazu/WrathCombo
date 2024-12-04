@@ -381,7 +381,7 @@ internal partial class MNK
             {
                 #region Open Lunar
 
-                if (solarNadi || !lunarNadi || bothNadisOpen || (!solarNadi && !lunarNadi))
+                if (!lunarNadi || bothNadisOpen || (!solarNadi && !lunarNadi))
                     return LevelChecked(ShadowOfTheDestroyer)
                         ? ShadowOfTheDestroyer
                         : Rockbreaker;
