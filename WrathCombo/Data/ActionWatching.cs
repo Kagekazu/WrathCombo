@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using WrathCombo.Combos.PvE;
+using WrathCombo.CustomComboNS;
 using WrathCombo.CustomComboNS.Functions;
 using WrathCombo.Extensions;
 using WrathCombo.Services;
@@ -28,7 +29,7 @@ namespace WrathCombo.Data
         internal static Dictionary<uint, Trait> TraitSheet = Svc.Data.GetExcelSheet<Trait>()!
             .Where(i => i.ClassJobCategory.IsValid) //All player traits are assigned to a category. Chocobo and other garbage lacks this, thus excluded.
             .ToDictionary(i => i.RowId, i => i);
-
+        private static uint lastAction = 0;
         private static readonly Dictionary<string, List<uint>> statusCache = [];
 
         internal static readonly Dictionary<uint, long> ChargeTimestamps = [];
@@ -36,6 +37,12 @@ namespace WrathCombo.Data
         internal static readonly Dictionary<uint, long> LastSuccessfulUseTime = [];
 
         internal readonly static List<uint> CombatActions = [];
+
+        public delegate void LastActionChangeDelegate();
+        public static event LastActionChangeDelegate? OnLastActionChange;
+
+        public delegate void ActionSendDelegate();
+        public static event ActionSendDelegate? OnActionSend;
 
         private delegate void ReceiveActionEffectDelegate(ulong sourceObjectId, IntPtr sourceActor, IntPtr position, IntPtr effectHeader, IntPtr effectArray, IntPtr effectTrail);
         private readonly static Hook<ReceiveActionEffectDelegate>? ReceiveActionEffectHook;
@@ -85,6 +92,8 @@ namespace WrathCombo.Data
         {
             try
             {
+                OnActionSend?.Invoke();
+
                 if (!CustomComboFunctions.InCombat())
                     CombatActions.Clear();
 
@@ -98,7 +107,7 @@ namespace WrathCombo.Data
                 TimeLastActionUsed = DateTime.Now;
                 LastAction = actionId;
                 ActionType = actionType;
-
+                WrathOpener.CurrentOpener?.ProgressOpener(actionId);
                 UpdateHelpers(actionId);
                 SendActionHook!.Original(targetObjectId, actionType, actionId, sequence, a5, a6, a7, a8, a9);
 
@@ -228,7 +237,18 @@ namespace WrathCombo.Data
         }
 
         public static int NumberOfGcdsUsed => CombatActions.Count(x => GetAttackType(x) == ActionAttackType.Weaponskill || GetAttackType(x) == ActionAttackType.Spell);
-        public static uint LastAction { get; set; } = 0;
+        public static uint LastAction
+        {
+            get => lastAction;
+            set
+            {
+                if (lastAction != value)
+                {
+                    OnLastActionChange?.Invoke();
+                    lastAction = value;
+                }
+            }
+        }
         public static int LastActionUseCount { get; set; } = 0;
         public static uint ActionType { get; set; } = 0;
         public static uint LastWeaponskill { get; set; } = 0;
@@ -331,20 +351,6 @@ namespace WrathCombo.Data
             Weaponskill,
             Unknown
         }
-    }
-
-    internal unsafe static class ActionManagerHelper
-    {
-        private static readonly IntPtr actionMgrPtr;
-        internal static IntPtr FpUseAction => (IntPtr)ActionManager.Addresses.UseAction.Value;
-        internal static IntPtr FpUseActionLocation => (IntPtr)ActionManager.Addresses.UseActionLocation.Value;
-        internal static IntPtr CheckActionResources => (IntPtr)ActionManager.Addresses.CheckActionResources.Value;
-        public static ushort CurrentSeq => actionMgrPtr != IntPtr.Zero ? (ushort)Marshal.ReadInt16(actionMgrPtr + 0x110) : (ushort)0;
-        public static ushort LastRecievedSeq => actionMgrPtr != IntPtr.Zero ? (ushort)Marshal.ReadInt16(actionMgrPtr + 0x112) : (ushort)0;
-        public static bool IsCasting => actionMgrPtr != IntPtr.Zero && Marshal.ReadByte(actionMgrPtr + 0x28) != 0;
-        public static uint CastingActionId => actionMgrPtr != IntPtr.Zero ? (uint)Marshal.ReadInt32(actionMgrPtr + 0x24) : 0u;
-        public static uint CastTargetObjectId => actionMgrPtr != IntPtr.Zero ? (uint)Marshal.ReadInt32(actionMgrPtr + 0x38) : 0u;
-        static ActionManagerHelper() => actionMgrPtr = (IntPtr)ActionManager.Instance();
     }
 
     [StructLayout(LayoutKind.Explicit)]
