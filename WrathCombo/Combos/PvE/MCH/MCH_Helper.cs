@@ -1,8 +1,7 @@
-﻿using Dalamud.Game.ClientState.JobGauge.Types;
-using FFXIVClientStructs.FFXIV.Client.Game;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using WrathCombo.Combos.JobHelpers.Enums;
+using Dalamud.Game.ClientState.JobGauge.Types;
+using FFXIVClientStructs.FFXIV.Client.Game;
 using WrathCombo.CustomComboNS;
 using WrathCombo.Data;
 using static WrathCombo.CustomComboNS.Functions.CustomComboFunctions;
@@ -76,8 +75,9 @@ internal partial class MCH
     internal class MCHOpenerLogic : WrathOpener
     {
         public override int OpenerLevel => 100;
-        public override List<uint> OpenerActions { get; protected set; } = new()
-        {
+
+        public override List<uint> OpenerActions { get; protected set; } =
+        [
             Reassemble,
             AirAnchor,
             CheckMate,
@@ -111,7 +111,7 @@ internal partial class MCH
             DoubleCheck,
             HeatedSlugShot,
             HeatedCleanShot
-        };
+        ];
 
         public override bool HasCooldowns()
         {

@@ -29,7 +29,7 @@ internal static partial class BLM
                 canWeave)
                 return Variant.VariantRampart;
 
-            if (BLMOpener.DoFullOpener(ref actionID))
+            if (BLMOpener.FullOpener(ref actionID))
                 return actionID;
 
             //Weaves
@@ -230,7 +230,7 @@ internal static partial class BLM
                 return Variant.VariantRampart;
 
             if (IsEnabled(CustomComboPreset.BLM_ST_Opener))
-                if (BLMOpener.DoFullOpener(ref actionID))
+                if (BLMOpener.FullOpener(ref actionID))
                     return actionID;
 
             //Weaves

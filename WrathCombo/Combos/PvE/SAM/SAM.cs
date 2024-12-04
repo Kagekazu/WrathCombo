@@ -120,7 +120,7 @@ internal partial class SAM
                 return Variant.VariantRampart;
 
             // Opener for SAM
-            if (SAMOpener.DoFullOpener(ref actionID))
+            if (SAMOpener.FullOpener(ref actionID))
                 return actionID;
 
             //Meikyo to start before combat
@@ -299,7 +299,7 @@ internal partial class SAM
 
             // Opener for SAM
             if (IsEnabled(CustomComboPreset.SAM_ST_Opener))
-                if (SAMOpener.DoFullOpener(ref actionID))
+                if (SAMOpener.FullOpener(ref actionID))
                     return actionID;
 
             //Meikyo to start before combat

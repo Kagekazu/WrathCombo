@@ -299,7 +299,7 @@ internal partial class SGE
 
                     // Opener for SGE
                     if (IsEnabled(CustomComboPreset.SGE_ST_DPS_Opener))
-                        if (SGEOpener.DoFullOpener(ref actionID))
+                        if (SGEOpener.FullOpener(ref actionID))
                             return actionID;
 
                     if (CanSpellWeave(ActionWatching.LastSpell))
