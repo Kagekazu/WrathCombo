@@ -15,10 +15,7 @@ internal partial class MNK
             // Don't change anything if not basic skill
             if (actionID is not (Bootshine or LeapingOpo))
                 return actionID;
-
-            if (MNKOpenerLL.FullOpener(ref actionID))
-                return actionID;
-
+            
             if ((!InCombat() || !InMeleeRange()) &&
                 Gauge.Chakra < 5 &&
                 !HasEffect(Buffs.RiddleOfFire) &&
@@ -28,6 +25,9 @@ internal partial class MNK
             if (!InCombat() && LevelChecked(FormShift) &&
                 !HasEffect(Buffs.FormlessFist))
                 return FormShift;
+
+            if (MNKOpenerLL.FullOpener(ref actionID))
+                return actionID;
 
             //Variant Cure
             if (IsEnabled(CustomComboPreset.MNK_Variant_Cure) &&
@@ -146,18 +146,7 @@ internal partial class MNK
             // Don't change anything if not basic skill
             if (actionID is not (Bootshine or LeapingOpo))
                 return actionID;
-
-            if (IsEnabled(CustomComboPreset.MNK_STUseOpener))
-            {
-                if (Config.MNK_SelectedOpener == 0)
-                    if (MNKOpenerLL.FullOpener(ref actionID))
-                        return actionID;
-
-                if (Config.MNK_SelectedOpener == 1)
-                    if (MNKOpenerSL.FullOpener(ref actionID))
-                        return actionID;
-            }
-
+            
             if (IsEnabled(CustomComboPreset.MNK_STUseMeditation) &&
                 (!InCombat() || !InMeleeRange()) &&
                 Gauge.Chakra < 5 &&
@@ -169,6 +158,17 @@ internal partial class MNK
                 !InCombat() && LevelChecked(FormShift) &&
                 !HasEffect(Buffs.FormlessFist))
                 return FormShift;
+
+            if (IsEnabled(CustomComboPreset.MNK_STUseOpener))
+            {
+                if (Config.MNK_SelectedOpener == 0)
+                    if (MNKOpenerLL.FullOpener(ref actionID))
+                        return actionID;
+
+                if (Config.MNK_SelectedOpener == 1)
+                    if (MNKOpenerSL.FullOpener(ref actionID))
+                        return actionID;
+            }
 
             //Variant Cure
             if (IsEnabled(CustomComboPreset.MNK_Variant_Cure) &&

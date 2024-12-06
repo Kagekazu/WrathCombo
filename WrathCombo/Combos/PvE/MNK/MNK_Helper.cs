@@ -110,8 +110,6 @@ internal partial class MNK
 
         public override List<uint> OpenerActions { get; protected set; } =
         [
-            ForbiddenMeditation,
-            FormShift,
             PerfectBalance,
             TwinSnakes,
             Demolish,
@@ -166,8 +164,6 @@ internal partial class MNK
 
         public override List<uint> OpenerActions { get; protected set; } =
         [
-            ForbiddenMeditation,
-            FormShift,
             DragonKick,
             PerfectBalance,
             LeapingOpo,
