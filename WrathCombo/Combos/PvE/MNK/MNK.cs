@@ -1,6 +1,10 @@
+#region
+
 using WrathCombo.Combos.PvE.Content;
 using WrathCombo.CustomComboNS;
 using WrathCombo.Data;
+
+#endregion
 
 namespace WrathCombo.Combos.PvE;
 
@@ -15,7 +19,7 @@ internal partial class MNK
             // Don't change anything if not basic skill
             if (actionID is not (Bootshine or LeapingOpo))
                 return actionID;
-            
+
             if ((!InCombat() || !InMeleeRange()) &&
                 Gauge.Chakra < 5 &&
                 !HasEffect(Buffs.RiddleOfFire) &&
@@ -27,7 +31,14 @@ internal partial class MNK
                 return FormShift;
 
             if (MNKOpenerLL.FullOpener(ref actionID))
+            {
+                if (IsOnCooldown(RiddleOfWind) &&
+                    CanWeave(ActionWatching.LastWeaponskill) &&
+                    Gauge.Chakra >= 5)
+                    return TheForbiddenChakra;
+
                 return actionID;
+            }
 
             //Variant Cure
             if (IsEnabled(CustomComboPreset.MNK_Variant_Cure) &&
@@ -94,7 +105,7 @@ internal partial class MNK
                         : OriginalHook(Bootshine);
 
                 #endregion
-                
+
                 #region Open Solar
 
                 if (!solarNadi && !bothNadisOpen)
@@ -146,7 +157,7 @@ internal partial class MNK
             // Don't change anything if not basic skill
             if (actionID is not (Bootshine or LeapingOpo))
                 return actionID;
-            
+
             if (IsEnabled(CustomComboPreset.MNK_STUseMeditation) &&
                 (!InCombat() || !InMeleeRange()) &&
                 Gauge.Chakra < 5 &&
@@ -163,11 +174,25 @@ internal partial class MNK
             {
                 if (Config.MNK_SelectedOpener == 0)
                     if (MNKOpenerLL.FullOpener(ref actionID))
+                    {
+                        if (IsOnCooldown(RiddleOfWind) &&
+                            CanWeave(ActionWatching.LastWeaponskill) &&
+                            Gauge.Chakra >= 5)
+                            return TheForbiddenChakra;
+
                         return actionID;
+                    }
 
                 if (Config.MNK_SelectedOpener == 1)
                     if (MNKOpenerSL.FullOpener(ref actionID))
+                    {
+                        if (IsOnCooldown(RiddleOfWind) &&
+                            CanWeave(ActionWatching.LastWeaponskill) &&
+                            Gauge.Chakra >= 5)
+                            return TheForbiddenChakra;
+
                         return actionID;
+                    }
             }
 
             //Variant Cure
@@ -387,7 +412,7 @@ internal partial class MNK
                         : Rockbreaker;
 
                 #endregion
-                
+
                 #region Open Solar
 
                 if (!solarNadi && !bothNadisOpen)
@@ -583,7 +608,8 @@ internal partial class MNK
         protected internal override CustomComboPreset Preset => CustomComboPreset.MNK_PerfectBalance;
 
         protected override uint Invoke(uint actionID, uint lastComboActionID, float comboTime, byte level) =>
-            actionID is PerfectBalance && OriginalHook(MasterfulBlitz) != MasterfulBlitz && LevelChecked(MasterfulBlitz)
+            actionID is PerfectBalance && OriginalHook(MasterfulBlitz) != MasterfulBlitz &&
+            LevelChecked(MasterfulBlitz)
                 ? OriginalHook(MasterfulBlitz)
                 : actionID;
     }

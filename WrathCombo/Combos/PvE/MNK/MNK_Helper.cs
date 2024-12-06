@@ -101,9 +101,7 @@ internal partial class MNK
     }
 
     #region Openers
-
-    //TODO
-    //Fix chakra spenders
+    
     internal class MNKOpenerLogicSL : WrathOpener
     {
         public override int OpenerLevel => 100;
