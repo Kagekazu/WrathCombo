@@ -1,16 +1,9 @@
 ﻿using Dalamud.Game.ClientState.JobGauge.Types;
 using ECommons.DalamudServices;
-using WrathCombo.Combos.JobHelpers.Enums;
-using WrathCombo.CustomComboNS.Functions;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using Dalamud.Game.ClientState.Statuses;
 using WrathCombo.CustomComboNS;
-using WrathCombo.Data;
 using static WrathCombo.CustomComboNS.Functions.CustomComboFunctions;
-using static WrathCombo.Combos.PvE.MCH;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+
 
 namespace WrathCombo.Combos.PvE;
 
@@ -18,9 +11,7 @@ internal partial class PCT
 {
     public static PCTopener1 PCTOpener = new();
 
-    public static PCTGauge Gauge = GetJobGauge<PCTGauge>();
-
-    public static bool canWeave => CanSpellWeave(ActionWatching.LastSpell);
+    private static PCTGauge Gauge = GetJobGauge<PCTGauge>();
 
     public static bool HasMotifs()
     {
@@ -44,9 +35,8 @@ internal partial class PCT
         public override List<uint> OpenerActions { get; protected set; } =
         [
             RainbowDrip,
-            StrikingMuse,
-            HolyInWhite,
             PomMuse,
+            StrikingMuse,
             WingMotif,
             StarryMuse,
             HammerStamp,
@@ -60,8 +50,10 @@ internal partial class PCT
             StarPrism,
             HammerBrush,
             PolishingHammer,
-            RainbowDrip
-
+            RainbowDrip,
+            All.Swiftcast,
+            ClawMotif,
+            ClawedMuse,
         ];
 
         public override bool HasCooldowns()
@@ -79,6 +71,9 @@ internal partial class PCT
                 return false;
 
             if (HasEffect(Buffs.SubtractivePalette))
+                return false;
+
+            if (IsOnCooldown(All.Swiftcast))
                 return false;
 
             return true;
