@@ -271,9 +271,7 @@ internal class All
             actionID is BRD.Troubadour or MCH.Tactician or DNC.ShieldSamba &&
             (HasEffectAny(BRD.Buffs.Troubadour) || HasEffectAny(MCH.Buffs.Tactician) ||
              HasEffectAny(DNC.Buffs.ShieldSamba)) &&
-            (IsOffCooldown(BRD.Troubadour) ||
-             IsOffCooldown(MCH.Tactician) ||
-             IsOffCooldown(DNC.ShieldSamba))
+            IsOffCooldown(actionID)
                 ? OriginalHook(11)
                 : actionID;
     }
