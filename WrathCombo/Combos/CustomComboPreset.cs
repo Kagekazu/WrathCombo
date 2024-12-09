@@ -3318,30 +3318,34 @@ public enum CustomComboPreset
         PCT.JobID)]
     PCT_ST_AdvancedMode = 20005,
 
-        [ParentCombo(PCT_ST_AdvancedMode)]
-        [ConflictingCombos(PCT_ST_SimpleMode)]
-        [CustomComboInfo("Balance Opener Option", $"Uses the Balance Opener depending on your current level. \n Supports lvl 70, 80, 90, 92, 100. \n - Requirements: \n - Starry Muse off cooldown \n - Pom. Weapon, Landscape Motif", PCT.JobID)]
-        PCT_ST_Advanced_Openers = 20006,
+    [ParentCombo(PCT_ST_AdvancedMode)]
+    [ConflictingCombos(PCT_ST_SimpleMode)]
+    [CustomComboInfo("Balance Opener Option",
+        "Uses the Balance Opener depending on your current level. \n Supports lvl 70, 80, 90, 92, 100. \n - Requirements: \n - Starry Muse off cooldown \n - Pom. Weapon, Landscape Motif",
+        PCT.JobID)]
+    PCT_ST_Advanced_Openers = 20006,
 
-        [ParentCombo(PCT_ST_Advanced_Openers)]
-        [ConflictingCombos(PCT_ST_Advanced_Openers_2, PCT_ST_Advanced_Openers_3, PCT_ST_SimpleMode)]
-        [CustomComboInfo("3rd GCD Opener", $"Uses 3rd GCD lvl 100 Balance Opener.", PCT.JobID)]
-        PCT_ST_Advanced_Openers_1 = 20036,
+    [ParentCombo(PCT_ST_Advanced_Openers)]
+    [ConflictingCombos(PCT_ST_Advanced_Openers_2, PCT_ST_Advanced_Openers_3, PCT_ST_SimpleMode)]
+    [CustomComboInfo("3rd GCD Opener", "Uses 3rd GCD lvl 100 Balance Opener.", PCT.JobID)]
+    PCT_ST_Advanced_Openers_1 = 20036,
 
-        [ParentCombo(PCT_ST_Advanced_Openers)]
-        [ConflictingCombos(PCT_ST_Advanced_Openers_1, PCT_ST_Advanced_Openers_3, PCT_ST_SimpleMode)]
-        [CustomComboInfo("2nd GCD Opener", $"Uses 2nd GCD lvl 100 Balance Opener.", PCT.JobID)]
-        PCT_ST_Advanced_Openers_2 = 20037,
+    [ParentCombo(PCT_ST_Advanced_Openers)]
+    [ConflictingCombos(PCT_ST_Advanced_Openers_1, PCT_ST_Advanced_Openers_3, PCT_ST_SimpleMode)]
+    [CustomComboInfo("2nd GCD Opener", "Uses 2nd GCD lvl 100 Balance Opener.", PCT.JobID)]
+    PCT_ST_Advanced_Openers_2 = 20037,
 
-        [ParentCombo(PCT_ST_Advanced_Openers)]
-        [ConflictingCombos(PCT_ST_Advanced_Openers_1, PCT_ST_Advanced_Openers_2, PCT_ST_SimpleMode)]
-        [CustomComboInfo("2nd GCD + Swiftcast Opener", $"Uses 2nd GCD lvl 100 Balance Opener with added swiftcast for Wing Motif.", PCT.JobID)]
-        PCT_ST_Advanced_Openers_3 = 20038,
+    [ParentCombo(PCT_ST_Advanced_Openers)]
+    [ConflictingCombos(PCT_ST_Advanced_Openers_1, PCT_ST_Advanced_Openers_2, PCT_ST_SimpleMode)]
+    [CustomComboInfo("2nd GCD + Swiftcast Opener",
+        "Uses 2nd GCD lvl 100 Balance Opener with added swiftcast for Wing Motif.", PCT.JobID)]
+    PCT_ST_Advanced_Openers_3 = 20038,
 
-        [ParentCombo(PCT_ST_Advanced_Openers)]
-        [ConflictingCombos(PCT_ST_SimpleMode)]
-        [CustomComboInfo("Early Balance Opener Option", $"Uses Balance Opener. This setting only applies to when below lvl 100", PCT.JobID)]
-        PCT_ST_Advanced_Openers_EarlyOpener = 20007,
+    [ParentCombo(PCT_ST_Advanced_Openers)]
+    [ConflictingCombos(PCT_ST_SimpleMode)]
+    [CustomComboInfo("Early Balance Opener Option",
+        "Uses Balance Opener. This setting only applies to when below lvl 100", PCT.JobID)]
+    PCT_ST_Advanced_Openers_EarlyOpener = 20007,
 
     [ParentCombo(PCT_ST_AdvancedMode)]
     [CustomComboInfo("Prepull Motifs Feature", "Adds missing Motifs to the combo while out of combat.", PCT.JobID)]
@@ -4286,19 +4290,23 @@ public enum CustomComboPreset
     [CustomComboInfo("Melee Finisher Option", "Add Verflare/Verholy and other finishing moves.", RDM.JobID)]
     RDM_ST_MeleeFinisher = 13510,
 
-        [ParentCombo(RDM_ST_DPS)]
-        [CustomComboInfo("Lucid Dreaming Option", "Weaves Lucid Dreaming when your MP drops below the specified value.", RDM.JobID, 610)]
-        RDM_ST_Lucid = 13610,
-        
-        [ParentCombo(RDM_ST_MeleeCombo)]
-        [CustomComboInfo("Melee combo overcap protection", "Adds melee combo to the rotation when mana is at a certain threshold.", RDM.JobID, 450)]
-        RDM_ST_Melee_Overcap_Protection = 13660,
-        
-        [ParentCombo(RDM_ST_MeleeCombo)]
-        [CustomComboInfo("Melee Combo Fill Option", "Adds the melee combo to the rotation." + "\nRiposte itself must be initiated manually when using this option.", RDM.JobID, 440)]
-        RDM_ST_Adv_MeleeFill = 13710,
-        
-        #endregion
+    [ParentCombo(RDM_ST_DPS)]
+    [CustomComboInfo("Lucid Dreaming Option", "Weaves Lucid Dreaming when your MP drops below the specified value.",
+        RDM.JobID)]
+    RDM_ST_Lucid = 13610,
+
+    [ParentCombo(RDM_ST_MeleeCombo)]
+    [CustomComboInfo("Melee combo overcap protection",
+        "Adds melee combo to the rotation when mana is at a certain threshold.", RDM.JobID)]
+    RDM_ST_Melee_Overcap_Protection = 13660,
+
+    [ParentCombo(RDM_ST_MeleeCombo)]
+    [CustomComboInfo("Melee Combo Fill Option",
+        "Adds the melee combo to the rotation." + "\nRiposte itself must be initiated manually when using this option.",
+        RDM.JobID)]
+    RDM_ST_Adv_MeleeFill = 13710,
+
+    #endregion
 
     #region AoE DPS
 
