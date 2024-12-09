@@ -1950,7 +1950,7 @@ public enum CustomComboPreset
 
     #region GUNBREAKER
 
-    #region Simple ST
+    #region Simple Mode
 
     [AutoAction(false, false)]
     [ConflictingCombos(GNB_ST_Advanced, GNB_NM_Features)]
@@ -1959,10 +1959,6 @@ public enum CustomComboPreset
         "Replaces Keen Edge with a one-button, full single-target rotation.\n This is the ideal selection for newcomers to the job.",
         GNB.JobID)]
     GNB_ST_Simple = 7001,
-
-    #endregion
-
-    #region Simple AoE
 
     [AutoAction(true, false)]
     [ConflictingCombos(GNB_AoE_Advanced, GNB_NM_Features)]
@@ -5721,26 +5717,22 @@ public enum CustomComboPreset
 
     #region WARRIOR
 
-    #region Simple ST
+    #region Simple Mode
 
     [AutoAction(false, false)]
     [ConflictingCombos(WAR_ST_Advanced)]
     [ReplaceSkill(WAR.StormsPath)]
     [CustomComboInfo("Simple Mode - Single Target",
         "Replaces Storm's Path with a one-button, full single target rotation.\nThis is the ideal selection for newcomers to the job.",
-        WAR.JobID, 1)]
+        WAR.JobID)]
     WAR_ST_Simple = 18000,
-
-    #endregion
-
-    #region Simple AoE
 
     [AutoAction(true, false)]
     [ConflictingCombos(WAR_AoE_Advanced)]
     [ReplaceSkill(WAR.Overpower)]
     [CustomComboInfo("Simple Mode - AoE",
         "Replaces Overpower with a one-button, full AoE rotation.\nThis is the ideal selection for newcomers to the job.",
-        WAR.JobID, 1)]
+        WAR.JobID)]
     WAR_AoE_Simple = 18001,
 
     #endregion
@@ -5752,7 +5744,7 @@ public enum CustomComboPreset
     [ReplaceSkill(WAR.StormsPath)]
     [CustomComboInfo("Advanced Mode - Single Target",
         "Replaces Storm's Path with a one-button, full single-target rotation.\nThis is the ideal selection for users experienced with the job.",
-        WAR.JobID, 2)]
+        WAR.JobID)]
     WAR_ST_Advanced = 18002,
 
     [ParentCombo(WAR_ST_Advanced)]
