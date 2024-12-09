@@ -1,6 +1,4 @@
-using WrathCombo.Combos.PvP;
 using WrathCombo.CustomComboNS.Functions;
-using WrathCombo.Data;
 using WrathCombo.Window.Functions;
 
 namespace WrathCombo.Combos.PvE;
@@ -17,6 +15,7 @@ internal partial class GNB
             GNB_ST_Corundum_Health = new("GNB_ST_CorundumOption", 90),
             GNB_ST_Corundum_SubOption = new("GNB_ST_Corundum_SubOption", 1),
             GNB_ST_Aurora_Health = new("GNB_ST_Aurora_Health", 99),
+            GNB_ST_Aurora_Charges = new("GNB_ST_Aurora_Charges", 1),
             GNB_ST_Aurora_SubOption = new("GNB_ST_Aurora_SubOption", 1),
             GNB_ST_Rampart_Health = new("GNB_ST_Rampart_Health", 80),
             GNB_ST_Rampart_SubOption = new("GNB_ST_Rampart_SubOption", 1),
@@ -30,6 +29,7 @@ internal partial class GNB
             GNB_AoE_Corundum_Health = new("GNB_AoE_CorundumOption", 90),
             GNB_AoE_Corundum_SubOption = new("GNB_AoE_Corundum_SubOption", 1),
             GNB_AoE_Aurora_Health = new("GNB_AoE_Aurora_Health", 99),
+            GNB_AoE_Aurora_Charges = new("GNB_AoE_Aurora_Charges", 1),
             GNB_AoE_Aurora_SubOption = new("GNB_AoE_Aurora_SubOption", 1),
             GNB_AoE_Rampart_Health = new("GNB_AoE_Rampart_Health", 80),
             GNB_AoE_Rampart_SubOption = new("GNB_AoE_Rampart_SubOption", 1),
@@ -39,12 +39,54 @@ internal partial class GNB
             GNB_AoE_Nebula_SubOption = new("GNB_AoE_Nebula_SubOption", 1),
             GNB_AoE_Superbolide_Health = new("GNB_AoE_Superbolide_Health", 30),
             GNB_AoE_Superbolide_SubOption = new("GNB_AoE_Superbolide_SubOption", 1),
-            GNB_AoE_NoMercyStop = new("GNB_AoE_NoMercyStop", 5);
+            GNB_AoE_NoMercyStop = new("GNB_AoE_NoMercyStop", 5),
+            GNB_Mit_Superbolide_Health = new("GNB_Mit_Superbolide_Health", 30),
+            GNB_Mit_Aurora_Charges = new("GNB_Aurora_Charges", 1),
+            GNB_NM_Features_Weave = new("GNB_NM_Features_Weave", 1),
+            GNB_GF_Features_Choice = new("GNB_GF_Features_Choice", 1),
+
+            //Bozja
+            GNB_Bozja_LostCure_Health = new("GNB_Bozja_LostCure_Health", 50),
+            GNB_Bozja_LostCure2_Health = new("GNB_Bozja_LostCure_Health", 50),
+            GNB_Bozja_LostCure3_Health = new("GNB_Bozja_LostCure_Health", 50),
+            GNB_Bozja_LostCure4_Health = new("GNB_Bozja_LostCure_Health", 50),
+            GNB_Bozja_LostAethershield_Health = new("GNB_Bozja_LostAethershield_Health", 70),
+            GNB_Bozja_LostReraise_Health = new("GNB_Bozja_LostReraise_Health", 10);
 
         internal static void Draw(CustomComboPreset preset)
         {
             switch (preset)
             {
+                case CustomComboPreset.GNB_Bozja_LostCure:
+                    UserConfig.DrawSliderInt(1, 100, GNB_Bozja_LostCure_Health,
+                        "Player HP% to be \nless than or equal to:", 200);
+                    break;
+
+                case CustomComboPreset.GNB_Bozja_LostCure2:
+                    UserConfig.DrawSliderInt(1, 100, GNB_Bozja_LostCure2_Health,
+                        "Player HP% to be \nless than or equal to:", 200);
+                    break;
+
+                case CustomComboPreset.GNB_Bozja_LostCure3:
+                    UserConfig.DrawSliderInt(1, 100, GNB_Bozja_LostCure3_Health,
+                        "Player HP% to be \nless than or equal to:", 200);
+                    break;
+
+                case CustomComboPreset.GNB_Bozja_LostCure4:
+                    UserConfig.DrawSliderInt(1, 100, GNB_Bozja_LostCure4_Health,
+                        "Player HP% to be \nless than or equal to:", 200);
+                    break;
+
+                case CustomComboPreset.GNB_Bozja_LostAethershield:
+                    UserConfig.DrawSliderInt(1, 100, GNB_Bozja_LostAethershield_Health,
+                        "Player HP% to be \nless than or equal to:", 200);
+                    break;
+
+                case CustomComboPreset.GNB_Bozja_LostReraise:
+                    UserConfig.DrawSliderInt(1, 100, GNB_Bozja_LostReraise_Health,
+                        "Player HP% to be \nless than or equal to:", 200);
+                    break;
+
                 case CustomComboPreset.GNB_Variant_Cure:
                     UserConfig.DrawSliderInt(1, 100, GNB_VariantCure,
                         "Player HP% to be \nless than or equal to:", 200);
@@ -94,6 +136,8 @@ internal partial class GNB
                 case CustomComboPreset.GNB_ST_Aurora:
                     UserConfig.DrawSliderInt(1, 100, GNB_ST_Aurora_Health,
                         "Player HP% to be \nless than or equal to:", 200);
+                    UserConfig.DrawSliderInt(0, 1, GNB_ST_Aurora_Charges,
+                        "How many charges to keep ready?\n (0 = Use All)");
 
                     UserConfig.DrawHorizontalRadioButton(GNB_ST_Aurora_SubOption,
                         "All Enemies",
@@ -108,6 +152,8 @@ internal partial class GNB
                 case CustomComboPreset.GNB_AoE_Aurora:
                     UserConfig.DrawSliderInt(1, 100, GNB_AoE_Aurora_Health,
                         "Player HP% to be \nless than or equal to:", 200);
+                    UserConfig.DrawSliderInt(0, 1, GNB_AoE_Aurora_Charges,
+                        "How many charges to keep ready?\n (0 = Use All)");
 
                     UserConfig.DrawHorizontalRadioButton(GNB_AoE_Aurora_SubOption,
                         "All Enemies",
@@ -117,6 +163,11 @@ internal partial class GNB
                         "Bosses Only",
                         "Only uses Aurora when the targeted enemy is a boss.", 2);
 
+                    break;
+
+                case CustomComboPreset.GNB_Mit_Aurora:
+                    UserConfig.DrawSliderInt(0, 1, GNB_Mit_Aurora_Charges,
+                        "How many charges to keep ready?\n (0 = Use All)");
                     break;
 
                 case CustomComboPreset.GNB_ST_Rampart:
@@ -231,6 +282,35 @@ internal partial class GNB
 
                     break;
 
+                case CustomComboPreset.GNB_Mit_Superbolide:
+                    UserConfig.DrawSliderInt(1, 100, GNB_Mit_Superbolide_Health,
+                        "Player HP% to be \nless than or equal to:", 200);
+
+                    break;
+
+                case CustomComboPreset.GNB_NM_Features:
+
+                    UserConfig.DrawHorizontalRadioButton(GNB_NM_Features_Weave,
+                        "Weave-Only",
+                        "Uses cooldowns only when inside a weave window (excludes No Mercy)", 1);
+
+                    UserConfig.DrawHorizontalRadioButton(GNB_NM_Features_Weave,
+                        "On Cooldown",
+                        "Uses cooldowns as soon as possible", 2);
+
+                    break;
+
+                case CustomComboPreset.GNB_GF_Features:
+
+                    UserConfig.DrawHorizontalRadioButton(GNB_GF_Features_Choice,
+                        "Replace Gnashing Fang",
+                        "Use this feature as intended on Gnashing Fang", 1);
+
+                    UserConfig.DrawHorizontalRadioButton(GNB_GF_Features_Choice,
+                        "Replace No Mercy",
+                        "Use this feature instead on No Mercy", 2);
+
+                    break;
             }
         }
     }
