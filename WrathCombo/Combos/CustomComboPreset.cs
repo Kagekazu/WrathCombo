@@ -4784,7 +4784,7 @@ public enum CustomComboPreset
 
     #endregion
 
-    #region AoE Combos
+    #region Advanced AoE
 
     [AutoAction(true, false)]
     [ReplaceSkill(SAM.Fuga, SAM.Fuko)]
@@ -4861,22 +4861,23 @@ public enum CustomComboPreset
     [ReplaceSkill(SAM.Oka)] [CustomComboInfo("Oka Combo", "Replace Oka with its combo chain.", SAM.JobID)]
     SAM_AoE_OkaCombo = 15100,
 
-    //[ParentCombo(SAM_AoE_OkaCombo)]
-    //[CustomComboInfo("Oka Two Target Rotation Feature", "Adds the Yukikaze combo, Mangetsu combo, Senei, Shinten, and Shoha to Oka combo.\nUsed for two targets only and when Lv86 and above.", SAM.JobID)]
-    //SAM_AoE_OkaCombo_TwoTarget = 15101,
-
     [ReplaceSkill(SAM.Mangetsu)]
     [CustomComboInfo("Mangetsu Combo", "Replace Mangetsu with its combo chain.", SAM.JobID)]
     SAM_AoE_MangetsuCombo = 15101,
 
     #endregion
 
-    #region Cooldown Features
+    #region Meikyo Features
 
     [ReplaceSkill(SAM.MeikyoShisui)]
     [CustomComboInfo("Jinpu/Shifu Feature",
         "Replace Meikyo Shisui with Jinpu, Shifu, and Yukikaze depending on what is needed.", SAM.JobID)]
     SAM_JinpuShifu = 15200,
+
+    [ReplaceSkill(SAM.MeikyoShisui)]
+    [CustomComboInfo("Meikyo Shisui Protection",
+        "Replaces Meikyo Shisui with Savage Blade when u already have Meikyo Shisui active.", SAM.JobID)]
+    SAM_MeikyoShisuiProtection = 15214,
 
     #endregion
 
@@ -4967,6 +4968,8 @@ public enum CustomComboPreset
 
     #endregion
 
+    // Last value = 15214
+
     #region variant
 
     [Variant]
@@ -4979,9 +4982,9 @@ public enum CustomComboPreset
     [CustomComboInfo("Rampart Option", "Use Variant Rampart on cooldown.", SAM.JobID)]
     SAM_Variant_Rampart = 15301,
 
-    #endregion
+    // Last value = 15301
 
-    // Last value = 15050
+    #endregion
 
     #endregion
 
@@ -5713,11 +5716,12 @@ public enum CustomComboPreset
     [CustomComboInfo("Legacy Buttons", "Replaces Generations with the Legacys.", VPR.JobID)]
     VPR_Legacies = 30209,
 
-        [ReplaceSkill(VPR.SteelFangs, VPR.ReavingFangs, VPR.SteelMaw, VPR.ReavingMaw)]
-        [CustomComboInfo("Serpents Tail", "Replaces basic combo with Death Rattle or Last Lash when applicable.", VPR.JobID)]
-        VPR_SerpentsTail = 30210,
+    [ReplaceSkill(VPR.SteelFangs, VPR.ReavingFangs, VPR.SteelMaw, VPR.ReavingMaw)]
+    [CustomComboInfo("Serpents Tail", "Replaces basic combo with Death Rattle or Last Lash when applicable.",
+        VPR.JobID)]
+    VPR_SerpentsTail = 30210,
 
-        #endregion
+    #endregion
 
     #region WARRIOR
 
