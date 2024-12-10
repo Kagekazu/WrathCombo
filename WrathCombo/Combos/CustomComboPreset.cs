@@ -6364,14 +6364,17 @@ public enum CustomComboPreset
     PvP_EmergencyGuard = 1100010,
 
     [PvPCustomCombo]
-    [CustomComboInfo("Prevent Mash Cancelling Feature",
-        "Stops you cancelling your guard if you're pressing buttons quickly.", ADV.JobID)]
-    PvP_MashCancel = 1100030,
-
-    [PvPCustomCombo]
     [CustomComboInfo("Quick Purify Feature", "Uses Purify when afflicted with any selected debuff.", ADV.JobID)]
     PvP_QuickPurify = 1100020,
 
+    [PvPCustomCombo]
+    [CustomComboInfo("Prevent Mash Cancelling Feature",
+        "Stops you cancelling your guard if you're pressing buttons quickly.", ADV.JobID)]
+    PvP_MashCancel = 1100030,
+    
+    [ParentCombo(PvP_MashCancel)]
+    [CustomComboInfo("Recuperate Option", "Allows you to cancel your guard with Recuperate on the Guard button if health is low enough to not waste it.", ADV.JobID)]
+    PvP_MashCancelRecup = 1100031,
     // Last value = 1100030
     // Extra 0 on the end keeps things working the way they should be. Nothing to see here.
 
@@ -6982,18 +6985,15 @@ public enum CustomComboPreset
         "Turns Slice Combo into an all-in-one damage button.\nAdds Soul Slice to the main combo.", RPR.JobID)]
     RPRPvP_Burst = 122000,
 
-    [PvPCustomCombo]
-    [ParentCombo(RPRPvP_Burst)]
-    [CustomComboInfo("Death Warrant Option",
-        "Adds Death Warrant onto the main combo when Plentiful Harvest is ready to use, or when Plentiful Harvest's cooldown is longer than Death Warrant's.\nRespects Immortal Sacrifice Pooling Option.",
-        RPR.JobID)]
-    RPRPvP_Burst_DeathWarrant = 122001,
+        [PvPCustomCombo]
+        [ParentCombo(RPRPvP_Burst)]
+        [CustomComboInfo("Grim Swathe Option", "Add's Grim Swathe onto the main combo on cd", RPR.JobID)]
+        RPRPvP_Burst_GrimSwathe = 122009,
 
-    [PvPCustomCombo]
-    [ParentCombo(RPRPvP_Burst)]
-    [CustomComboInfo("Plentiful Harvest Opener Option",
-        "Starts combat with Plentiful Harvest to immediately begin Limit Break generation.", RPR.JobID)]
-    RPRPvP_Burst_PlentifulOpener = 122002,
+        [PvPCustomCombo]
+        [ParentCombo(RPRPvP_Burst)]
+        [CustomComboInfo("Death Warrant Option", "Adds Death Warrant onto the main combo when Plentiful Harvest is ready to use, or when Plentiful Harvest's cooldown is longer than Death Warrant's.\nRespects Immortal Sacrifice Pooling Option.", RPR.JobID)]
+        RPRPvP_Burst_DeathWarrant = 122001,
 
     [PvPCustomCombo]
     [ParentCombo(RPRPvP_Burst)]
@@ -7038,7 +7038,7 @@ public enum CustomComboPreset
         RPR.JobID)]
     RPRPvP_Burst_ArcaneCircle = 122008,
 
-    // Last value = 122008
+        // Last value = 122009
 
     #endregion
 
