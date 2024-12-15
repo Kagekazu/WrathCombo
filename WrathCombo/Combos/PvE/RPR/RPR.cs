@@ -216,8 +216,7 @@ internal partial class RPR
             //All Weaves
             if (CanWeave(ActionWatching.LastWeaponskill))
             {
-                if (IsEnabled(CustomComboPreset.RPR_ST_CDs))
-                {
+
                     //Arcane Cirlce
                     if (IsEnabled(CustomComboPreset.RPR_ST_ArcaneCircle) &&
                         LevelChecked(ArcaneCircle) &&
@@ -257,7 +256,6 @@ internal partial class RPR
                               (Gauge.Soul is 100 || GetCooldownRemainingTime(Gluttony) > GCD * 4))))
                             return OriginalHook(BloodStalk);
                     }
-                }
 
                 //Enshroud Weaves
                 if (HasEffect(Buffs.Enshrouded))
@@ -340,8 +338,7 @@ internal partial class RPR
             }
 
             //Plentiful Harvest
-            if (IsEnabled(CustomComboPreset.RPR_ST_CDs) &&
-                IsEnabled(CustomComboPreset.RPR_ST_PlentifulHarvest) &&
+            if (IsEnabled(CustomComboPreset.RPR_ST_PlentifulHarvest) &&
                 LevelChecked(PlentifulHarvest) &&
                 !HasEffect(Buffs.Enshrouded) && !HasEffect(Buffs.SoulReaver) &&
                 !HasEffect(Buffs.Executioner) && HasEffect(Buffs.ImmortalSacrifice) &&
@@ -529,8 +526,7 @@ internal partial class RPR
                     HasEffect(Buffs.PerfectioParata) && LevelChecked(Perfectio))
                     return OriginalHook(Communio);
 
-                if (IsEnabled(CustomComboPreset.RPR_AoE_CDs))
-                {
+    
                     if (IsEnabled(CustomComboPreset.RPR_AoE_PlentifulHarvest) &&
                         HasEffect(Buffs.ImmortalSacrifice) && LevelChecked(PlentifulHarvest) &&
                         !HasEffect(Buffs.SoulReaver) && !HasEffect(Buffs.Enshrouded) &&
@@ -566,7 +562,7 @@ internal partial class RPR
                                                              GCD * 5))))
                             return GrimSwathe;
                     }
-                }
+                
 
                 if (IsEnabled(CustomComboPreset.RPR_AoE_SoulScythe) &&
                     !HasEffect(Buffs.Enshrouded) && !HasEffect(Buffs.SoulReaver) && !HasEffect(Buffs.Executioner) &&

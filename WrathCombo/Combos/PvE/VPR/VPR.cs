@@ -718,8 +718,7 @@ internal static partial class VPR
                         return OriginalHook(Twinblood);
                 }
 
-                if (IsEnabled(CustomComboPreset.VPR_AoE_CDs) &&
-                    !HasEffect(Buffs.Reawakened))
+                if (!HasEffect(Buffs.Reawakened))
                 {
                     //Vicepit weaves
                     if (IsEnabled(CustomComboPreset.VPR_AoE_VicepitWeaves) &&
@@ -740,8 +739,7 @@ internal static partial class VPR
             }
 
             //Vicepit combo
-            if (IsEnabled(CustomComboPreset.VPR_AoE_CDs) &&
-                IsEnabled(CustomComboPreset.VPR_AoE_VicepitCombo) &&
+            if (IsEnabled(CustomComboPreset.VPR_AoE_VicepitCombo) &&
                 !HasEffect(Buffs.Reawakened) &&
                 (in5y || IsEnabled(CustomComboPreset.VPR_AoE_VicepitCombo_DisableRange)))
             {
@@ -769,8 +767,7 @@ internal static partial class VPR
                 return UncoiledFury;
 
             //Vicepit Usage
-            if (IsEnabled(CustomComboPreset.VPR_AoE_CDs) &&
-                IsEnabled(CustomComboPreset.VPR_AoE_Vicepit) &&
+            if (IsEnabled(CustomComboPreset.VPR_AoE_Vicepit) &&
                 ActionReady(Vicepit) && !HasEffect(Buffs.Reawakened) &&
                 (in5y || IsEnabled(CustomComboPreset.VPR_AoE_Vicepit_DisableRange)) &&
                 (ireCD >= GCD * 5 || !LevelChecked(SerpentsIre)))
