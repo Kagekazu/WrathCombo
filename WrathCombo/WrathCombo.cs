@@ -706,7 +706,7 @@ namespace WrathCombo
             file.WriteLine($"{key} - NOT SET");
         }
 
-        public static object GetValue(MemberInfo memberInfo, object forObject)
+        public static object? GetValue(MemberInfo memberInfo, object forObject)
         {
             switch (memberInfo.MemberType)
             {
