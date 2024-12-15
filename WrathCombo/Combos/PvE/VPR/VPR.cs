@@ -291,8 +291,7 @@ internal static partial class VPR
                 }
 
                 //Vice Twin Weaves
-                if (IsEnabled(CustomComboPreset.VPR_ST_CDs) &&
-                    IsEnabled(CustomComboPreset.VPR_ST_VicewinderWeaves) &&
+                if (IsEnabled(CustomComboPreset.VPR_ST_VicewinderWeaves) &&
                     !HasEffect(Buffs.Reawakened) && in5y)
                 {
                     if (HasEffect(Buffs.HuntersVenom))
@@ -317,8 +316,7 @@ internal static partial class VPR
                     : WrithingSnap;
 
             //Vicewinder Combo
-            if (IsEnabled(CustomComboPreset.VPR_ST_CDs) &&
-                IsEnabled(CustomComboPreset.VPR_ST_VicewinderCombo) &&
+            if (IsEnabled(CustomComboPreset.VPR_ST_VicewinderCombo) &&
                 !HasEffect(Buffs.Reawakened) && LevelChecked(Vicewinder) && InMeleeRange())
             {
                 // Swiftskin's Coil
@@ -342,8 +340,7 @@ internal static partial class VPR
                 return UncoiledFury;
 
             //Vicewinder Usage
-            if (IsEnabled(CustomComboPreset.VPR_ST_CDs) &&
-                IsEnabled(CustomComboPreset.VPR_ST_Vicewinder) && HasEffect(Buffs.Swiftscaled) &&
+            if (IsEnabled(CustomComboPreset.VPR_ST_Vicewinder) && HasEffect(Buffs.Swiftscaled) &&
                 !IsComboExpiring(3) &&
                 ActionReady(Vicewinder) && !HasEffect(Buffs.Reawakened) && InMeleeRange() &&
                 (ireCD >= GCD * 5 || !LevelChecked(SerpentsIre)) &&
