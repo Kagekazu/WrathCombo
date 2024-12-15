@@ -30,8 +30,15 @@ internal static partial class MNK
                 !HasEffect(Buffs.FormlessFist))
                 return FormShift;
 
-            if (MNKOpener.DoFullOpener(ref actionID, 0))
+            if (MNKOpenerLL.FullOpener(ref actionID))
+            {
+                if (IsOnCooldown(RiddleOfWind) &&
+                    CanWeave(ActionWatching.LastWeaponskill) &&
+                    Gauge.Chakra >= 5)
+                    return TheForbiddenChakra;
+
                 return actionID;
+            }
 
             //Variant Cure
             if (IsEnabled(CustomComboPreset.MNK_Variant_Cure) &&
@@ -164,8 +171,29 @@ internal static partial class MNK
                 return FormShift;
 
             if (IsEnabled(CustomComboPreset.MNK_STUseOpener))
-                if (MNKOpener.DoFullOpener(ref actionID, Config.MNK_SelectedOpener))
-                    return actionID;
+            {
+                if (Config.MNK_SelectedOpener == 0)
+                    if (MNKOpenerLL.FullOpener(ref actionID))
+                    {
+                        if (IsOnCooldown(RiddleOfWind) &&
+                            CanWeave(ActionWatching.LastWeaponskill) &&
+                            Gauge.Chakra >= 5)
+                            return TheForbiddenChakra;
+
+                        return actionID;
+                    }
+
+                if (Config.MNK_SelectedOpener == 1)
+                    if (MNKOpenerSL.FullOpener(ref actionID))
+                    {
+                        if (IsOnCooldown(RiddleOfWind) &&
+                            CanWeave(ActionWatching.LastWeaponskill) &&
+                            Gauge.Chakra >= 5)
+                            return TheForbiddenChakra;
+
+                        return actionID;
+                    }
+            }
 
             //Variant Cure
             if (IsEnabled(CustomComboPreset.MNK_Variant_Cure) &&
@@ -579,21 +607,25 @@ internal static partial class MNK
     {
         protected internal override CustomComboPreset Preset => CustomComboPreset.MNK_PerfectBalance;
 
-        protected override uint Invoke(uint actionID, uint lastComboActionID, float comboTime, byte level) =>
-            actionID is PerfectBalance && OriginalHook(MasterfulBlitz) != MasterfulBlitz &&
-            LevelChecked(MasterfulBlitz)
+        protected override uint Invoke(uint actionID, uint lastComboActionID, float comboTime, byte level)
+        {
+            return actionID is PerfectBalance && OriginalHook(MasterfulBlitz) != MasterfulBlitz &&
+                   LevelChecked(MasterfulBlitz)
                 ? OriginalHook(MasterfulBlitz)
                 : actionID;
+        }
     }
 
     internal class MNK_Riddle_Brotherhood : CustomCombo
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.MNK_Riddle_Brotherhood;
 
-        protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level) =>
-            actionID is RiddleOfFire && ActionReady(Brotherhood) && IsOnCooldown(RiddleOfFire)
+        protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
+        {
+            return actionID is RiddleOfFire && ActionReady(Brotherhood) && IsOnCooldown(RiddleOfFire)
                 ? Brotherhood
                 : actionID;
+        }
     }
 
     #region Beast Chakras

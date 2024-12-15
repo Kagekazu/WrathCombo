@@ -39,7 +39,16 @@ internal static partial class SGE
             Dosis3,
             Phlegma3,
             Psyche,
-            Phlegma3
+            Phlegma3,
+            Dosis3,
+            Dosis3,
+            Dosis3,
+            Dosis3,
+            Eukrasia,
+            EukrasianDosis3,
+            Dosis3,
+            Dosis3,
+            Dosis3
         ];
 
         public override bool HasCooldowns()
