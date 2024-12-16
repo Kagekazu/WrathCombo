@@ -14,23 +14,30 @@ namespace WrathCombo.Combos.PvE;
 
 internal static partial class DRG
 {
-    public static DRGOpenerLogic DRGOpener = new();
+    public static DRGOpenerLogic DRGOpener1 = new();
 
     // DRG Gauge & Extensions
-    public static DRGGauge Gauge => GetJobGauge<DRGGauge>();
+    internal static DRGGauge Gauge => GetJobGauge<DRGGauge>();
 
-    public static Status? ChaosDoTDebuff =>
+    internal static Status? ChaosDoTDebuff =>
         FindTargetEffect(LevelChecked(ChaoticSpring)
             ? Debuffs.ChaoticSpring
             : Debuffs.ChaosThrust);
 
-    public static bool trueNorthReady =>
+    internal static bool trueNorthReady =>
         TargetNeedsPositionals() && ActionReady(All.TrueNorth) &&
         !HasEffect(All.Buffs.TrueNorth);
 
+    internal static WrathOpener DRGOpener() =>
+        DRGOpener1.LevelChecked
+            ? DRGOpener1
+            : WrathOpener.Dummy;
+
     internal class DRGOpenerLogic : WrathOpener
     {
-        public override int OpenerLevel => 100;
+        public override int MinOpenerLevel => 100;
+
+        public override int MaxOpenerLevel => 109;
 
         public override List<uint> OpenerActions { get; protected set; } =
         [
@@ -78,7 +85,7 @@ internal static partial class DRG
         }
     }
 
-    internal class DRGHelper
+    internal static class DRGHelper
     {
         internal static readonly List<uint> FastLocks =
         [

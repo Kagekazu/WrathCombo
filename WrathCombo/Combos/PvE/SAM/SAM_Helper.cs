@@ -15,7 +15,7 @@ namespace WrathCombo.Combos.PvE;
 internal static partial class SAM
 {
     internal static SAMGauge gauge = GetJobGauge<SAMGauge>();
-    internal static SAMOpenerLogic SAMOpener = new();
+    internal static SAMOpenerMaxLevel1 Opener1 = new();
 
     internal static int MeikyoUsed => ActionWatching.CombatActions.Count(x => x == MeikyoShisui);
 
@@ -25,7 +25,12 @@ internal static partial class SAM
 
     internal static float GCD => GetCooldown(Hakaze).CooldownTotal;
 
-    internal class SAMHelper
+    internal static WrathOpener SAMOpener() =>
+        Opener1.LevelChecked
+            ? Opener1
+            : WrathOpener.Dummy;
+
+    internal static class SAMHelper
     {
         internal static int SenCount => GetSenCount();
 
@@ -65,26 +70,24 @@ internal static partial class SAM
                 {
                     if (GetCooldownRemainingTime(Ikishoten) is > 45 and < 71) //1min windows
                     {
-                        if (usedMeikyo is 1 or 8 && SenCount is 3)
-                            return true;
-
-                        if (usedMeikyo is 3 or 10 && SenCount is 2)
-                            return true;
-
-                        if (usedMeikyo is 5 or 12 && SenCount is 1)
-                            return true;
+                        switch (usedMeikyo)
+                        {
+                            case 1 or 8 when SenCount is 3:
+                            case 3 or 10 when SenCount is 2:
+                            case 5 or 12 when SenCount is 1:
+                                return true;
+                        }
                     }
 
                     if (GetCooldownRemainingTime(Ikishoten) > 80) //2min windows
                     {
-                        if (usedMeikyo is 2 or 9 && SenCount is 3)
-                            return true;
-
-                        if (usedMeikyo is 4 or 11 && SenCount is 2)
-                            return true;
-
-                        if (usedMeikyo is 6 or 13 && SenCount is 1)
-                            return true;
+                        switch (usedMeikyo)
+                        {
+                            case 2 or 9 when SenCount is 3:
+                            case 4 or 11 when SenCount is 2:
+                            case 6 or 13 when SenCount is 1:
+                                return true;
+                        }
                     }
 
                     if (usedMeikyo is 7 or 14 && !HasEffect(Buffs.MeikyoShisui))
@@ -96,9 +99,11 @@ internal static partial class SAM
         }
     }
 
-    internal class SAMOpenerLogic : WrathOpener
+    internal class SAMOpenerMaxLevel1 : WrathOpener
     {
-        public override int OpenerLevel => 100;
+        public override int MinOpenerLevel => 100;
+
+        public override int MaxOpenerLevel => 109;
 
         public override List<uint> OpenerActions { get; protected set; } =
         [

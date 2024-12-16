@@ -38,7 +38,7 @@ internal static partial class MCH
                     return actionID;
 
             //Reassemble to start before combat
-            if (!HasEffect(Buffs.Reassembled) && ActionReady(Reassemble) && 
+            if (!HasEffect(Buffs.Reassembled) && ActionReady(Reassemble) &&
                 !InCombat() && TargetIsHostile())
                 return Reassemble;
 

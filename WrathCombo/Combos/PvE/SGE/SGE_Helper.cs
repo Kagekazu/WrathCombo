@@ -12,22 +12,25 @@ namespace WrathCombo.Combos.PvE;
 
 internal static partial class SGE
 {
+    internal static SGEOpenerMaxLevel1 Opener1 = new();
+
     // Sage Gauge & Extensions
     internal static SGEGauge Gauge => GetJobGauge<SGEGauge>();
 
-    internal static bool HasAddersgall(this SGEGauge gauge)
-    {
-        return gauge.Addersgall > 0;
-    }
+    internal static bool HasAddersgall(this SGEGauge gauge) => gauge.Addersgall > 0;
 
-    internal static bool HasAddersting(this SGEGauge gauge)
-    {
-        return gauge.Addersting > 0;
-    }
+    internal static bool HasAddersting(this SGEGauge gauge) => gauge.Addersting > 0;
 
-    internal class SGEOpenerLogic : WrathOpener
+    internal static WrathOpener SGEOpener() =>
+        Opener1.LevelChecked
+            ? Opener1
+            : WrathOpener.Dummy;
+
+    internal class SGEOpenerMaxLevel1 : WrathOpener
     {
-        public override int OpenerLevel => 92;
+        public override int MinOpenerLevel => 92;
+
+        public override int MaxOpenerLevel => 109;
 
         public override List<uint> OpenerActions { get; protected set; } =
         [
@@ -66,7 +69,7 @@ internal static partial class SGE
         }
     }
 
-    internal class SGEHelper
+    internal static class SGEHelper
     {
         public static int GetMatchingConfigST(int i, IGameObject? optionalTarget, out uint action, out bool enabled)
         {

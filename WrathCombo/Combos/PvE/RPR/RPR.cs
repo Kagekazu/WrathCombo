@@ -34,7 +34,7 @@ internal static partial class RPR
                 return Variant.VariantRampart;
 
             //RPR Opener
-            if (RPROpener.FullOpener(ref actionID))
+            if (RPROpener().FullOpener(ref actionID))
                 return actionID;
 
             //All Weaves
@@ -214,7 +214,7 @@ internal static partial class RPR
 
             //RPR Opener
             if (IsEnabled(CustomComboPreset.RPR_ST_Opener))
-                if (RPROpener.FullOpener(ref actionID))
+                if (RPROpener().FullOpener(ref actionID))
                     return actionID;
 
             //All Weaves

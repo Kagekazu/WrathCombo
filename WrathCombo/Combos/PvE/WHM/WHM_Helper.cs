@@ -14,10 +14,18 @@ internal partial class WHM
 {
     internal static WHMGauge gauge = GetJobGauge<WHMGauge>();
     internal static byte BloodLilies = GetJobGauge<WHMGauge>().BloodLily;
+    internal static WHMOpenerMaxLevel1 Opener1 = new();
 
-    internal class WHMOpenerLogic : WrathOpener
+    internal static WrathOpener WHMOpener() =>
+        Opener1.LevelChecked
+            ? Opener1
+            : WrathOpener.Dummy;
+
+    internal class WHMOpenerMaxLevel1 : WrathOpener
     {
-        public override int OpenerLevel => 100;
+        public override int MinOpenerLevel => 100;
+
+        public override int MaxOpenerLevel => 109;
 
         public override List<uint> OpenerActions { get; protected set; } =
         [
@@ -51,7 +59,7 @@ internal partial class WHM
         }
     }
 
-    internal class WHMHelper
+    internal static class WHMHelper
     {
         public static int GetMatchingConfigST(int i, IGameObject? optionalTarget, out uint action,
             out bool enabled)

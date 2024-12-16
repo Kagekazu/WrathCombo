@@ -13,27 +13,27 @@ namespace WrathCombo.Combos.PvE;
 
 internal static partial class MNK
 {
-    public static MNKOpenerLogicSL MNKOpenerSL = new();
-    public static MNKOpenerLogicLL MNKOpenerLL = new();
+    internal static MNKOpenerLogicSL MNKOpenerSL = new();
+    internal static MNKOpenerLogicLL MNKOpenerLL = new();
 
-    public static MNKGauge Gauge = GetJobGauge<MNKGauge>();
+    internal static MNKGauge Gauge = GetJobGauge<MNKGauge>();
 
     // MNK Gauge & Extensions
-    public static float GCD => GetCooldown(OriginalHook(Bootshine)).CooldownTotal;
+    internal static float GCD => GetCooldown(OriginalHook(Bootshine)).CooldownTotal;
 
-    public static bool bothNadisOpen => Gauge.Nadi.ToString() == "LUNAR, SOLAR";
+    internal static bool bothNadisOpen => Gauge.Nadi.ToString() == "LUNAR, SOLAR";
 
-    public static bool solarNadi => Gauge.Nadi == Nadi.SOLAR;
+    internal static bool solarNadi => Gauge.Nadi == Nadi.SOLAR;
 
-    public static bool lunarNadi => Gauge.Nadi == Nadi.LUNAR;
+    internal static bool lunarNadi => Gauge.Nadi == Nadi.LUNAR;
 
-    public static int opoOpoChakra => Gauge.BeastChakra.Count(x => x == BeastChakra.OPOOPO);
+    internal static int opoOpoChakra => Gauge.BeastChakra.Count(x => x == BeastChakra.OPOOPO);
 
-    public static int raptorChakra => Gauge.BeastChakra.Count(x => x == BeastChakra.RAPTOR);
+    internal static int raptorChakra => Gauge.BeastChakra.Count(x => x == BeastChakra.RAPTOR);
 
-    public static int coeurlChakra => Gauge.BeastChakra.Count(x => x == BeastChakra.COEURL);
+    internal static int coeurlChakra => Gauge.BeastChakra.Count(x => x == BeastChakra.COEURL);
 
-    internal class MNKHelper
+    internal static class MNKHelper
     {
         public static uint DetermineCoreAbility(uint actionId, bool useTrueNorthIfEnabled)
         {
@@ -106,9 +106,18 @@ internal static partial class MNK
 
     #region Openers
 
+    internal static WrathOpener MNKOpener() =>
+        Config.MNK_SelectedOpener == 0 || IsEnabled(CustomComboPreset.MNK_ST_SimpleMode)
+            ? MNKOpenerLL
+            : Config.MNK_SelectedOpener == 1
+                ? MNKOpenerSL
+                : WrathOpener.Dummy;
+
     internal class MNKOpenerLogicSL : WrathOpener
     {
-        public override int OpenerLevel => 100;
+        public override int MinOpenerLevel => 100;
+
+        public override int MaxOpenerLevel => 109;
 
         public override List<uint> OpenerActions { get; protected set; } =
         [
@@ -162,7 +171,9 @@ internal static partial class MNK
 
     internal class MNKOpenerLogicLL : WrathOpener
     {
-        public override int OpenerLevel => 100;
+        public override int MinOpenerLevel => 100;
+
+        public override int MaxOpenerLevel => 109;
 
         public override List<uint> OpenerActions { get; protected set; } =
         [

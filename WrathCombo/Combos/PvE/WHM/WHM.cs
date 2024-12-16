@@ -152,14 +152,8 @@ internal partial class WHM
 
     internal class WHM_ST_MainCombo : CustomCombo
     {
-        internal static WHMOpenerLogic WHMOpener = new();
-
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.WHM_ST_MainCombo;
-
-        internal static int Glare3Count => ActionWatching.CombatActions.Count(x => x == OriginalHook(Glare3));
-
-        internal static int DiaCount => ActionWatching.CombatActions.Count(x => x == OriginalHook(Dia));
-
+        
         protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
         {
             bool ActionFound;
@@ -179,7 +173,7 @@ internal partial class WHM
             if (ActionFound)
             {
                 if (IsEnabled(CustomComboPreset.WHM_ST_MainCombo_Opener))
-                    if (WHMOpener.FullOpener(ref actionID))
+                    if (WHMOpener().FullOpener(ref actionID))
                         return actionID;
 
                 bool liliesFull = gauge.Lily == 3;

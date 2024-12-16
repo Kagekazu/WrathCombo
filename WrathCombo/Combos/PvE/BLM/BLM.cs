@@ -1,9 +1,13 @@
+#region
+
 using System.Collections.Generic;
 using WrathCombo.Combos.PvE.Content;
 using WrathCombo.CustomComboNS;
 using WrathCombo.Data;
 using WrathCombo.Extensions;
 using static WrathCombo.CustomComboNS.Functions.CustomComboFunctions;
+
+#endregion
 
 namespace WrathCombo.Combos.PvE;
 
@@ -29,7 +33,7 @@ internal static partial class BLM
                 canWeave)
                 return Variant.VariantRampart;
 
-            if (BLMOpener.FullOpener(ref actionID))
+            if (BLMOpener().FullOpener(ref actionID))
                 return actionID;
 
             //Weaves
@@ -230,7 +234,7 @@ internal static partial class BLM
                 return Variant.VariantRampart;
 
             if (IsEnabled(CustomComboPreset.BLM_ST_Opener))
-                if (BLMOpener.FullOpener(ref actionID))
+                if (BLMOpener().FullOpener(ref actionID))
                     return actionID;
 
             //Weaves
@@ -834,10 +838,10 @@ internal static partial class BLM
         {
             switch (actionID)
             {
-                case Fire4 when (Gauge.InAstralFire && LevelChecked(Fire4)):
+                case Fire4 when Gauge.InAstralFire && LevelChecked(Fire4):
                     return Fire4;
 
-                case Fire4 when (Gauge.InUmbralIce && LevelChecked(Blizzard4)):
+                case Fire4 when Gauge.InUmbralIce && LevelChecked(Blizzard4):
                     return Blizzard4;
 
                 default:
@@ -897,14 +901,15 @@ internal static partial class BLM
             { HighThunder2, Debuffs.HighThunder2 }
         };
 
-    private static int nextMpGain => Gauge.UmbralIceStacks switch
-    {
-        0 => 0,
-        1 => 2500,
-        2 => 5000,
-        3 => 10000,
-        var _ => 0
-    };
+    private static int nextMpGain =>
+        Gauge.UmbralIceStacks switch
+        {
+            0 => 0,
+            1 => 2500,
+            2 => 5000,
+            3 => 10000,
+            var _ => 0
+        };
 
     public static class Buffs
     {
@@ -943,25 +948,25 @@ internal static partial class BLM
 
     public static class MP
     {
-        public const int MaxMP = 10000;
+        internal const int MaxMP = 10000;
 
-        public const int AllMPSpells = 800; //"ALL MP" spell. Only caring about the absolute minimum.
+        internal const int AllMPSpells = 800; //"ALL MP" spell. Only caring about the absolute minimum.
 
-        public static int FireI => GetResourceCost(OriginalHook(Fire));
+        internal static int FireI => GetResourceCost(OriginalHook(Fire));
 
-        public static int FlareAoE => GetResourceCost(OriginalHook(Flare));
+        internal static int FlareAoE => GetResourceCost(OriginalHook(Flare));
 
-        public static int FireAoE => GetResourceCost(OriginalHook(Fire2));
+        internal static int FireAoE => GetResourceCost(OriginalHook(Fire2));
 
-        public static int FireIII => GetResourceCost(OriginalHook(Fire3));
+        internal static int FireIII => GetResourceCost(OriginalHook(Fire3));
 
-        public static int BlizzardAoE => GetResourceCost(OriginalHook(Blizzard2));
+        internal static int BlizzardAoE => GetResourceCost(OriginalHook(Blizzard2));
 
-        public static int BlizzardI => GetResourceCost(OriginalHook(Blizzard));
+        internal static int BlizzardI => GetResourceCost(OriginalHook(Blizzard));
 
-        public static int Freeze => GetResourceCost(OriginalHook(BLM.Freeze));
+        internal static int Freeze => GetResourceCost(OriginalHook(BLM.Freeze));
 
-        public static int Despair => GetResourceCost(OriginalHook(BLM.Despair));
+        internal static int Despair => GetResourceCost(OriginalHook(BLM.Despair));
     }
 
     #endregion

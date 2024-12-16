@@ -12,20 +12,27 @@ namespace WrathCombo.Combos.PvE;
 
 internal static partial class RPR
 {
-    public static RPROpenerLogic RPROpener = new();
+    internal static RPROpenerMaxLevel1 Opener1 = new();
 
-    public static RPRGauge Gauge = GetJobGauge<RPRGauge>();
+    internal static RPRGauge Gauge = GetJobGauge<RPRGauge>();
 
     // RPR Gauge & Extensions
-    public static float GCD => GetCooldown(Slice).CooldownTotal;
+    internal static float GCD => GetCooldown(Slice).CooldownTotal;
 
-    public static bool trueNorthReady =>
+    internal static bool trueNorthReady =>
         TargetNeedsPositionals() && ActionReady(All.TrueNorth) &&
         !HasEffect(All.Buffs.TrueNorth);
 
-    internal class RPROpenerLogic : WrathOpener
+    internal static WrathOpener RPROpener() =>
+        Opener1.LevelChecked
+            ? Opener1
+            : WrathOpener.Dummy;
+
+    internal class RPROpenerMaxLevel1 : WrathOpener
     {
-        public override int OpenerLevel => 100;
+        public override int MinOpenerLevel => 100;
+
+        public override int MaxOpenerLevel => 109;
 
         public override List<uint> OpenerActions { get; protected set; } =
         [
@@ -68,7 +75,7 @@ internal static partial class RPR
         }
     }
 
-    internal class RPRHelper
+    internal static class RPRHelper
     {
         public static unsafe bool IsComboExpiring(float Times)
         {

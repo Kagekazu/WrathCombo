@@ -16,44 +16,48 @@ namespace WrathCombo.Combos.PvE;
 internal partial class BLM
 {
     // BLM Gauge & Extensions
-    public static BLMGauge Gauge = GetJobGauge<BLMGauge>();
-    public static BLMOpenerLogic BLMOpener = new();
+    internal static BLMGauge Gauge = GetJobGauge<BLMGauge>();
+    internal static BLMOpenerMaxLevel1 Opener1 = new();
 
-    public static bool canWeave => CanSpellWeave(ActionWatching.LastSpell);
+    internal static bool canWeave => CanSpellWeave(ActionWatching.LastSpell);
 
-    public static uint curMp => LocalPlayer.CurrentMp;
+    internal static uint curMp => LocalPlayer.CurrentMp;
 
-    public static int maxPolyglot =>
+    internal static int maxPolyglot =>
         TraitLevelChecked(Traits.EnhancedPolyglotII) ? 3 :
         TraitLevelChecked(Traits.EnhancedPolyglot) ? 2 : 1;
 
-    public static float elementTimer => Gauge.ElementTimeRemaining / 1000f;
+    internal static float elementTimer => Gauge.ElementTimeRemaining / 1000f;
 
-    public static double gcdsInTimer =>
+    internal static double gcdsInTimer =>
         Math.Floor(elementTimer / GetActionCastTime(Gauge.InAstralFire ? Fire : Blizzard));
 
-    public static int remainingPolyglotCD =>
+    internal static int remainingPolyglotCD =>
         Math.Max(0,
             (maxPolyglot - Gauge.PolyglotStacks) * 30000 + (Gauge.EnochianTimer - 30000));
 
-    public static Status? thunderDebuffST =>
+    internal static Status? thunderDebuffST =>
         FindEffect(ThunderList[OriginalHook(Thunder)], CurrentTarget, LocalPlayer.GameObjectId);
 
-    public static Status? thunderDebuffAoE =>
+    internal static Status? thunderDebuffAoE =>
         FindEffect(ThunderList[OriginalHook(Thunder2)], CurrentTarget, LocalPlayer.GameObjectId);
 
-    public static bool canSwiftF =>
+    internal static bool canSwiftF =>
         TraitLevelChecked(Traits.AspectMasteryIII) &&
         IsOffCooldown(All.Swiftcast);
 
-    public static bool HasPolyglotStacks(BLMGauge gauge)
-    {
-        return gauge.PolyglotStacks > 0;
-    }
+    internal static bool HasPolyglotStacks(BLMGauge gauge) => gauge.PolyglotStacks > 0;
 
-    internal class BLMOpenerLogic : WrathOpener
+    internal static WrathOpener BLMOpener() =>
+        Opener1.LevelChecked
+            ? Opener1
+            : WrathOpener.Dummy;
+
+    internal class BLMOpenerMaxLevel1 : WrathOpener
     {
-        public override int OpenerLevel => 100;
+        public override int MinOpenerLevel => 100;
+
+        public override int MaxOpenerLevel => 109;
 
         public override List<uint> OpenerActions { get; protected set; } =
         [
@@ -104,9 +108,9 @@ internal partial class BLM
         }
     }
 
-    internal class BLMHelper
+    internal static class BLMHelper
     {
-        public static float MPAfterCast()
+        internal static float MPAfterCast()
         {
             uint castedSpell = LocalPlayer.CastActionId;
 
@@ -124,7 +128,7 @@ internal partial class BLM
                 : Math.Max(0, LocalPlayer.CurrentMp - GetResourceCost(castedSpell));
         }
 
-        public static bool DoubleBlizz()
+        internal static bool DoubleBlizz()
         {
             List<uint> spells = ActionWatching.CombatActions.Where(x =>
                 ActionWatching.GetAttackType(x) == ActionWatching.ActionAttackType.Spell &&

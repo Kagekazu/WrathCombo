@@ -14,7 +14,7 @@ namespace WrathCombo.Combos.PvE;
 internal static partial class VPR
 {
     // VPR Gauge & Extensions
-    internal static VPROpenerLogic VPROpener = new();
+    internal static VPROpenerMaxLevel1 Opener1 = new();
 
     internal static VPRGauge gauge = GetJobGauge<VPRGauge>();
 
@@ -42,14 +42,18 @@ internal static partial class VPR
         (TraitLevelChecked(Traits.EnhancedVipersRattle) && gauge.RattlingCoilStacks > 2) ||
         (!TraitLevelChecked(Traits.EnhancedVipersRattle) && gauge.RattlingCoilStacks > 1);
 
-    internal static bool HasRattlingCoilStack(VPRGauge Gauge)
-    {
-        return gauge.RattlingCoilStacks > 0;
-    }
+    internal static bool HasRattlingCoilStack(VPRGauge Gauge) => gauge.RattlingCoilStacks > 0;
 
-    internal class VPROpenerLogic : WrathOpener
+    internal static WrathOpener VPROpener() =>
+        Opener1.LevelChecked
+            ? Opener1
+            : WrathOpener.Dummy;
+
+    internal class VPROpenerMaxLevel1 : WrathOpener
     {
-        public override int OpenerLevel => 100;
+        public override int MinOpenerLevel => 100;
+
+        public override int MaxOpenerLevel => 109;
 
         public override List<uint> OpenerActions { get; protected set; } =
         [
