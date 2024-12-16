@@ -19,7 +19,7 @@ internal static partial class MNK
             // Don't change anything if not basic skill
             if (actionID is not (Bootshine or LeapingOpo))
                 return actionID;
-
+            
             if ((!InCombat() || !InMeleeRange()) &&
                 Gauge.Chakra < 5 &&
                 !HasEffect(Buffs.RiddleOfFire) &&
@@ -27,10 +27,7 @@ internal static partial class MNK
                 return OriginalHook(SteeledMeditation);
 
             if (!InCombat() && LevelChecked(FormShift) &&
-                !HasEffect(Buffs.FormlessFist) && 
-                !HasEffect(Buffs.CoeurlForm) && 
-                !HasEffect(Buffs.RaptorForm) && 
-                !HasEffect(Buffs.OpoOpoForm))
+                !HasEffect(Buffs.FormlessFist) && !HasEffect(Buffs.PerfectBalance))
                 return FormShift;
 
             if (MNKOpener().FullOpener(ref actionID))
@@ -42,7 +39,7 @@ internal static partial class MNK
 
                 return actionID;
             }
-
+            
             //Variant Cure
             if (IsEnabled(CustomComboPreset.MNK_Variant_Cure) &&
                 IsEnabled(Variant.VariantCure) &&
@@ -80,8 +77,8 @@ internal static partial class MNK
                     ActionReady(All.Bloodbath))
                     return All.Bloodbath;
 
-                if (Gauge.Chakra >= 5 &&
-                    LevelChecked(SteelPeak) && InCombat())
+                if (Gauge.Chakra >= 5 && InCombat() &&
+                    LevelChecked(SteeledMeditation))
                     return OriginalHook(SteeledMeditation);
             }
 
@@ -160,7 +157,7 @@ internal static partial class MNK
             // Don't change anything if not basic skill
             if (actionID is not (Bootshine or LeapingOpo))
                 return actionID;
-
+            
             if (IsEnabled(CustomComboPreset.MNK_STUseMeditation) &&
                 (!InCombat() || !InMeleeRange()) &&
                 Gauge.Chakra < 5 &&
@@ -236,8 +233,8 @@ internal static partial class MNK
                 }
 
                 if (IsEnabled(CustomComboPreset.MNK_STUseTheForbiddenChakra) &&
-                    Gauge.Chakra >= 5 &&
-                    LevelChecked(SteelPeak) && InCombat())
+                    Gauge.Chakra >= 5 && InCombat() &&
+                    LevelChecked(SteeledMeditation))
                     return OriginalHook(SteeledMeditation);
             }
 
@@ -324,8 +321,14 @@ internal static partial class MNK
             if (actionID is not (ArmOfTheDestroyer or ShadowOfTheDestroyer))
                 return actionID;
 
-            if (!InCombat() && Gauge.Chakra < 5 && LevelChecked(InspiritedMeditation))
+            if (!InCombat() && Gauge.Chakra < 5 &&
+                LevelChecked(InspiritedMeditation))
                 return OriginalHook(InspiritedMeditation);
+
+            if (!InCombat() && LevelChecked(FormShift) &&
+                !HasEffect(Buffs.FormlessFist) && 
+                !HasEffect(Buffs.PerfectBalance))
+                return FormShift;
 
             //Variant Cure
             if (IsEnabled(CustomComboPreset.MNK_Variant_Cure) &&
@@ -362,7 +365,7 @@ internal static partial class MNK
                     return PerfectBalance;
 
                 if (Gauge.Chakra >= 5 &&
-                    LevelChecked(HowlingFist) &&
+                    LevelChecked(InspiritedMeditation) &&
                     HasBattleTarget() && InCombat())
                     return OriginalHook(InspiritedMeditation);
 
@@ -451,8 +454,14 @@ internal static partial class MNK
                 return actionID;
 
             if (IsEnabled(CustomComboPreset.MNK_AoEUseMeditation) &&
-                !InCombat() && Gauge.Chakra < 5 && LevelChecked(InspiritedMeditation))
+                !InCombat() && Gauge.Chakra < 5 && 
+                LevelChecked(InspiritedMeditation))
                 return OriginalHook(InspiritedMeditation);
+
+            if (IsEnabled(CustomComboPreset.MNK_AoEUseFormShift) &&
+                !InCombat() && LevelChecked(FormShift) &&
+                !HasEffect(Buffs.FormlessFist) && !HasEffect(Buffs.PerfectBalance))
+                return FormShift;
 
             //Variant Cure
             if (IsEnabled(CustomComboPreset.MNK_Variant_Cure) &&
@@ -500,9 +509,8 @@ internal static partial class MNK
                     return PerfectBalance;
 
                 if (IsEnabled(CustomComboPreset.MNK_AoEUseHowlingFist) &&
-                    Gauge.Chakra >= 5 &&
-                    LevelChecked(HowlingFist) &&
-                    HasBattleTarget() && InCombat())
+                    Gauge.Chakra >= 5 && HasBattleTarget() && InCombat() &&
+                    LevelChecked(InspiritedMeditation))
                     return OriginalHook(InspiritedMeditation);
 
                 if (IsEnabled(CustomComboPreset.MNK_AoE_ComboHeals))
@@ -596,25 +604,21 @@ internal static partial class MNK
     {
         protected internal override CustomComboPreset Preset => CustomComboPreset.MNK_PerfectBalance;
 
-        protected override uint Invoke(uint actionID, uint lastComboActionID, float comboTime, byte level)
-        {
-            return actionID is PerfectBalance && OriginalHook(MasterfulBlitz) != MasterfulBlitz &&
-                   LevelChecked(MasterfulBlitz)
+        protected override uint Invoke(uint actionID, uint lastComboActionID, float comboTime, byte level) =>
+            actionID is PerfectBalance && OriginalHook(MasterfulBlitz) != MasterfulBlitz &&
+            LevelChecked(MasterfulBlitz)
                 ? OriginalHook(MasterfulBlitz)
                 : actionID;
-        }
     }
 
     internal class MNK_Riddle_Brotherhood : CustomCombo
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.MNK_Riddle_Brotherhood;
 
-        protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
-        {
-            return actionID is RiddleOfFire && ActionReady(Brotherhood) && IsOnCooldown(RiddleOfFire)
+        protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level) =>
+            actionID is RiddleOfFire && ActionReady(Brotherhood) && IsOnCooldown(RiddleOfFire)
                 ? Brotherhood
                 : actionID;
-        }
     }
 
     #region Beast Chakras
