@@ -44,10 +44,14 @@ internal static partial class VPR
 
     internal static bool HasRattlingCoilStack(VPRGauge Gauge) => gauge.RattlingCoilStacks > 0;
 
-    internal static WrathOpener VPROpener() =>
-        Opener1.LevelChecked
-            ? Opener1
-            : WrathOpener.Dummy;
+    internal static WrathOpener VPROpener()
+    {
+        if (Opener1.LevelChecked)
+            return Opener1;
+
+        return WrathOpener.Dummy;
+    }
+
 
     internal class VPROpenerMaxLevel1 : WrathOpener
     {

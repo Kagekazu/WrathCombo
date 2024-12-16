@@ -16,10 +16,14 @@ internal partial class WHM
     internal static byte BloodLilies = GetJobGauge<WHMGauge>().BloodLily;
     internal static WHMOpenerMaxLevel1 Opener1 = new();
 
-    internal static WrathOpener WHMOpener() =>
-        Opener1.LevelChecked
-            ? Opener1
-            : WrathOpener.Dummy;
+    internal static WrathOpener WHMOpener()
+    {
+        if (Opener1.LevelChecked)
+            return Opener1;
+
+        return WrathOpener.Dummy;
+    }
+
 
     internal class WHMOpenerMaxLevel1 : WrathOpener
     {

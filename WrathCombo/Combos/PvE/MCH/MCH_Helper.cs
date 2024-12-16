@@ -82,10 +82,14 @@ internal static partial class MCH
 
     internal static int BSUsed => ActionWatching.CombatActions.Count(x => x == BarrelStabilizer);
 
-    internal static WrathOpener MCHOpener() =>
-        Opener1.LevelChecked
-            ? Opener1
-            : WrathOpener.Dummy;
+    internal static WrathOpener MCHOpener()
+    {
+        if (Opener1.LevelChecked)
+            return Opener1;
+
+        return WrathOpener.Dummy;
+    }
+
 
     internal class MCHOpenerMaxLevel1 : WrathOpener
     {

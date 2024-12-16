@@ -14,7 +14,7 @@ namespace WrathCombo.Combos.PvE;
 
 internal static partial class DRG
 {
-    public static DRGOpenerLogic DRGOpener1 = new();
+    public static DRGOpenerLogic Opener1 = new();
 
     // DRG Gauge & Extensions
     internal static DRGGauge Gauge => GetJobGauge<DRGGauge>();
@@ -28,10 +28,13 @@ internal static partial class DRG
         TargetNeedsPositionals() && ActionReady(All.TrueNorth) &&
         !HasEffect(All.Buffs.TrueNorth);
 
-    internal static WrathOpener DRGOpener() =>
-        DRGOpener1.LevelChecked
-            ? DRGOpener1
-            : WrathOpener.Dummy;
+    internal static WrathOpener DRGOpener()
+    {
+        if (Opener1.LevelChecked)
+            return Opener1;
+
+        return WrathOpener.Dummy;
+    }
 
     internal class DRGOpenerLogic : WrathOpener
     {

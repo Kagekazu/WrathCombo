@@ -23,10 +23,14 @@ internal static partial class RPR
         TargetNeedsPositionals() && ActionReady(All.TrueNorth) &&
         !HasEffect(All.Buffs.TrueNorth);
 
-    internal static WrathOpener RPROpener() =>
-        Opener1.LevelChecked
-            ? Opener1
-            : WrathOpener.Dummy;
+    internal static WrathOpener RPROpener()
+    {
+        if (Opener1.LevelChecked)
+            return Opener1;
+
+        return WrathOpener.Dummy;
+    }
+
 
     internal class RPROpenerMaxLevel1 : WrathOpener
     {
