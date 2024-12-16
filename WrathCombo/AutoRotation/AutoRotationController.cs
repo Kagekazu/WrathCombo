@@ -42,7 +42,6 @@ namespace WrathCombo.AutoRotation
             if (!cfg.Enabled || !Player.Available || Svc.Condition[ConditionFlag.Mounted])
                 return;
 
-
             if (!EzThrottler.Throttle("AutoRotController", 50))
                 return;
 
