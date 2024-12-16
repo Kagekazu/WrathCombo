@@ -14,10 +14,10 @@ namespace WrathCombo.Combos.PvE;
 
 internal static partial class DRG
 {
-    public static DRGOpenerLogic Opener1 = new();
-
     // DRG Gauge & Extensions
-    internal static DRGGauge Gauge => GetJobGauge<DRGGauge>();
+    public static DRGOpenerLogic Opener1 = new();
+    
+    internal static DRGGauge Gauge = GetJobGauge<DRGGauge>();
 
     internal static Status? ChaosDoTDebuff =>
         FindTargetEffect(LevelChecked(ChaoticSpring)
