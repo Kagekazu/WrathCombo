@@ -23,11 +23,14 @@ internal static partial class MNK
             if ((!InCombat() || !InMeleeRange()) &&
                 Gauge.Chakra < 5 &&
                 !HasEffect(Buffs.RiddleOfFire) &&
-                LevelChecked(Meditation))
-                return OriginalHook(Meditation);
+                LevelChecked(SteeledMeditation))
+                return OriginalHook(SteeledMeditation);
 
             if (!InCombat() && LevelChecked(FormShift) &&
-                !HasEffect(Buffs.FormlessFist))
+                !HasEffect(Buffs.FormlessFist) && 
+                !HasEffect(Buffs.CoeurlForm) && 
+                !HasEffect(Buffs.RaptorForm) && 
+                !HasEffect(Buffs.OpoOpoForm))
                 return FormShift;
 
             if (MNKOpener().FullOpener(ref actionID))
@@ -78,8 +81,8 @@ internal static partial class MNK
                     return All.Bloodbath;
 
                 if (Gauge.Chakra >= 5 &&
-                    LevelChecked(SteelPeak))
-                    return OriginalHook(Meditation);
+                    LevelChecked(SteelPeak) && InCombat())
+                    return OriginalHook(SteeledMeditation);
             }
 
             // GCDs
@@ -162,12 +165,12 @@ internal static partial class MNK
                 (!InCombat() || !InMeleeRange()) &&
                 Gauge.Chakra < 5 &&
                 !HasEffect(Buffs.RiddleOfFire) &&
-                LevelChecked(Meditation))
-                return OriginalHook(Meditation);
+                LevelChecked(SteeledMeditation))
+                return OriginalHook(SteeledMeditation);
 
             if (IsEnabled(CustomComboPreset.MNK_STUseFormShift) &&
                 !InCombat() && LevelChecked(FormShift) &&
-                !HasEffect(Buffs.FormlessFist))
+                !HasEffect(Buffs.FormlessFist) && !HasEffect(Buffs.PerfectBalance))
                 return FormShift;
 
             if (IsEnabled(CustomComboPreset.MNK_STUseOpener))
@@ -234,8 +237,8 @@ internal static partial class MNK
 
                 if (IsEnabled(CustomComboPreset.MNK_STUseTheForbiddenChakra) &&
                     Gauge.Chakra >= 5 &&
-                    LevelChecked(SteelPeak))
-                    return OriginalHook(Meditation);
+                    LevelChecked(SteelPeak) && InCombat())
+                    return OriginalHook(SteeledMeditation);
             }
 
             // GCDs
@@ -321,8 +324,8 @@ internal static partial class MNK
             if (actionID is not (ArmOfTheDestroyer or ShadowOfTheDestroyer))
                 return actionID;
 
-            if (!InCombat() && Gauge.Chakra < 5 && LevelChecked(Meditation))
-                return OriginalHook(Meditation);
+            if (!InCombat() && Gauge.Chakra < 5 && LevelChecked(InspiritedMeditation))
+                return OriginalHook(InspiritedMeditation);
 
             //Variant Cure
             if (IsEnabled(CustomComboPreset.MNK_Variant_Cure) &&
@@ -360,8 +363,8 @@ internal static partial class MNK
 
                 if (Gauge.Chakra >= 5 &&
                     LevelChecked(HowlingFist) &&
-                    HasBattleTarget())
-                    return OriginalHook(HowlingFist);
+                    HasBattleTarget() && InCombat())
+                    return OriginalHook(InspiritedMeditation);
 
                 if (PlayerHealthPercentageHp() <= 25 && ActionReady(All.SecondWind))
                     return All.SecondWind;
@@ -448,8 +451,8 @@ internal static partial class MNK
                 return actionID;
 
             if (IsEnabled(CustomComboPreset.MNK_AoEUseMeditation) &&
-                !InCombat() && Gauge.Chakra < 5 && LevelChecked(Meditation))
-                return OriginalHook(Meditation);
+                !InCombat() && Gauge.Chakra < 5 && LevelChecked(InspiritedMeditation))
+                return OriginalHook(InspiritedMeditation);
 
             //Variant Cure
             if (IsEnabled(CustomComboPreset.MNK_Variant_Cure) &&
@@ -499,8 +502,8 @@ internal static partial class MNK
                 if (IsEnabled(CustomComboPreset.MNK_AoEUseHowlingFist) &&
                     Gauge.Chakra >= 5 &&
                     LevelChecked(HowlingFist) &&
-                    HasBattleTarget())
-                    return OriginalHook(HowlingFist);
+                    HasBattleTarget() && InCombat())
+                    return OriginalHook(InspiritedMeditation);
 
                 if (IsEnabled(CustomComboPreset.MNK_AoE_ComboHeals))
                 {
@@ -655,7 +658,7 @@ internal static partial class MNK
         Bootshine = 53,
         TrueStrike = 54,
         SnapPunch = 56,
-        Meditation = 36940,
+        SteeledMeditation = 36940,
         SteelPeak = 25761,
         TwinSnakes = 61,
         ArmOfTheDestroyer = 62,
@@ -675,6 +678,7 @@ internal static partial class MNK
         RiddleOfFire = 7395,
         Brotherhood = 7396,
         RiddleOfWind = 25766,
+        InspiritedMeditation = 36941,
         EnlightenedMeditation = 36943,
         Enlightenment = 16474,
         SixSidedStar = 16476,
