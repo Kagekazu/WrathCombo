@@ -12,9 +12,9 @@ namespace WrathCombo.Combos.PvE;
 
 internal static partial class SGE
 {
-    internal static SGEOpenerMaxLevel1 Opener1 = new();
-
     // Sage Gauge & Extensions
+    internal static SGEOpenerMaxLevel1 Opener1 = new();
+    
     internal static SGEGauge Gauge => GetJobGauge<SGEGauge>();
 
     internal static bool HasAddersgall(this SGEGauge gauge) => gauge.Addersgall > 0;
