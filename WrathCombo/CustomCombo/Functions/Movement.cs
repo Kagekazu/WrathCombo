@@ -1,4 +1,6 @@
-﻿#region
+﻿using ECommons.DalamudServices;
+using FFXIVClientStructs.FFXIV.Client.UI.Agent;
+#region
 
 using System;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
@@ -25,6 +27,10 @@ internal abstract partial class CustomComboFunctions
         if (!isMoving)
             movementStarted = null;
 
-        return isMoving && TimeMoving.TotalMilliseconds / 1000f >= Service.Configuration.MovementLeeway;
+            Svc.Log.Debug("???");
+            return isMoving && (TimeMoving.TotalMilliseconds / 1000f) >= Service.Configuration.MovementLeeway;
+        }
+
+        public static TimeSpan TimeMoving => movementStarted is null ? TimeSpan.Zero : (DateTime.Now - movementStarted.Value);
     }
 }
