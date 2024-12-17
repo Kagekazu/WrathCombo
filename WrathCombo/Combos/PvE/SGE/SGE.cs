@@ -1,10 +1,10 @@
 #region
 
+using Dalamud.Game.ClientState.Objects.Types;
+using Dalamud.Game.ClientState.Statuses;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Dalamud.Game.ClientState.Objects.Types;
-using Dalamud.Game.ClientState.Statuses;
 using WrathCombo.Combos.PvE.Content;
 using WrathCombo.CustomComboNS;
 using WrathCombo.Data;
@@ -118,10 +118,10 @@ internal static partial class SGE
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.SGE_Kardia;
 
-        protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
-        {
-            return actionID is Soteria && (!HasEffect(Buffs.Kardia) || IsOnCooldown(Soteria)) ? Kardia : actionID;
-        }
+        protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level) =>
+            actionID is Soteria && (!HasEffect(Buffs.Kardia) || IsOnCooldown(Soteria))
+            ? Kardia
+            : actionID;
     }
 
     /*
@@ -133,13 +133,11 @@ internal static partial class SGE
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.SGE_Rhizo;
 
-        protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
-        {
-            return AddersgallList.Contains(actionID) && ActionReady(Rhizomata) && !Gauge.HasAddersgall() &&
-                   IsOffCooldown(actionID)
+        protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level) =>
+            AddersgallList.Contains(actionID) && ActionReady(Rhizomata) &&
+            !Gauge.HasAddersgall() && IsOffCooldown(actionID)
                 ? Rhizomata
                 : actionID;
-        }
     }
 
     /*
@@ -152,10 +150,10 @@ internal static partial class SGE
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.SGE_TauroDruo;
 
-        protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
-        {
-            return actionID is Taurochole && IsOnCooldown(Taurochole) ? Druochole : actionID;
-        }
+        protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level) =>
+            actionID is Taurochole && IsOnCooldown(Taurochole)
+            ? Druochole
+            : actionID;
     }
 
     /*
@@ -166,10 +164,10 @@ internal static partial class SGE
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.SGE_ZoePneuma;
 
-        protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
-        {
-            return actionID is Pneuma && ActionReady(Pneuma) && IsOffCooldown(Zoe) ? Zoe : actionID;
-        }
+        protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level) =>
+            actionID is Pneuma && ActionReady(Pneuma) && IsOffCooldown(Zoe)
+            ? Zoe
+            : actionID;
     }
 
     /*
@@ -343,7 +341,7 @@ internal static partial class SGE
 
                     if (HasBattleTarget() && !HasEffect(Buffs.Eukrasia))
 
-                        // Buff check Above. Without it, Toxikon and any future option will interfere in the Eukrasia->Eukrasia Dosis combo
+                    // Buff check Above. Without it, Toxikon and any future option will interfere in the Eukrasia->Eukrasia Dosis combo
                     {
                         // Eukrasian Dosis.
                         // If we're too low level to use Eukrasia, we can stop here.
@@ -392,15 +390,15 @@ internal static partial class SGE
                             InCombat() && IsMoving())
                         {
                             // Toxikon
-                            if (Config.SGE_ST_DPS_Movement[0] && LevelChecked(Toxikon) && Gauge.HasAddersting())
+                            if (Config.SGE_ST_DPS_Movement [0] && LevelChecked(Toxikon) && Gauge.HasAddersting())
                                 return OriginalHook(Toxikon);
 
                             // Dyskrasia
-                            if (Config.SGE_ST_DPS_Movement[1] && LevelChecked(Dyskrasia) && InActionRange(Dyskrasia))
+                            if (Config.SGE_ST_DPS_Movement [1] && LevelChecked(Dyskrasia) && InActionRange(Dyskrasia))
                                 return OriginalHook(Dyskrasia);
 
                             // Eukrasia
-                            if (Config.SGE_ST_DPS_Movement[2] && LevelChecked(Eukrasia)) return Eukrasia;
+                            if (Config.SGE_ST_DPS_Movement [2] && LevelChecked(Eukrasia)) return Eukrasia;
                         }
                     }
 
@@ -420,10 +418,7 @@ internal static partial class SGE
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.SGE_Raise;
 
-        protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
-        {
-            return actionID is All.Swiftcast && IsOnCooldown(All.Swiftcast) ? Egeiro : actionID;
-        }
+        protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level) => actionID is All.Swiftcast && IsOnCooldown(All.Swiftcast) ? Egeiro : actionID;
     }
 
     /*
@@ -438,7 +433,7 @@ internal static partial class SGE
         protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
         {
             if (actionID is Eukrasia && HasEffect(Buffs.Eukrasia))
-                switch ((int)Config.SGE_Eukrasia_Mode)
+                switch ((int) Config.SGE_Eukrasia_Mode)
                 {
                     case 0: return OriginalHook(Dosis);
 
@@ -464,25 +459,24 @@ internal static partial class SGE
 
         protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
         {
-            IGameObject? healTarget =
-                OptionalTarget ?? GetHealTarget(Config.SGE_ST_Heal_Adv && Config.SGE_ST_Heal_UIMouseOver);
-            
+            IGameObject? healTarget = OptionalTarget ?? GetHealTarget(Config.SGE_ST_Heal_Adv && Config.SGE_ST_Heal_UIMouseOver);
+
             if (actionID is Diagnosis)
             {
                 if (HasEffect(Buffs.Eukrasia))
                     return EukrasianDiagnosis;
-                
-                if (IsEnabled(CustomComboPreset.SGE_ST_Heal_Esuna) && 
+
+                if (IsEnabled(CustomComboPreset.SGE_ST_Heal_Esuna) &&
                     ActionReady(All.Esuna) &&
                     GetTargetHPPercent(healTarget, Config.SGE_ST_Heal_IncludeShields) >= Config.SGE_ST_Heal_Esuna &&
                     HasCleansableDebuff(healTarget))
                     return All.Esuna;
 
-                if (IsEnabled(CustomComboPreset.SGE_ST_Heal_Rhizomata) && 
+                if (IsEnabled(CustomComboPreset.SGE_ST_Heal_Rhizomata) &&
                     ActionReady(Rhizomata) && !Gauge.HasAddersgall())
                     return Rhizomata;
 
-                if (IsEnabled(CustomComboPreset.SGE_ST_Heal_Kardia) && 
+                if (IsEnabled(CustomComboPreset.SGE_ST_Heal_Kardia) &&
                     LevelChecked(Kardia) && FindEffect(Buffs.Kardia) is null &&
                     FindEffect(Buffs.Kardion, healTarget, LocalPlayer?.GameObjectId) is null)
                     return Kardia;
@@ -501,9 +495,9 @@ internal static partial class SGE
                 if (IsEnabled(CustomComboPreset.SGE_ST_Heal_EDiagnosis) && LevelChecked(Eukrasia) &&
                     GetTargetHPPercent(healTarget, Config.SGE_ST_Heal_IncludeShields) <=
                     Config.SGE_ST_Heal_EDiagnosisHP &&
-                    (Config.SGE_ST_Heal_EDiagnosisOpts[0] ||
+                    (Config.SGE_ST_Heal_EDiagnosisOpts [0] ||
                      FindEffectOnMember(Buffs.EukrasianDiagnosis, healTarget) is null) && //Ignore existing shield check
-                    (!Config.SGE_ST_Heal_EDiagnosisOpts[1] ||
+                    (!Config.SGE_ST_Heal_EDiagnosisOpts [1] ||
                      FindEffectOnMember(SCH.Buffs.Galvanize, healTarget) is null)) //Galvenize Check
                     return Eukrasia;
             }
