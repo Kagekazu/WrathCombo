@@ -387,7 +387,7 @@ internal static partial class SGE
                             return phlegma;
 
                         // Movement Options
-                        if (IsEnabled(CustomComboPreset.SGE_ST_DPS_Movement) && InCombat() && IsMoving)
+                        if (IsEnabled(CustomComboPreset.SGE_ST_DPS_Movement) && InCombat() && IsMoving())
                         {
                             // Toxikon
                             if (Config.SGE_ST_DPS_Movement[0] && LevelChecked(Toxikon) && Gauge.HasAddersting())
@@ -554,19 +554,25 @@ internal static partial class SGE
 
         protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
         {
-            if (actionID is Kerachole && IsEnabled(CustomComboPreset.SGE_OverProtect_Kerachole) &&
-                ActionReady(Kerachole))
-                if (HasEffectAny(Buffs.Kerachole) ||
-                    (IsEnabled(CustomComboPreset.SGE_OverProtect_SacredSoil) && HasEffectAny(SCH.Buffs.SacredSoil)))
+            switch (actionID)
+            {
+                case Kerachole when IsEnabled(CustomComboPreset.SGE_OverProtect_Kerachole) &&
+                                    ActionReady(Kerachole) &&
+                                    (HasEffectAny(Buffs.Kerachole) ||
+                                     (IsEnabled(CustomComboPreset.SGE_OverProtect_SacredSoil) && HasEffectAny(SCH.Buffs.SacredSoil))) &&
+                                    (HasEffectAny(Buffs.Kerachole) ||
+                                     (IsEnabled(CustomComboPreset.SGE_OverProtect_SacredSoil) && HasEffectAny(SCH.Buffs.SacredSoil))):
+                case Panhaima when IsEnabled(CustomComboPreset.SGE_OverProtect_Panhaima) &&
+                                   ActionReady(Panhaima) && HasEffectAny(Buffs.Panhaima):
                     return SCH.SacredSoil;
 
-            if (actionID is Panhaima && IsEnabled(CustomComboPreset.SGE_OverProtect_Panhaima) &&
-                ActionReady(Panhaima) && HasEffectAny(Buffs.Panhaima)) return SCH.SacredSoil;
+                case Philosophia when IsEnabled(CustomComboPreset.SGE_OverProtect_Philosophia) &&
+                                      ActionReady(Philosophia) && HasEffectAny(Buffs.Eudaimonia):
+                    return SCH.Consolation;
 
-            if (actionID is Philosophia && IsEnabled(CustomComboPreset.SGE_OverProtect_Philosophia) &&
-                ActionReady(Philosophia) && HasEffectAny(Buffs.Eudaimonia)) return SCH.Consolation;
-
-            return actionID;
+                default:
+                    return actionID;
+            }
         }
     }
 }
