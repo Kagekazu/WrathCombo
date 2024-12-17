@@ -1,20 +1,13 @@
-﻿using ECommons.DalamudServices;
-using FFXIVClientStructs.FFXIV.Client.UI.Agent;
-#region
-
-using System;
+﻿using System;
+using ECommons.DalamudServices;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using WrathCombo.Services;
-
-#endregion
 
 namespace WrathCombo.CustomComboNS.Functions;
 
 internal abstract partial class CustomComboFunctions
 {
     private static DateTime? movementStarted;
-
-    public static TimeSpan TimeMoving => movementStarted is null ? TimeSpan.Zero : DateTime.Now - movementStarted.Value;
 
     /// <summary> Checks player movement </summary>
     public static unsafe bool IsMoving()
@@ -27,10 +20,9 @@ internal abstract partial class CustomComboFunctions
         if (!isMoving)
             movementStarted = null;
 
-            Svc.Log.Debug("???");
-            return isMoving && (TimeMoving.TotalMilliseconds / 1000f) >= Service.Configuration.MovementLeeway;
-        }
-
-        public static TimeSpan TimeMoving => movementStarted is null ? TimeSpan.Zero : (DateTime.Now - movementStarted.Value);
+        Svc.Log.Debug("???");
+        return isMoving && (TimeMoving.TotalMilliseconds / 1000f) >= Service.Configuration.MovementLeeway;
     }
+
+    public static TimeSpan TimeMoving => movementStarted is null ? TimeSpan.Zero : (DateTime.Now - movementStarted.Value);
 }
