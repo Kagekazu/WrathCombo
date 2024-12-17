@@ -232,16 +232,14 @@ internal static partial class SGE
                             return Druochole;
                     }
 
-                    // Addersgall Protection
-                    if (IsEnabled(CustomComboPreset.SGE_AoE_DPS_AddersgallProtect) &&
-                        Gauge.Addersting == 3 && HasEffect(Buffs.EukrasianPrognosis))
-                        return Druochole;
+                    // Addersting Protection
+                    if (Gauge.Addersting == 3 && HasEffect(Buffs.EukrasianPrognosis))
+                        return Toxikon2;
 
                     //Eukrasia for DoT
                     if (IsEnabled(CustomComboPreset.SGE_AoE_DPS_EDyskrasia))
                         if (IsOffCooldown(Eukrasia) &&
-                            !WasLastSpell(
-                                EukrasianDyskrasia) && //AoE DoT can be slow to take affect, doesn't apply to target first before others
+                            !WasLastSpell(EukrasianDyskrasia) && //AoE DoT can be slow to take affect, doesn't apply to target first before others
                             TraitLevelChecked(Traits.OffensiveMagicMasteryII) &&
                             HasBattleTarget() &&
                             InActionRange(Dyskrasia) && //Same range
@@ -339,6 +337,10 @@ internal static partial class SGE
                             ActionReady(Druochole) && Gauge.Addersgall >= Config.SGE_ST_DPS_AddersgallProtect)
                             return Druochole;
                     }
+
+                    // Addersting Protection
+                    if (Gauge.Addersting == 3 && HasEffect(Buffs.EukrasianPrognosis))
+                        return Toxikon2;
 
                     if (HasBattleTarget() && !HasEffect(Buffs.Eukrasia))
 
