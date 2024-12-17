@@ -211,8 +211,7 @@ internal static partial class SGE
 
                         // Psyche
                         if (IsEnabled(CustomComboPreset.SGE_AoE_DPS_Psyche))
-                            if (ActionReady(Psyche) &&
-                                HasBattleTarget() &&
+                            if (ActionReady(Psyche) && HasBattleTarget() &&
                                 InActionRange(Psyche))
                                 return Psyche;
 
@@ -234,27 +233,25 @@ internal static partial class SGE
 
                     // Addersting Protection
                     if (Gauge.Addersting == 3 && HasEffect(Buffs.EukrasianPrognosis))
-                        return Toxikon2;
+                        return ToxikonID;
 
                     //Eukrasia for DoT
                     if (IsEnabled(CustomComboPreset.SGE_AoE_DPS_EDyskrasia))
                         if (IsOffCooldown(Eukrasia) &&
-                            !WasLastSpell(EukrasianDyskrasia) && //AoE DoT can be slow to take affect, doesn't apply to target first before others
+                            !WasLastSpell(
+                                EukrasianDyskrasia) && //AoE DoT can be slow to take affect, doesn't apply to target first before others
                             TraitLevelChecked(Traits.OffensiveMagicMasteryII) &&
-                            HasBattleTarget() &&
-                            InActionRange(Dyskrasia) && //Same range
+                            HasBattleTarget() && InActionRange(Dyskrasia) && //Same range
                             DosisList.TryGetValue(OriginalHook(Dosis), out ushort dotDebuffID))
                         {
                             float dotDebuff = Math.Max(GetDebuffRemainingTime(dotDebuffID),
                                 GetDebuffRemainingTime(Debuffs.EukrasianDyskrasia));
 
                             const float
-                                refreshtimer =
-                                    4; //Will revisit if it's really needed....SGE_ST_DPS_EDosis_Adv ? Config.SGE_ST_DPS_EDosisThreshold : 3;
+                                refreshtimer = 4; //Will revisit if it's really needed....SGE_ST_DPS_EDosis_Adv ? Config.SGE_ST_DPS_EDosisThreshold : 3;
 
                             if (dotDebuff <= refreshtimer &&
-                                GetTargetHPPercent() >
-                                10) //Will Revisit if Config is needed Config.SGE_ST_DPS_EDosisHPPer)
+                                GetTargetHPPercent() > 10) //Will Revisit if Config is needed Config.SGE_ST_DPS_EDosisHPPer)
                                 return Eukrasia;
                         }
 
@@ -286,7 +283,8 @@ internal static partial class SGE
 
         protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
         {
-            uint phlegma = OriginalHook(Phlegma);
+            uint PhlegmaID = OriginalHook(Phlegma);
+            uint ToxikonID = OriginalHook(Toxikon);
             bool ActionFound = actionID is Dosis2 || (!Config.SGE_ST_DPS_Adv && DosisList.ContainsKey(actionID));
 
             switch (ActionFound)
@@ -294,8 +292,8 @@ internal static partial class SGE
                 case true:
                 {
                     // Kardia Reminder
-                    if (IsEnabled(CustomComboPreset.SGE_ST_DPS_Kardia) && LevelChecked(Kardia) &&
-                        FindEffect(Buffs.Kardia) is null)
+                    if (IsEnabled(CustomComboPreset.SGE_ST_DPS_Kardia) &&
+                        LevelChecked(Kardia) && FindEffect(Buffs.Kardia) is null)
                         return Kardia;
 
                     // Opener for SGE
@@ -318,8 +316,7 @@ internal static partial class SGE
 
                         // Psyche
                         if (IsEnabled(CustomComboPreset.SGE_ST_DPS_Psyche) &&
-                            ActionReady(Psyche) &&
-                            InCombat())
+                            ActionReady(Psyche) && InCombat())
                             return Psyche;
 
                         // Rhizomata
@@ -339,8 +336,10 @@ internal static partial class SGE
                     }
 
                     // Addersting Protection
-                    if (Gauge.Addersting == 3 && HasEffect(Buffs.EukrasianPrognosis))
-                        return Toxikon2;
+                    if (Gauge.Addersting is 3 && HasEffect(Buffs.EukrasianPrognosis) &&
+                        ActionReady(ToxikonID) && HasBattleTarget() &&
+                        InActionRange(ToxikonID) && Gauge.HasAddersting())
+                        return ToxikonID;
 
                     if (HasBattleTarget() && !HasEffect(Buffs.Eukrasia))
 
@@ -379,17 +378,18 @@ internal static partial class SGE
 
                         // Phlegma
                         if (IsEnabled(CustomComboPreset.SGE_ST_DPS_Phlegma) && InCombat() &&
-                            InActionRange(phlegma) && ActionReady(phlegma) &&
+                            InActionRange(PhlegmaID) && ActionReady(PhlegmaID) &&
                             (!LevelChecked(Psyche) ||
                              (LevelChecked(Psyche) &&
                               ((GetCooldownRemainingTime(Psyche) >= 37 &&
-                                GetRemainingCharges(phlegma) == GetMaxCharges(phlegma)) ||
+                                GetRemainingCharges(PhlegmaID) == GetMaxCharges(PhlegmaID)) ||
                                ActionReady(Psyche) ||
                                JustUsed(Psyche)))))
-                            return phlegma;
+                            return PhlegmaID;
 
                         // Movement Options
-                        if (IsEnabled(CustomComboPreset.SGE_ST_DPS_Movement) && InCombat() && IsMoving())
+                        if (IsEnabled(CustomComboPreset.SGE_ST_DPS_Movement) &&
+                            InCombat() && IsMoving())
                         {
                             // Toxikon
                             if (Config.SGE_ST_DPS_Movement[0] && LevelChecked(Toxikon) && Gauge.HasAddersting())
@@ -464,25 +464,26 @@ internal static partial class SGE
 
         protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
         {
+            IGameObject? healTarget =
+                OptionalTarget ?? GetHealTarget(Config.SGE_ST_Heal_Adv && Config.SGE_ST_Heal_UIMouseOver);
+            
             if (actionID is Diagnosis)
             {
                 if (HasEffect(Buffs.Eukrasia))
                     return EukrasianDiagnosis;
-
-                IGameObject? healTarget = OptionalTarget ??
-                                          GetHealTarget(Config.SGE_ST_Heal_Adv && Config.SGE_ST_Heal_UIMouseOver);
-
-                if (IsEnabled(CustomComboPreset.SGE_ST_Heal_Esuna) && ActionReady(All.Esuna) &&
+                
+                if (IsEnabled(CustomComboPreset.SGE_ST_Heal_Esuna) && 
+                    ActionReady(All.Esuna) &&
                     GetTargetHPPercent(healTarget, Config.SGE_ST_Heal_IncludeShields) >= Config.SGE_ST_Heal_Esuna &&
                     HasCleansableDebuff(healTarget))
                     return All.Esuna;
 
-                if (IsEnabled(CustomComboPreset.SGE_ST_Heal_Rhizomata) && ActionReady(Rhizomata) &&
-                    !Gauge.HasAddersgall())
+                if (IsEnabled(CustomComboPreset.SGE_ST_Heal_Rhizomata) && 
+                    ActionReady(Rhizomata) && !Gauge.HasAddersgall())
                     return Rhizomata;
 
-                if (IsEnabled(CustomComboPreset.SGE_ST_Heal_Kardia) && LevelChecked(Kardia) &&
-                    FindEffect(Buffs.Kardia) is null &&
+                if (IsEnabled(CustomComboPreset.SGE_ST_Heal_Kardia) && 
+                    LevelChecked(Kardia) && FindEffect(Buffs.Kardia) is null &&
                     FindEffect(Buffs.Kardion, healTarget, LocalPlayer?.GameObjectId) is null)
                     return Kardia;
 
@@ -561,9 +562,11 @@ internal static partial class SGE
                 case Kerachole when IsEnabled(CustomComboPreset.SGE_OverProtect_Kerachole) &&
                                     ActionReady(Kerachole) &&
                                     (HasEffectAny(Buffs.Kerachole) ||
-                                     (IsEnabled(CustomComboPreset.SGE_OverProtect_SacredSoil) && HasEffectAny(SCH.Buffs.SacredSoil))) &&
+                                     (IsEnabled(CustomComboPreset.SGE_OverProtect_SacredSoil) &&
+                                      HasEffectAny(SCH.Buffs.SacredSoil))) &&
                                     (HasEffectAny(Buffs.Kerachole) ||
-                                     (IsEnabled(CustomComboPreset.SGE_OverProtect_SacredSoil) && HasEffectAny(SCH.Buffs.SacredSoil))):
+                                     (IsEnabled(CustomComboPreset.SGE_OverProtect_SacredSoil) &&
+                                      HasEffectAny(SCH.Buffs.SacredSoil))):
                 case Panhaima when IsEnabled(CustomComboPreset.SGE_OverProtect_Panhaima) &&
                                    ActionReady(Panhaima) && HasEffectAny(Buffs.Panhaima):
                     return SCH.SacredSoil;
