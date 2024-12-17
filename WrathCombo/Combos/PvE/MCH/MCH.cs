@@ -1,4 +1,4 @@
-#region
+﻿#region
 
 using WrathCombo.Combos.PvE.Content;
 using WrathCombo.CustomComboNS;
@@ -698,60 +698,51 @@ internal static partial class MCH
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.MCH_Overdrive;
 
-        protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
-        {
-            return actionID is RookAutoturret or AutomatonQueen && Gauge.IsRobotActive
-                ? OriginalHook(QueenOverdrive)
-                : actionID;
-        }
+        protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level) =>
+            actionID is RookAutoturret or AutomatonQueen && Gauge.IsRobotActive
+            ? OriginalHook(QueenOverdrive)
+            : actionID;
     }
 
     internal class MCH_HotShotDrillChainsawExcavator : CustomCombo
     {
-        protected internal override CustomComboPreset Preset { get; } =
-            CustomComboPreset.MCH_HotShotDrillChainsawExcavator;
+        protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.MCH_HotShotDrillChainsawExcavator;
 
-        protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
-        {
-            return actionID is Drill or HotShot or AirAnchor or Chainsaw
-                ? LevelChecked(Excavator) && HasEffect(Buffs.ExcavatorReady)
-                    ? CalcBestAction(actionID, Excavator, Chainsaw, AirAnchor, Drill)
-                    : LevelChecked(Chainsaw)
-                        ? CalcBestAction(actionID, Chainsaw, AirAnchor, Drill)
-                        : LevelChecked(AirAnchor)
-                            ? CalcBestAction(actionID, AirAnchor, Drill)
-                            : LevelChecked(Drill)
-                                ? CalcBestAction(actionID, Drill, HotShot)
-                                : HotShot
-                : actionID;
-        }
+        protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level) =>
+            actionID is Drill or HotShot or AirAnchor or Chainsaw
+            ? LevelChecked(Excavator) && HasEffect(Buffs.ExcavatorReady)
+            ? CalcBestAction(actionID, Excavator, Chainsaw, AirAnchor, Drill)
+            : LevelChecked(Chainsaw)
+            ? CalcBestAction(actionID, Chainsaw, AirAnchor, Drill)
+            : LevelChecked(AirAnchor)
+            ? CalcBestAction(actionID, AirAnchor, Drill)
+            : LevelChecked(Drill)
+            ? CalcBestAction(actionID, Drill, HotShot)
+            : HotShot
+            : actionID;
     }
 
     internal class MCH_DismantleTactician : CustomCombo
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.MCH_DismantleTactician;
 
-        protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
-        {
-            return actionID is Dismantle
-                   && (IsOnCooldown(Dismantle) || !LevelChecked(Dismantle))
-                   && ActionReady(Tactician)
-                   && !HasEffect(Buffs.Tactician)
+        protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level) =>
+            actionID is Dismantle
+            && (IsOnCooldown(Dismantle) || !LevelChecked(Dismantle))
+            && ActionReady(Tactician)
+            && !HasEffect(Buffs.Tactician)
                 ? Tactician
                 : actionID;
-        }
     }
 
     internal class All_PRanged_Dismantle : CustomCombo
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.All_PRanged_Dismantle;
 
-        protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
-        {
-            return actionID is Dismantle && TargetHasEffectAny(Debuffs.Dismantled) && IsOffCooldown(Dismantle)
-                ? OriginalHook(11)
-                : actionID;
-        }
+        protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level) =>
+            actionID is Dismantle && TargetHasEffectAny(Debuffs.Dismantled) && IsOffCooldown(Dismantle)
+            ? OriginalHook(11)
+            : actionID;
     }
 
     #region ID's

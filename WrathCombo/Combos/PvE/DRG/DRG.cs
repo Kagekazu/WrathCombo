@@ -1,4 +1,4 @@
-#region
+﻿#region
 
 using WrathCombo.Combos.PvE.Content;
 using WrathCombo.CustomComboNS;
@@ -727,12 +727,10 @@ internal partial class DRG
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.DRG_BurstCDFeature;
 
-        protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
-        {
-            return actionID is LanceCharge && IsOnCooldown(LanceCharge) && ActionReady(BattleLitany)
+        protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level) =>
+            actionID is LanceCharge && IsOnCooldown(LanceCharge) && ActionReady(BattleLitany)
                 ? BattleLitany
                 : actionID;
-        }
     }
 
     #region ID's

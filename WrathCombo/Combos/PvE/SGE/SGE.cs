@@ -1,10 +1,10 @@
-#region
+﻿#region
 
-using Dalamud.Game.ClientState.Objects.Types;
-using Dalamud.Game.ClientState.Statuses;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Dalamud.Game.ClientState.Objects.Types;
+using Dalamud.Game.ClientState.Statuses;
 using WrathCombo.Combos.PvE.Content;
 using WrathCombo.CustomComboNS;
 using WrathCombo.Data;
@@ -390,15 +390,16 @@ internal static partial class SGE
                             InCombat() && IsMoving())
                         {
                             // Toxikon
-                            if (Config.SGE_ST_DPS_Movement [0] && LevelChecked(Toxikon) && Gauge.HasAddersting())
+                            if (Config.SGE_ST_DPS_Movement[0] && LevelChecked(Toxikon) && Gauge.HasAddersting())
                                 return OriginalHook(Toxikon);
 
                             // Dyskrasia
-                            if (Config.SGE_ST_DPS_Movement [1] && LevelChecked(Dyskrasia) && InActionRange(Dyskrasia))
+                            if (Config.SGE_ST_DPS_Movement[1] && LevelChecked(Dyskrasia) && InActionRange(Dyskrasia))
                                 return OriginalHook(Dyskrasia);
 
                             // Eukrasia
-                            if (Config.SGE_ST_DPS_Movement [2] && LevelChecked(Eukrasia)) return Eukrasia;
+                            if (Config.SGE_ST_DPS_Movement[2] && LevelChecked(Eukrasia))
+                                return Eukrasia;
                         }
                     }
 
@@ -433,7 +434,7 @@ internal static partial class SGE
         protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
         {
             if (actionID is Eukrasia && HasEffect(Buffs.Eukrasia))
-                switch ((int) Config.SGE_Eukrasia_Mode)
+                switch ((int)Config.SGE_Eukrasia_Mode)
                 {
                     case 0: return OriginalHook(Dosis);
 
@@ -495,9 +496,9 @@ internal static partial class SGE
                 if (IsEnabled(CustomComboPreset.SGE_ST_Heal_EDiagnosis) && LevelChecked(Eukrasia) &&
                     GetTargetHPPercent(healTarget, Config.SGE_ST_Heal_IncludeShields) <=
                     Config.SGE_ST_Heal_EDiagnosisHP &&
-                    (Config.SGE_ST_Heal_EDiagnosisOpts [0] ||
+                    (Config.SGE_ST_Heal_EDiagnosisOpts[0] ||
                      FindEffectOnMember(Buffs.EukrasianDiagnosis, healTarget) is null) && //Ignore existing shield check
-                    (!Config.SGE_ST_Heal_EDiagnosisOpts [1] ||
+                    (!Config.SGE_ST_Heal_EDiagnosisOpts[1] ||
                      FindEffectOnMember(SCH.Buffs.Galvanize, healTarget) is null)) //Galvenize Check
                     return Eukrasia;
             }
