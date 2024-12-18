@@ -33,7 +33,6 @@ internal static partial class SAM
         return WrathOpener.Dummy;
     }
 
-
     internal static class SAMHelper
     {
         internal static int SenCount => GetSenCount();
@@ -43,9 +42,12 @@ internal static partial class SAM
         private static int GetSenCount()
         {
             int senCount = 0;
-            if (gauge.HasGetsu) senCount++;
-            if (gauge.HasSetsu) senCount++;
-            if (gauge.HasKa) senCount++;
+            if (gauge.HasGetsu)
+                senCount++;
+            if (gauge.HasSetsu)
+                senCount++;
+            if (gauge.HasKa)
+                senCount++;
 
             return senCount;
         }

@@ -1,4 +1,4 @@
-#region
+﻿#region
 
 using WrathCombo.Combos.PvP;
 using WrathCombo.CustomComboNS.Functions;
