@@ -1,12 +1,8 @@
-﻿#region
-
-using ImGuiNET;
+﻿using ImGuiNET;
 using WrathCombo.CustomComboNS.Functions;
 using static WrathCombo.Extensions.UIntExtensions;
 using static WrathCombo.Window.Functions.SliderIncrements;
 using static WrathCombo.Window.Functions.UserConfig;
-
-#endregion
 
 namespace WrathCombo.Combos.PvE;
 

@@ -1,3 +1,4 @@
+﻿using WrathCombo.Combos.PvE.ALL;
 using WrathCombo.CustomComboNS.Functions;
 using WrathCombo.Extensions;
 using WrathCombo.Window.Functions;
@@ -95,7 +96,6 @@ internal partial class GNB
                         "Player HP% to be \nless than or equal to:", 200);
 
                     break;
-
 
                 case CustomComboPreset.GNB_ST_Simple:
                     UserConfig.DrawHorizontalRadioButton(GNB_ST_MitsOptions,

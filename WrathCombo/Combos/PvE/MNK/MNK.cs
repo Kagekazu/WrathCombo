@@ -1,10 +1,7 @@
-﻿#region
-
+﻿using WrathCombo.Combos.PvE.ALL;
 using WrathCombo.Combos.PvE.Content;
 using WrathCombo.CustomComboNS;
 using WrathCombo.Data;
-
-#endregion
 
 namespace WrathCombo.Combos.PvE;
 
@@ -65,7 +62,7 @@ internal static partial class MNK
                     return RiddleOfWind;
 
                 //Perfect Balance
-                if (MNKHelper.UsePerfectBalance())
+                if (UsePerfectBalance())
                     return PerfectBalance;
 
                 if (PlayerHealthPercentageHp() <= 25 &&
@@ -100,7 +97,7 @@ internal static partial class MNK
             {
                 #region Open Lunar
 
-                if (!lunarNadi || bothNadisOpen || (!solarNadi && !lunarNadi))
+                if (!LunarNadi || BothNadisOpen || (!SolarNadi && !LunarNadi))
                 {
                     return Gauge.OpoOpoFury == 0
                         ? DragonKick
@@ -111,23 +108,23 @@ internal static partial class MNK
 
                 #region Open Solar
 
-                if (!solarNadi && !bothNadisOpen)
+                if (!SolarNadi && !BothNadisOpen)
                 {
-                    if (coeurlChakra == 0)
+                    if (CoeurlChakra == 0)
                     {
                         return Gauge.CoeurlFury == 0
                             ? Demolish
                             : OriginalHook(SnapPunch);
                     }
 
-                    if (raptorChakra == 0)
+                    if (RaptorChakra == 0)
                     {
                         return Gauge.RaptorFury == 0
                             ? TwinSnakes
                             : OriginalHook(TrueStrike);
                     }
 
-                    if (opoOpoChakra == 0)
+                    if (OpoOpoChakra == 0)
                     {
                         return Gauge.OpoOpoFury == 0
                             ? DragonKick
@@ -153,7 +150,7 @@ internal static partial class MNK
                 return WindsReply;
 
             // Standard Beast Chakras
-            return MNKHelper.DetermineCoreAbility(actionID, true);
+            return DetermineCoreAbility(actionID, true);
         }
     }
 
@@ -188,7 +185,6 @@ internal static partial class MNK
                         ? TheForbiddenChakra
                         : actionID;
                 }
-            }
 
             //Variant Cure
             if (IsEnabled(CustomComboPreset.MNK_Variant_Cure) &&
@@ -227,7 +223,7 @@ internal static partial class MNK
 
                 //Perfect Balance
                 if (IsEnabled(CustomComboPreset.MNK_STUsePerfectBalance) &&
-                    MNKHelper.UsePerfectBalance())
+                    UsePerfectBalance())
                     return PerfectBalance;
 
                 if (IsEnabled(CustomComboPreset.MNK_ST_ComboHeals))
@@ -266,7 +262,7 @@ internal static partial class MNK
             {
                 #region Open Lunar
 
-                if (!lunarNadi || bothNadisOpen || (!solarNadi && !lunarNadi))
+                if (!LunarNadi || BothNadisOpen || (!SolarNadi && !LunarNadi))
                 {
                     return Gauge.OpoOpoFury == 0
                         ? DragonKick
@@ -277,23 +273,23 @@ internal static partial class MNK
 
                 #region Open Solar
 
-                if (!solarNadi && !bothNadisOpen)
+                if (!SolarNadi && !BothNadisOpen)
                 {
-                    if (coeurlChakra == 0)
+                    if (CoeurlChakra == 0)
                     {
                         return Gauge.CoeurlFury == 0
                             ? Demolish
                             : OriginalHook(SnapPunch);
                     }
 
-                    if (raptorChakra == 0)
+                    if (RaptorChakra == 0)
                     {
                         return Gauge.RaptorFury == 0
                             ? TwinSnakes
                             : OriginalHook(TrueStrike);
                     }
 
-                    if (opoOpoChakra == 0)
+                    if (OpoOpoChakra == 0)
                     {
                         return Gauge.OpoOpoFury == 0
                             ? DragonKick
@@ -326,7 +322,7 @@ internal static partial class MNK
             }
 
             // Standard Beast Chakras
-            return MNKHelper.DetermineCoreAbility(actionID, IsEnabled(CustomComboPreset.MNK_STUseTrueNorth));
+            return DetermineCoreAbility(actionID, IsEnabled(CustomComboPreset.MNK_STUseTrueNorth));
         }
     }
 
@@ -417,7 +413,7 @@ internal static partial class MNK
             {
                 #region Open Lunar
 
-                if (!lunarNadi || bothNadisOpen || (!solarNadi && !lunarNadi))
+                if (!LunarNadi || BothNadisOpen || (!SolarNadi && !LunarNadi))
                 {
                     return LevelChecked(ShadowOfTheDestroyer)
                         ? ShadowOfTheDestroyer
@@ -428,7 +424,7 @@ internal static partial class MNK
 
                 #region Open Solar
 
-                if (!solarNadi && !bothNadisOpen)
+                if (!SolarNadi && !BothNadisOpen)
                 {
                     switch (GetBuffStacks(Buffs.PerfectBalance))
                     {
@@ -577,7 +573,7 @@ internal static partial class MNK
             {
                 #region Open Lunar
 
-                if (!lunarNadi || bothNadisOpen || (!solarNadi && !lunarNadi))
+                if (!LunarNadi || BothNadisOpen || (!SolarNadi && !LunarNadi))
                 {
                     return LevelChecked(ShadowOfTheDestroyer)
                         ? ShadowOfTheDestroyer
@@ -588,7 +584,7 @@ internal static partial class MNK
 
                 #region Open Solar
 
-                if (!solarNadi && !bothNadisOpen)
+                if (!SolarNadi && !BothNadisOpen)
                 {
                     switch (GetBuffStacks(Buffs.PerfectBalance))
                     {

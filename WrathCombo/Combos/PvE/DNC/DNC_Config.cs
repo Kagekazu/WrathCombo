@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 using ImGuiNET;
 using WrathCombo.Combos.PvP;
 using WrathCombo.CustomComboNS.Functions;
@@ -47,7 +47,7 @@ internal partial class DNC
 
         public static readonly UserInt
             DNCVariantCurePercent = new("DNCVariantCurePercent"); // Variant Cure - player HP% threshold
-            
+
         internal static void Draw(CustomComboPreset preset)
         {
             switch (preset)

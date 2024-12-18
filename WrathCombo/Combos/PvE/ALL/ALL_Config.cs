@@ -1,4 +1,4 @@
-namespace WrathCombo.Combos.PvE;
+﻿namespace WrathCombo.Combos.PvE.ALL;
 
 internal partial class ALL
 {

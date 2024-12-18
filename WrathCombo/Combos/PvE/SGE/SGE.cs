@@ -1,115 +1,17 @@
-﻿#region
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Game.ClientState.Statuses;
+using WrathCombo.Combos.PvE.ALL;
 using WrathCombo.Combos.PvE.Content;
 using WrathCombo.CustomComboNS;
 using WrathCombo.Data;
-
-#endregion
 
 namespace WrathCombo.Combos.PvE;
 
 internal static partial class SGE
 {
-    internal const byte JobID = 40;
-
-    // Actions
-    internal const uint
-
-        // Heals and Shields
-        Diagnosis = 24284,
-        Prognosis = 24286,
-        Physis = 24288,
-        Druochole = 24296,
-        Kerachole = 24298,
-        Ixochole = 24299,
-        Pepsis = 24301,
-        Physis2 = 24302,
-        Taurochole = 24303,
-        Haima = 24305,
-        Panhaima = 24311,
-        Holos = 24310,
-        EukrasianDiagnosis = 24291,
-        EukrasianPrognosis = 24292,
-        Egeiro = 24287,
-
-        // DPS
-        Dosis = 24283,
-        Dosis2 = 24306,
-        Dosis3 = 24312,
-        EukrasianDosis = 24293,
-        EukrasianDosis2 = 24308,
-        EukrasianDosis3 = 24314,
-        Phlegma = 24289,
-        Phlegma2 = 24307,
-        Phlegma3 = 24313,
-        Dyskrasia = 24297,
-        Dyskrasia2 = 24315,
-        Toxikon = 24304,
-        Toxikon2 = 24316,
-        Pneuma = 24318,
-        EukrasianDyskrasia = 37032,
-        Psyche = 37033,
-
-        // Buffs
-        Soteria = 24294,
-        Zoe = 24300,
-        Krasis = 24317,
-        Philosophia = 37035,
-
-        // Other
-        Kardia = 24285,
-        Eukrasia = 24290,
-        Rhizomata = 24309;
-
-    // Action Groups
-    internal static readonly List<uint>
-        AddersgallList = [Taurochole, Druochole, Ixochole, Kerachole],
-        DyskrasiaList = [Dyskrasia, Dyskrasia2];
-
-    // Debuff Pairs of Actions and Debuff
-    internal static readonly Dictionary<uint, ushort>
-        DosisList = new()
-        {
-            { Dosis, Debuffs.EukrasianDosis },
-            { Dosis2, Debuffs.EukrasianDosis2 },
-            { Dosis3, Debuffs.EukrasianDosis3 }
-        };
-
-    // Action Buffs
-    internal static class Buffs
-    {
-        internal const ushort
-            Kardia = 2604,
-            Kardion = 2605,
-            Eukrasia = 2606,
-            EukrasianDiagnosis = 2607,
-            EukrasianPrognosis = 2609,
-            Panhaima = 2613,
-            Kerachole = 2618,
-            Eudaimonia = 3899;
-    }
-
-    internal static class Debuffs
-    {
-        internal const ushort
-            EukrasianDosis = 2614,
-            EukrasianDosis2 = 2615,
-            EukrasianDosis3 = 2616,
-            EukrasianDyskrasia = 3897;
-    }
-
-    internal static class Traits
-    {
-        internal const ushort
-            EnhancedKerachole = 375,
-            OffensiveMagicMasteryII = 376;
-    }
-
     /*
      * SGE_Kardia
      * Soteria becomes Kardia when Kardia's Buff is not active or Soteria is on cooldown.
@@ -181,8 +83,8 @@ internal static partial class SGE
         protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
         {
             Status? sustainedDamage = FindTargetEffect(Variant.Debuffs.SustainedDamage);
-            uint PhlegmaID = OriginalHook(Phlegma);
-            uint ToxikonID = OriginalHook(Toxikon);
+            uint phlegmaID = OriginalHook(Phlegma);
+            uint toxikonID = OriginalHook(Toxikon);
 
             if (DyskrasiaList.Contains(actionID))
                 if (!HasEffect(Buffs.Eukrasia))
@@ -204,7 +106,7 @@ internal static partial class SGE
                         // Lucid Dreaming
                         if (IsEnabled(CustomComboPreset.SGE_AoE_DPS_Lucid) &&
                             ActionReady(All.LucidDreaming) &&
-                            LocalPlayer.CurrentMp <= Config.SGE_AoE_DPS_Lucid)
+                            LocalPlayer?.CurrentMp <= Config.SGE_AoE_DPS_Lucid)
                             return All.LucidDreaming;
 
                         // Psyche
@@ -231,7 +133,7 @@ internal static partial class SGE
 
                     // Addersting Protection
                     if (Gauge.Addersting == 3 && HasEffect(Buffs.EukrasianPrognosis))
-                        return ToxikonID;
+                        return toxikonID;
 
                     //Eukrasia for DoT
                     if (IsEnabled(CustomComboPreset.SGE_AoE_DPS_EDyskrasia))
@@ -255,15 +157,15 @@ internal static partial class SGE
 
                     //Phlegma
                     if (IsEnabled(CustomComboPreset.SGE_AoE_DPS_Phlegma) &&
-                        ActionReady(PhlegmaID) && HasBattleTarget() &&
-                        InActionRange(PhlegmaID))
-                        return PhlegmaID;
+                        ActionReady(phlegmaID) && HasBattleTarget() &&
+                        InActionRange(phlegmaID))
+                        return phlegmaID;
 
                     //Toxikon
                     if (IsEnabled(CustomComboPreset.SGE_AoE_DPS_Toxikon) &&
-                        ActionReady(ToxikonID) && HasBattleTarget() &&
-                        InActionRange(ToxikonID) && Gauge.HasAddersting())
-                        return ToxikonID;
+                        ActionReady(toxikonID) && HasBattleTarget() &&
+                        InActionRange(toxikonID) && Gauge.HasAddersting())
+                        return toxikonID;
                 }
 
             return actionID;
@@ -281,11 +183,11 @@ internal static partial class SGE
 
         protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
         {
-            uint PhlegmaID = OriginalHook(Phlegma);
-            uint ToxikonID = OriginalHook(Toxikon);
-            bool ActionFound = actionID is Dosis2 || (!Config.SGE_ST_DPS_Adv && DosisList.ContainsKey(actionID));
+            uint phlegmaID = OriginalHook(Phlegma);
+            uint toxikonID = OriginalHook(Toxikon);
+            bool actionFound = actionID is Dosis2 || (!Config.SGE_ST_DPS_Adv && DosisList.ContainsKey(actionID));
 
-            switch (ActionFound)
+            switch (actionFound)
             {
                 case true:
                 {
@@ -294,10 +196,10 @@ internal static partial class SGE
                         LevelChecked(Kardia) && FindEffect(Buffs.Kardia) is null)
                         return Kardia;
 
-                // Opener for SGE
-                if (IsEnabled(CustomComboPreset.SGE_ST_DPS_Opener))
-                    if (Opener().FullOpener(ref actionID))
-                        return actionID;
+                    // Opener for SGE
+                    if (IsEnabled(CustomComboPreset.SGE_ST_DPS_Opener))
+                        if (Opener().FullOpener(ref actionID))
+                            return actionID;
 
                     if (CanSpellWeave(ActionWatching.LastSpell))
                     {
@@ -335,9 +237,9 @@ internal static partial class SGE
 
                     // Addersting Protection
                     if (Gauge.Addersting is 3 && HasEffect(Buffs.EukrasianPrognosis) &&
-                        ActionReady(ToxikonID) && HasBattleTarget() &&
-                        InActionRange(ToxikonID) && Gauge.HasAddersting())
-                        return ToxikonID;
+                        ActionReady(toxikonID) && HasBattleTarget() &&
+                        InActionRange(toxikonID) && Gauge.HasAddersting())
+                        return toxikonID;
 
                     if (HasBattleTarget() && !HasEffect(Buffs.Eukrasia))
 
@@ -376,14 +278,14 @@ internal static partial class SGE
 
                         // Phlegma
                         if (IsEnabled(CustomComboPreset.SGE_ST_DPS_Phlegma) && InCombat() &&
-                            InActionRange(PhlegmaID) && ActionReady(PhlegmaID) &&
+                            InActionRange(phlegmaID) && ActionReady(phlegmaID) &&
                             (!LevelChecked(Psyche) ||
                              (LevelChecked(Psyche) &&
                               ((GetCooldownRemainingTime(Psyche) >= 37 &&
-                                GetRemainingCharges(PhlegmaID) == GetMaxCharges(PhlegmaID)) ||
+                                GetRemainingCharges(phlegmaID) == GetMaxCharges(phlegmaID)) ||
                                ActionReady(Psyche) ||
                                JustUsed(Psyche)))))
-                            return PhlegmaID;
+                            return phlegmaID;
 
                         // Movement Options
                         if (IsEnabled(CustomComboPreset.SGE_ST_DPS_Movement) &&
@@ -485,7 +387,7 @@ internal static partial class SGE
                 foreach (int prio in Config.SGE_ST_Heals_Priority.Items.OrderBy(x => x))
                 {
                     int index = Config.SGE_ST_Heals_Priority.IndexOf(prio);
-                    int config = SGEHelper.GetMatchingConfigST(index, OptionalTarget, out uint spell, out bool enabled);
+                    int config = GetMatchingConfigST(index, OptionalTarget, out uint spell, out bool enabled);
 
                     if (enabled)
                         if (GetTargetHPPercent(healTarget, Config.SGE_ST_Heal_IncludeShields) <= config &&
@@ -530,7 +432,7 @@ internal static partial class SGE
                 foreach (int prio in Config.SGE_AoE_Heals_Priority.Items.OrderBy(x => x))
                 {
                     int index = Config.SGE_AoE_Heals_Priority.IndexOf(prio);
-                    int config = SGEHelper.GetMatchingConfigAoE(index, out uint spell, out bool enabled);
+                    int config = GetMatchingConfigAoE(index, out uint spell, out bool enabled);
 
                     if (enabled && ActionReady(spell))
                         return spell;
@@ -575,4 +477,103 @@ internal static partial class SGE
             }
         }
     }
+
+    #region ID's
+
+    internal const byte JobID = 40;
+
+    // Actions
+    internal const uint
+
+        // Heals and Shields
+        Diagnosis = 24284,
+        Prognosis = 24286,
+        Physis = 24288,
+        Druochole = 24296,
+        Kerachole = 24298,
+        Ixochole = 24299,
+        Pepsis = 24301,
+        Physis2 = 24302,
+        Taurochole = 24303,
+        Haima = 24305,
+        Panhaima = 24311,
+        Holos = 24310,
+        EukrasianDiagnosis = 24291,
+        EukrasianPrognosis = 24292,
+        Egeiro = 24287,
+
+        // DPS
+        Dosis = 24283,
+        Dosis2 = 24306,
+        Dosis3 = 24312,
+        EukrasianDosis = 24293,
+        EukrasianDosis2 = 24308,
+        EukrasianDosis3 = 24314,
+        Phlegma = 24289,
+        Phlegma2 = 24307,
+        Phlegma3 = 24313,
+        Dyskrasia = 24297,
+        Dyskrasia2 = 24315,
+        Toxikon = 24304,
+        Toxikon2 = 24316,
+        Pneuma = 24318,
+        EukrasianDyskrasia = 37032,
+        Psyche = 37033,
+
+        // Buffs
+        Soteria = 24294,
+        Zoe = 24300,
+        Krasis = 24317,
+        Philosophia = 37035,
+
+        // Other
+        Kardia = 24285,
+        Eukrasia = 24290,
+        Rhizomata = 24309;
+
+    // Action Groups
+    internal static readonly List<uint>
+        AddersgallList = [Taurochole, Druochole, Ixochole, Kerachole],
+        DyskrasiaList = [Dyskrasia, Dyskrasia2];
+
+    // Debuff Pairs of Actions and Debuff
+    internal static readonly Dictionary<uint, ushort>
+        DosisList = new()
+        {
+            { Dosis, Debuffs.EukrasianDosis },
+            { Dosis2, Debuffs.EukrasianDosis2 },
+            { Dosis3, Debuffs.EukrasianDosis3 }
+        };
+
+    // Action Buffs
+    internal static class Buffs
+    {
+        internal const ushort
+            Kardia = 2604,
+            Kardion = 2605,
+            Eukrasia = 2606,
+            EukrasianDiagnosis = 2607,
+            EukrasianPrognosis = 2609,
+            Panhaima = 2613,
+            Kerachole = 2618,
+            Eudaimonia = 3899;
+    }
+
+    internal static class Debuffs
+    {
+        internal const ushort
+            EukrasianDosis = 2614,
+            EukrasianDosis2 = 2615,
+            EukrasianDosis3 = 2616,
+            EukrasianDyskrasia = 3897;
+    }
+
+    internal static class Traits
+    {
+        internal const ushort
+            EnhancedKerachole = 375,
+            OffensiveMagicMasteryII = 376;
+    }
+
+    #endregion
 }

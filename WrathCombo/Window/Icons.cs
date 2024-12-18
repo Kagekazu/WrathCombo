@@ -5,6 +5,7 @@ using ECommons.DalamudServices;
 using Lumina.Data.Files;
 using System.Collections.Generic;
 using WrathCombo.Combos.PvE;
+using WrathCombo.Combos.PvE.ALL;
 
 namespace WrathCombo.Window
 {

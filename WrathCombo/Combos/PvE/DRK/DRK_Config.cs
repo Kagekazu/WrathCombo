@@ -1,6 +1,4 @@
-#region
-
-using WrathCombo.Combos.PvP;
+﻿using WrathCombo.Combos.PvP;
 using WrathCombo.CustomComboNS.Functions;
 using WrathCombo.Data;
 using WrathCombo.Window.Functions;
@@ -9,8 +7,6 @@ using WrathCombo.Window.Functions;
 // ReSharper disable InconsistentNaming
 // ReSharper disable CheckNamespace
 // ReSharper disable ClassNeverInstantiated.Global
-
-#endregion
 
 namespace WrathCombo.Combos.PvE;
 
@@ -184,7 +180,7 @@ internal partial class DRK
 
                     break;
 
-                #endregion
+                    #endregion
             }
         }
 
