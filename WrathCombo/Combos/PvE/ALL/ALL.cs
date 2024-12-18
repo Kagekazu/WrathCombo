@@ -2,7 +2,7 @@
 using WrathCombo.CustomComboNS;
 using WrathCombo.CustomComboNS.Functions;
 
-namespace WrathCombo.Combos.PvE.ALL;
+namespace WrathCombo.Combos.PvE;
 
 internal class All
 {
