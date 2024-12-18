@@ -124,7 +124,7 @@ internal static partial class SAM
                 return Variant.VariantRampart;
 
             // Opener for SAM
-            if (SAMOpener().FullOpener(ref actionID))
+            if (Opener().FullOpener(ref actionID))
                 return actionID;
 
             //Meikyo to start before combat
@@ -218,7 +218,7 @@ internal static partial class SAM
 
             if (HasEffect(Buffs.MeikyoShisui))
             {
-                if (trueNorthReady && CanDelayedWeave(ActionWatching.LastWeaponskill))
+                if (trueNorthReady && CanDelayedWeave())
                     return All.TrueNorth;
 
                 if (LevelChecked(Gekko) &&
@@ -304,7 +304,7 @@ internal static partial class SAM
 
             // Opener for SAM
             if (IsEnabled(CustomComboPreset.SAM_ST_Opener))
-                if (SAMOpener().FullOpener(ref actionID))
+                if (Opener().FullOpener(ref actionID))
                     return actionID;
 
             //Meikyo to start before combat
@@ -422,7 +422,7 @@ internal static partial class SAM
             if (HasEffect(Buffs.MeikyoShisui))
             {
                 if (IsEnabled(CustomComboPreset.SAM_ST_TrueNorth) &&
-                    trueNorthReady && CanDelayedWeave(ActionWatching.LastWeaponskill))
+                    trueNorthReady && CanDelayedWeave())
                     return All.TrueNorth;
 
                 if (LevelChecked(Gekko) && (!HasEffect(Buffs.Fugetsu) ||

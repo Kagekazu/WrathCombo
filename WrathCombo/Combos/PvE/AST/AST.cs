@@ -40,8 +40,8 @@ namespace WrathCombo.Combos.PvE
             Spear = 37026,
             Spire = 37025,
             MinorArcana = 37022,
-            //LordOfCrowns = 7444,
-            //LadyOfCrown = 7445,
+            LordOfCrowns = 7444,
+            LadyOfCrown = 7445,
 
             //Utility
             Divination = 16552,
@@ -160,21 +160,25 @@ namespace WrathCombo.Combos.PvE
                 }
                 
                 bool AlternateMode = GetIntOptionAsBool(Config.AST_DPS_AltMode); //(0 or 1 radio values)
-                bool inOpener = IsEnabled(CustomComboPreset.AST_ST_DPS_Opener) && MaleficCount < 6;
+                bool actionFound = (!AlternateMode && MaleficList.Contains(actionID)) ||
+                    (AlternateMode && CombustList.ContainsKey(actionID));
+
+                if (!actionFound)
+                    return actionID;
 
                 // Out of combat Card Draw
-                if (((!AlternateMode && MaleficList.Contains(actionID)) ||
-                    (AlternateMode && CombustList.ContainsKey(actionID)) &&
-                    !InCombat()))
+                if (!InCombat())
                 {
                     if (IsEnabled(CustomComboPreset.AST_DPS_AutoDraw) &&
                         ActionReady(OriginalHook(AstralDraw)) && (Gauge.DrawnCards.All(x => x is CardType.NONE) || (DrawnCard == CardType.NONE && Config.AST_ST_DPS_OverwriteCards)))
                         return OriginalHook(AstralDraw);
                 }
+
+                if (IsEnabled(CustomComboPreset.AST_ST_DPS_Opener) && Opener().FullOpener(ref actionID))
+                    return actionID;
+
                 //In combat
-                if (((!AlternateMode && MaleficList.Contains(actionID)) ||
-                     (AlternateMode && CombustList.ContainsKey(actionID))) &&
-                     InCombat())
+                if (InCombat())
                 {
                     //Variant stuff
                     if (IsEnabled(CustomComboPreset.AST_Variant_Rampart) &&
@@ -189,62 +193,6 @@ namespace WrathCombo.Combos.PvE
                         (sustainedDamage is null || sustainedDamage?.RemainingTime <= 3) &&
                         CanSpellWeave(actionID))
                         return Variant.VariantSpiritDart;
-
-                    //Opener
-                    if (inOpener)
-                    {
-                        if (MaleficCount == 0)
-                            return OriginalHook(Malefic);
-
-                        if (MaleficCount == 1 && CombustCount == 0)
-                            return OriginalHook(Combust);
-
-                        if (MaleficCount == 1 && (CombustCount == 1) && ActionReady(Lightspeed) && CanDelayedWeave(actionID) && !HasEffect(Buffs.Lightspeed))
-                            return OriginalHook(Lightspeed);
-
-                        if (MaleficCount == 3 && CanWeave(actionID))
-                        {
-                            if (IsEnabled(CustomComboPreset.AST_DPS_Divination) &&
-                            ActionReady(Divination) &&
-                            !HasEffectAny(Buffs.Divination) && //Overwrite protection
-                            GetTargetHPPercent() > Config.AST_DPS_DivinationOption &&
-                            CanWeave(actionID))
-                                return Divination;
-
-                            if (IsEnabled(CustomComboPreset.AST_DPS_AutoPlay) &&
-                            ActionReady(Play1) &&
-                            Gauge.DrawnCards[0] is not CardType.NONE)
-                                return OriginalHook(Play1);
-                        }
-
-                        if (MaleficCount == 4 && CanWeave(actionID))
-                        {
-                            if (ActionReady(OriginalHook(MinorArcana)) &&
-                            IsEnabled(CustomComboPreset.AST_DPS_LazyLord) && Gauge.DrawnCrownCard is CardType.LORD &&
-                            HasBattleTarget())
-                                return OriginalHook(MinorArcana);
-
-                            if (IsEnabled(CustomComboPreset.AST_DPS_AutoDraw) && Gauge.DrawnCrownCard is not CardType.LORD && CanDelayedWeave(actionID))
-                                return OriginalHook(AstralDraw);
-                        }
-                        if (MaleficCount == 5 && CanWeave(actionID))
-                        {
-                            if (IsEnabled(CustomComboPreset.AST_DPS_AutoPlay) &&
-                            ActionReady(Play1) &&
-                            Gauge.DrawnCards[0] is not CardType.NONE)
-                                return OriginalHook(Play1);
-
-                            if (IsEnabled(CustomComboPreset.AST_DPS_Oracle) &&
-                            HasEffect(Buffs.Divining) &&
-                            CanSpellWeave(actionID))
-                                return Oracle;
-                        }
-
-                        if (MaleficCount > 0)
-                            return OriginalHook(Malefic);
-                    }
-
-                    //End opener
 
                     if (IsEnabled(CustomComboPreset.AST_DPS_LightSpeed) &&
                         ActionReady(Lightspeed) &&
@@ -274,7 +222,7 @@ namespace WrathCombo.Combos.PvE
                     if (IsEnabled(CustomComboPreset.AST_DPS_AutoDraw) &&
                         ActionReady(OriginalHook(AstralDraw)) &&
                         (Gauge.DrawnCards.All(x => x is CardType.NONE) || (DrawnCard == CardType.NONE && Config.AST_ST_DPS_OverwriteCards)) &&
-                        CanDelayedWeave(actionID))
+                        CanDelayedWeave())
                         return OriginalHook(AstralDraw);
 
                     //Divination
@@ -282,7 +230,7 @@ namespace WrathCombo.Combos.PvE
                         ActionReady(Divination) &&
                         !HasEffectAny(Buffs.Divination) && //Overwrite protection
                         GetTargetHPPercent() > Config.AST_DPS_DivinationOption &&
-                        CanDelayedWeave(actionID) &&
+                        CanDelayedWeave() &&
                         ActionWatching.NumberOfGcdsUsed >= 3)
                         return Divination;
 
@@ -301,7 +249,7 @@ namespace WrathCombo.Combos.PvE
                     if (ActionReady(OriginalHook(MinorArcana)) &&
                         IsEnabled(CustomComboPreset.AST_DPS_LazyLord) && Gauge.DrawnCrownCard is CardType.LORD &&
                         HasBattleTarget() &&
-                        CanDelayedWeave(actionID))
+                        CanDelayedWeave())
                         return OriginalHook(MinorArcana);                                       
 
                     if (HasBattleTarget())
@@ -391,7 +339,7 @@ namespace WrathCombo.Combos.PvE
                     if (IsEnabled(CustomComboPreset.AST_AOE_AutoDraw) &&
                         ActionReady(OriginalHook(AstralDraw)) &&
                         (Gauge.DrawnCards.All(x => x is CardType.NONE) || (DrawnCard == CardType.NONE && Config.AST_AOE_DPS_OverwriteCards)) &&
-                        CanDelayedWeave(actionID))
+                        CanDelayedWeave())
                         return OriginalHook(AstralDraw);
 
                     //Divination
@@ -399,7 +347,7 @@ namespace WrathCombo.Combos.PvE
                         ActionReady(Divination) &&
                         !HasEffectAny(Buffs.Divination) && //Overwrite protection
                         GetTargetHPPercent() > Config.AST_AOE_DivinationOption &&
-                        CanDelayedWeave(actionID) &&
+                        CanDelayedWeave() &&
                         ActionWatching.NumberOfGcdsUsed >= 3)
                         return Divination;
                     //Earthly Star
@@ -417,7 +365,7 @@ namespace WrathCombo.Combos.PvE
                     if (ActionReady(OriginalHook(MinorArcana)) &&
                         IsEnabled(CustomComboPreset.AST_AOE_LazyLord) && Gauge.DrawnCrownCard is CardType.LORD &&
                         HasBattleTarget() &&
-                        CanDelayedWeave(actionID))
+                        CanDelayedWeave())
                         return OriginalHook(MinorArcana);
                 }
                 return actionID;

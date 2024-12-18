@@ -30,7 +30,7 @@ internal static partial class MNK
                 !HasEffect(Buffs.FormlessFist) && !HasEffect(Buffs.PerfectBalance))
                 return FormShift;
 
-            if (MNKOpener().FullOpener(ref actionID))
+            if (Opener().FullOpener(ref actionID))
             {
                 return IsOnCooldown(RiddleOfWind) &&
                     CanWeave(ActionWatching.LastWeaponskill) &&
@@ -46,7 +46,7 @@ internal static partial class MNK
                 return Variant.VariantCure;
 
             if (ActionReady(RiddleOfFire) &&
-                CanDelayedWeave(ActionWatching.LastWeaponskill))
+                CanDelayedWeave())
                 return RiddleOfFire;
 
             // OGCDs
@@ -180,8 +180,7 @@ internal static partial class MNK
                 return FormShift;
 
             if (IsEnabled(CustomComboPreset.MNK_STUseOpener))
-            {
-                if (MNKOpener().FullOpener(ref actionID))
+                if (Opener().FullOpener(ref actionID))
                 {
                     return IsOnCooldown(RiddleOfWind) &&
                         CanWeave(ActionWatching.LastWeaponskill) &&
@@ -200,7 +199,7 @@ internal static partial class MNK
             if (IsEnabled(CustomComboPreset.MNK_STUseBuffs) &&
                 IsEnabled(CustomComboPreset.MNK_STUseROF) &&
                 ActionReady(RiddleOfFire) &&
-                CanDelayedWeave(ActionWatching.LastWeaponskill) &&
+                CanDelayedWeave() &&
                 GetTargetHPPercent() >= Config.MNK_ST_RiddleOfFire_HP)
                 return RiddleOfFire;
 
@@ -357,7 +356,7 @@ internal static partial class MNK
                 return Variant.VariantCure;
 
             if (ActionReady(RiddleOfFire) &&
-                CanDelayedWeave(ActionWatching.LastWeaponskill))
+                CanDelayedWeave())
                 return RiddleOfFire;
 
             // Buffs
@@ -495,7 +494,7 @@ internal static partial class MNK
             if (IsEnabled(CustomComboPreset.MNK_AoEUseBuffs) &&
                 IsEnabled(CustomComboPreset.MNK_AoEUseROF) &&
                 ActionReady(RiddleOfFire) &&
-                CanDelayedWeave(ActionWatching.LastWeaponskill) &&
+                CanDelayedWeave() &&
                 GetTargetHPPercent() >= Config.MNK_AoE_RiddleOfFire_HP)
                 return RiddleOfFire;
 

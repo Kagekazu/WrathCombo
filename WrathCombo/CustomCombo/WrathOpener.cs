@@ -3,10 +3,12 @@ using ECommons.GameHelpers;
 using ECommons.Logging;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using WrathCombo.Combos.JobHelpers.Enums;
 using WrathCombo.Combos.PvE;
 using WrathCombo.CustomComboNS.Functions;
 using WrathCombo.Data;
+using WrathCombo.Extensions;
 using WrathCombo.Services;
 
 namespace WrathCombo.CustomComboNS
@@ -143,9 +145,14 @@ namespace WrathCombo.CustomComboNS
                 if (DelayedWeaveSteps.Any(x => x == OpenerStep))
                 {
                     var nextAct = OpenerActions[OpenerStep];
-                    if (CustomComboFunctions.CanDelayedWeave(nextAct))
+                    if (CustomComboFunctions.CanDelayedWeave())
                     {
                         actionID = CurrentOpenerAction;
+                        return true;
+                    }
+                    else
+                    {
+                        actionID = 11;
                         return true;
                     }
                 }
@@ -171,16 +178,19 @@ namespace WrathCombo.CustomComboNS
         {
             CurrentOpener = jobId switch
             {
-                BLM.JobID => BLM.BLMOpener(),
-                DRG.JobID => DRG.DRGOpener(),
-                MCH.JobID => MCH.MCHOpener(),
-                MNK.JobID => MNK.MNKOpener(),
-                PCT.JobID => PCT.PCTOpener(),
-                RPR.JobID => RPR.RPROpener(),
-                SAM.JobID => SAM.SAMOpener(),
-                SGE.JobID => SGE.SGEOpener(),
-                VPR.JobID => VPR.VPROpener(),
-                WHM.JobID => WHM.WHMOpener(),
+                AST.JobID => AST.Opener(),
+                BLM.JobID => BLM.Opener(),
+                BRD.JobID => BRD.Opener(),
+                DRG.JobID => DRG.Opener(),
+                GNB.JobID => GNB.Opener(),
+                MCH.JobID => MCH.Opener(),
+                MNK.JobID => MNK.Opener(),
+                PCT.JobID => PCT.Opener(),
+                RPR.JobID => RPR.Opener(),
+                SAM.JobID => SAM.Opener(),
+                SGE.JobID => SGE.Opener(),
+                VPR.JobID => VPR.Opener(),
+                WHM.JobID => WHM.Opener(),
                 _ => WrathOpener.Dummy
             };
         }

@@ -16,6 +16,13 @@ internal static partial class MCH
 {
     // MCH Gauge & Extensions
     internal static MCHOpenerMaxLevel1 Opener1 = new();
+    internal static WrathOpener Opener()
+    {
+        if (Opener1.LevelChecked) return Opener1;
+
+        return WrathOpener.Dummy;
+    }
+
 
     internal static MCHGauge Gauge = GetJobGauge<MCHGauge>();
 
@@ -72,7 +79,7 @@ internal static partial class MCH
 
     internal static bool interruptReady =>
         ActionReady(All.HeadGraze) && CanInterruptEnemy() &&
-        CanDelayedWeave(ActionWatching.LastWeaponskill);
+        CanDelayedWeave();
 
     internal static bool battery => Gauge.Battery >= 100;
 

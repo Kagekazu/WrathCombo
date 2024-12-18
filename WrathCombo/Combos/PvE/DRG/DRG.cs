@@ -92,7 +92,7 @@ internal partial class DRG
                 return Variant.VariantRampart;
 
             // Opener for DRG
-            if (DRGOpener().FullOpener(ref actionID))
+            if (Opener().FullOpener(ref actionID))
                 return actionID;
 
             // Piercing Talon Uptime Option
@@ -252,7 +252,7 @@ internal partial class DRG
 
             // Opener for DRG
             if (IsEnabled(CustomComboPreset.DRG_ST_Opener))
-                if (DRGOpener().FullOpener(ref actionID))
+                if (Opener().FullOpener(ref actionID))
                     return actionID;
 
             // Piercing Talon Uptime Option

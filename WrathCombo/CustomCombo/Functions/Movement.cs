@@ -20,9 +20,8 @@ internal abstract partial class CustomComboFunctions
         if (!isMoving)
             movementStarted = null;
 
-        Svc.Log.Debug("???");
-        return isMoving && (TimeMoving.TotalMilliseconds / 1000f) >= Service.Configuration.MovementLeeway;
-    }
+            return isMoving && (TimeMoving.TotalMilliseconds / 1000f) >= Service.Configuration.MovementLeeway;
+        }
 
     public static TimeSpan TimeMoving => movementStarted is null ? TimeSpan.Zero : (DateTime.Now - movementStarted.Value);
 }

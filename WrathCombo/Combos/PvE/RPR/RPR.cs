@@ -34,7 +34,7 @@ internal static partial class RPR
                 return Variant.VariantRampart;
 
             //RPR Opener
-            if (RPROpener().FullOpener(ref actionID))
+            if (Opener().FullOpener(ref actionID))
                 return actionID;
 
             //All Weaves
@@ -116,7 +116,7 @@ internal static partial class RPR
                 if (HasEffect(Buffs.EnhancedGibbet))
                 {
                     if (trueNorthReady && !OnTargetsFlank() &&
-                        CanDelayedWeave(ActionWatching.LastWeaponskill))
+                        CanDelayedWeave())
                         return All.TrueNorth;
 
                     return OriginalHook(Gibbet);
@@ -127,7 +127,7 @@ internal static partial class RPR
                     (!HasEffect(Buffs.EnhancedGibbet) && !HasEffect(Buffs.EnhancedGallows)))
                 {
                     if (trueNorthReady && !OnTargetsRear() &&
-                        CanDelayedWeave(ActionWatching.LastWeaponskill))
+                        CanDelayedWeave())
                         return All.TrueNorth;
 
                     return OriginalHook(Gallows);
@@ -214,7 +214,7 @@ internal static partial class RPR
 
             //RPR Opener
             if (IsEnabled(CustomComboPreset.RPR_ST_Opener))
-                if (RPROpener().FullOpener(ref actionID))
+                if (Opener().FullOpener(ref actionID))
                     return actionID;
 
             //All Weaves
@@ -317,7 +317,7 @@ internal static partial class RPR
                           GetRemainingCharges(All.TrueNorth) < 2) ||
                          IsNotEnabled(CustomComboPreset.RPR_ST_TrueNorthDynamic_HoldCharge)) &&
                         trueNorthReady && !OnTargetsFlank() &&
-                        CanDelayedWeave(ActionWatching.LastWeaponskill))
+                        CanDelayedWeave())
                         return All.TrueNorth;
 
                     return OriginalHook(Gibbet);
@@ -333,7 +333,7 @@ internal static partial class RPR
                           GetRemainingCharges(All.TrueNorth) < 2) ||
                          IsNotEnabled(CustomComboPreset.RPR_ST_TrueNorthDynamic_HoldCharge)) &&
                         trueNorthReady && !OnTargetsRear() &&
-                        CanDelayedWeave(ActionWatching.LastWeaponskill))
+                        CanDelayedWeave())
                         return All.TrueNorth;
 
                     return OriginalHook(Gallows);
@@ -817,7 +817,7 @@ internal static partial class RPR
             switch (actionID)
             {
                 case Enshroud when IsEnabled(CustomComboPreset.RPR_TrueNorthEnshroud) &&
-                                   GetBuffStacks(Buffs.SoulReaver) is 2 && trueNorthReady && CanDelayedWeave(Slice):
+                                   GetBuffStacks(Buffs.SoulReaver) is 2 && trueNorthReady && CanDelayedWeave():
                     return All.TrueNorth;
 
                 case Enshroud:

@@ -294,10 +294,10 @@ internal static partial class SGE
                         LevelChecked(Kardia) && FindEffect(Buffs.Kardia) is null)
                         return Kardia;
 
-                    // Opener for SGE
-                    if (IsEnabled(CustomComboPreset.SGE_ST_DPS_Opener))
-                        if (SGEOpener().FullOpener(ref actionID))
-                            return actionID;
+                // Opener for SGE
+                if (IsEnabled(CustomComboPreset.SGE_ST_DPS_Opener))
+                    if (Opener().FullOpener(ref actionID))
+                        return actionID;
 
                     if (CanSpellWeave(ActionWatching.LastSpell))
                     {
