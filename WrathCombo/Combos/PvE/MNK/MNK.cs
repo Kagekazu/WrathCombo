@@ -1,5 +1,4 @@
-﻿using WrathCombo.Combos.PvE.ALL;
-using WrathCombo.Combos.PvE.Content;
+﻿using WrathCombo.Combos.PvE.Content;
 using WrathCombo.CustomComboNS;
 using WrathCombo.Data;
 
@@ -29,11 +28,12 @@ internal static partial class MNK
 
             if (Opener().FullOpener(ref actionID))
             {
-                return IsOnCooldown(RiddleOfWind) &&
+                if (IsOnCooldown(RiddleOfWind) &&
                     CanWeave(ActionWatching.LastWeaponskill) &&
-                    Gauge.Chakra >= 5
-                    ? TheForbiddenChakra
-                    : actionID;
+                    Gauge.Chakra >= 5)
+                    return TheForbiddenChakra;
+
+                return actionID;
             }
 
             //Variant Cure
@@ -179,11 +179,12 @@ internal static partial class MNK
             if (IsEnabled(CustomComboPreset.MNK_STUseOpener))
                 if (Opener().FullOpener(ref actionID))
                 {
-                    return IsOnCooldown(RiddleOfWind) &&
-                        CanWeave(ActionWatching.LastWeaponskill) &&
-                        Gauge.Chakra >= 5
-                        ? TheForbiddenChakra
-                        : actionID;
+                    if (IsOnCooldown(RiddleOfWind) &&
+                    CanWeave(ActionWatching.LastWeaponskill) &&
+                    Gauge.Chakra >= 5)
+                        return TheForbiddenChakra;
+
+                    return actionID;
                 }
 
             //Variant Cure
