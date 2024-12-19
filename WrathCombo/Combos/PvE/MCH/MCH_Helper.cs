@@ -12,7 +12,6 @@ internal static partial class MCH
 {
     // MCH Gauge & Extensions
     internal static MCHOpenerMaxLevel1 Opener1 = new();
-
     internal static MCHGauge Gauge = GetJobGauge<MCHGauge>();
 
     internal static bool ReassembledExcavatorST =>
@@ -48,7 +47,7 @@ internal static partial class MCH
         !IsEnabled(CustomComboPreset.MCH_ST_Adv_Reassemble);
 
     internal static float GCD => GetCooldown(OriginalHook(SplitShot)).CooldownTotal;
-
+    
     internal static float HeatblastRC => GetCooldown(Heatblast).CooldownTotal;
 
     internal static bool DrillCD =>
@@ -83,72 +82,7 @@ internal static partial class MCH
         if (Opener1.LevelChecked)
             return Opener1;
 
-        public override int MaxOpenerLevel => 109;
-        public override List<uint> OpenerActions { get; set; } = new()
-        {
-            Reassemble,
-            AirAnchor,
-            CheckMate,
-            DoubleCheck,
-            Drill,
-            BarrelStabilizer,
-            Chainsaw,
-            Excavator,
-            AutomatonQueen,
-            Reassemble,
-            Drill,
-            CheckMate,
-            Wildfire,
-            FullMetalField,
-            DoubleCheck,
-            Hypercharge,
-            BlazingShot,
-            CheckMate,
-            BlazingShot,
-            DoubleCheck,
-            BlazingShot,
-            CheckMate,
-            BlazingShot,
-            DoubleCheck,
-            BlazingShot,
-            CheckMate,
-            Drill,
-            DoubleCheck,
-            CheckMate,
-            HeatedSplitShot,
-            DoubleCheck,
-            HeatedSlugShot,
-            HeatedCleanShot
-        };
-
-        public override bool HasCooldowns()
-        {
-            if (GetRemainingCharges(Reassemble) < 2)
-                return false;
-
-            if (GetRemainingCharges(CheckMate) < 3)
-                return false;
-
-            if (GetRemainingCharges(DoubleCheck) < 3)
-                return false;
-
-            if (!ActionReady(Chainsaw))
-                return false;
-
-            if (!ActionReady(Wildfire))
-                return false;
-
-            if (!ActionReady(BarrelStabilizer))
-                return false;
-
-            if (!ActionReady(Excavator))
-                return false;
-
-            if (!ActionReady(FullMetalField))
-                return false;
-
-            return true;
-        }
+        return WrathOpener.Dummy;
     }
 
     internal static unsafe bool IsComboExpiring(float times)
@@ -331,7 +265,7 @@ internal static partial class MCH
 
         public override int MaxOpenerLevel => 109;
 
-        public override List<uint> OpenerActions { get; protected set; } =
+        public override List<uint> OpenerActions { get; set; } =
         [
             Reassemble,
             AirAnchor,

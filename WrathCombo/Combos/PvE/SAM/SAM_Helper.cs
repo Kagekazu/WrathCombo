@@ -21,6 +21,10 @@ internal static partial class SAM
 
     internal static float GCD => GetCooldown(Hakaze).CooldownTotal;
 
+    internal static int SenCount => GetSenCount();
+
+    internal static bool ComboStarted => GetComboStarted();
+
     internal static WrathOpener Opener()
     {
         if (Opener1.LevelChecked)
@@ -28,10 +32,6 @@ internal static partial class SAM
 
         return WrathOpener.Dummy;
     }
-
-    internal static int SenCount => GetSenCount();
-
-    internal static bool ComboStarted => GetComboStarted();
 
     private static int GetSenCount()
     {

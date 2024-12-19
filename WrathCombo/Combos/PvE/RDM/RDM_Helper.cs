@@ -2,7 +2,7 @@
 using Dalamud.Game.ClientState.JobGauge.Types;
 using ECommons.DalamudServices;
 using System;
-using WrathCombo.Combos.JobHelpers.Enums;
+using WrathCombo.Combos.PvE.Enums;
 using WrathCombo.Data;
 using static WrathCombo.CustomComboNS.Functions.CustomComboFunctions;
 
@@ -109,11 +109,11 @@ internal partial class RDM
             && HasEffect(Buffs.PrefulugenceReady))
             placeOGCD = Prefulgence;
 
-            if (CanSpellWeave() && placeOGCD != 0)
-            {
-                newActionID = placeOGCD;
-                return true;
-            }
+        if (CanSpellWeave(actionID) && placeOGCD != 0)
+        {
+            newActionID = placeOGCD;
+            return true;
+        }
 
         if (actionID is Fleche && placeOGCD == 0) // All actions are on cooldown, determine the lowest CD to display on Fleche.
         {
@@ -535,51 +535,51 @@ internal partial class RDM
                 return true;
             }
 
-                newActionID = actionID;
-                return false;
-            }
-            internal static bool TryAcceleration(uint actionID, uint lastComboMove, out uint newActionID, bool swiftcast = true, bool AoEWeave = false)
+            newActionID = actionID;
+            return false;
+        }
+        internal static bool TryAcceleration(uint actionID, uint lastComboMove, out uint newActionID, bool swiftcast = true, bool AoEWeave = false)
+        {
+            //RDM_ST_ACCELERATION
+            if (InCombat()
+                && LocalPlayer?.IsCasting == false
+                && RDMMana.ManaStacks == 0
+                && lastComboMove is not Verflare //are these needed if the finisher is still going on?
+                && lastComboMove is not Verholy
+                && lastComboMove is not Scorch
+                && !WasLastAction(Embolden)
+                && (!AoEWeave || CanSpellWeave(actionID))
+                && !HasEffect(Buffs.VerfireReady)
+                && !HasEffect(Buffs.VerstoneReady)
+                && !HasEffect(Buffs.Acceleration)
+                && !HasEffect(Buffs.Dualcast)
+                && !HasEffect(All.Buffs.Swiftcast))
             {
-                //RDM_ST_ACCELERATION
-                if (InCombat()
-                    && LocalPlayer.IsCasting == false
-                    && RDMMana.ManaStacks == 0
-                    && lastComboMove is not Verflare //are these needed if the finisher is still going on?
-                    && lastComboMove is not Verholy
-                    && lastComboMove is not Scorch
-                    && !WasLastAction(Embolden)
-                    && (!AoEWeave || CanSpellWeave())
-                    && !HasEffect(Buffs.VerfireReady)
-                    && !HasEffect(Buffs.VerstoneReady)
-                    && !HasEffect(Buffs.Acceleration)
-                    && !HasEffect(Buffs.Dualcast)
-                    && !HasEffect(All.Buffs.Swiftcast))
+                if (ActionReady(Acceleration)
+                    && GetCooldown(Acceleration).ChargeCooldownRemaining < 54.5)
                 {
-                    if (ActionReady(Acceleration)
-                        && GetCooldown(Acceleration).ChargeCooldownRemaining < 54.5)
-                    {
-                        newActionID = Acceleration;
-                        return true;
-                    }
-                    if (swiftcast
-                        && ActionReady(All.Swiftcast)
-                        && !HasCharges(Acceleration))
-                    {
-                        newActionID = All.Swiftcast;
-                        return true;
-                    }
-                }
-                //Else
-                newActionID = actionID; 
-                return false;
-            }
-            internal static bool TrySTSpellRotation(uint actionID, out uint newActionID, bool FireStone = true, bool ThunderAero = true)
-            {
-                if (TryGrandImpact(actionID, out uint GrandID))
-                {
-                    newActionID = GrandID;
+                    newActionID = Acceleration;
                     return true;
                 }
+                if (swiftcast
+                    && ActionReady(All.Swiftcast)
+                    && !HasCharges(Acceleration))
+                {
+                    newActionID = All.Swiftcast;
+                    return true;
+                }
+            }
+            //Else
+            newActionID = actionID;
+            return false;
+        }
+        internal static bool TrySTSpellRotation(uint actionID, out uint newActionID, bool FireStone = true, bool ThunderAero = true)
+        {
+            if (TryGrandImpact(actionID, out uint GrandID))
+            {
+                newActionID = GrandID;
+                return true;
+            }
 
             //SHUT UP ITS FINE
 #pragma warning disable IDE0042

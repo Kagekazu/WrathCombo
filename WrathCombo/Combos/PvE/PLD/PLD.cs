@@ -10,99 +10,35 @@ namespace WrathCombo.Combos.PvE;
 
 internal partial class PLD
 {
+    internal class PLD_ST_SimpleMode : CustomCombo
+    {
+        protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.PLD_ST_SimpleMode;
+        internal static int RoyalAuthorityCount => ActionWatching.CombatActions.Count(x => x == OriginalHook(RageOfHalone));
 
-    internal static PLDGauge Gauge => CustomComboFunctions.GetJobGauge<PLDGauge>();
-
-        public const uint
-            FastBlade = 9,
-            RiotBlade = 15,
-            ShieldBash = 16,
-            Sentinel = 17,
-            RageOfHalone = 21,
-            Bulwark = 22,
-            CircleOfScorn = 23,
-            ShieldLob = 24,
-            SpiritsWithin = 29,
-            HallowedGround = 30,
-            GoringBlade = 3538,
-            DivineVeil = 3540,
-            RoyalAuthority = 3539,
-            Guardian = 36920,
-            TotalEclipse = 7381,
-            Intervention = 7382,
-            Requiescat = 7383,
-            Imperator = 36921,
-            HolySpirit = 7384,
-            Prominence = 16457,
-            HolyCircle = 16458,
-            Confiteor = 16459,
-            Expiacion = 25747,
-            BladeOfFaith = 25748,
-            BladeOfTruth = 25749,
-            BladeOfValor = 25750,
-            FightOrFlight = 20,
-            Atonement = 16460,
-            Supplication = 36918, // Second Atonement
-            Sepulchre = 36919, // Third Atonement
-            Intervene = 16461,
-            BladeOfHonor = 36922,
-            Sheltron = 3542;
-
-        public static class Buffs
+        protected override uint Invoke(uint actionID, uint lastComboActionID, float comboTime, byte level)
         {
-            public const ushort
-                IronWill = 79,
-                Requiescat = 1368,
-                AtonementReady = 1902, // First Atonement Buff
-                SupplicationReady = 3827, // Second Atonement Buff
-                SepulchreReady = 3828, // Third Atonement Buff
-                GoringBladeReady = 3847,
-                BladeOfHonor = 3831,
-                FightOrFlight = 76,
-                ConfiteorReady = 3019,
-                DivineMight = 2673,
-                HolySheltron = 2674,
-                Sheltron = 1856;
-        }
-
-        public static class Debuffs
-        {
-            public const ushort
-                BladeOfValor = 2721,
-                GoringBlade = 725;
-        }
-
-        private static PLDGauge Gauge => CustomComboFunctions.GetJobGauge<PLDGauge>();
-        
-        internal class PLD_ST_SimpleMode : CustomCombo
-        {
-            protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.PLD_ST_SimpleMode;
-            internal static int RoyalAuthorityCount => ActionWatching.CombatActions.Count(x => x == OriginalHook(RageOfHalone));
-
-            protected override uint Invoke(uint actionID, uint lastComboActionID, float comboTime, byte level)
-            {
-                #region Variables
-                float durationFightOrFlight = GetBuffRemainingTime(Buffs.FightOrFlight);
-                float cooldownFightOrFlight = GetCooldownRemainingTime(FightOrFlight);
-                float cooldownRequiescat = GetCooldownRemainingTime(Requiescat);
-                uint playerMP = LocalPlayer.CurrentMp;
-                bool canWeave = CanWeave();
-                bool canEarlyWeave = CanWeave(1.5f);
-                bool hasRequiescat = HasEffect(Buffs.Requiescat);
-                bool hasDivineMight = HasEffect(Buffs.DivineMight);
-                bool hasFightOrFlight = HasEffect(Buffs.FightOrFlight);
-                bool hasDivineMagicMP = playerMP >= GetResourceCost(HolySpirit);
-                bool hasRequiescatMP = playerMP >= GetResourceCost(HolySpirit) * 3.6;
-                bool inBurstWindow = JustUsed(FightOrFlight, 30f);
-                bool inAtonementStarter = HasEffect(Buffs.AtonementReady);
-                bool inAtonementFinisher = HasEffect(Buffs.SepulchreReady);
-                bool afterOpener = LevelChecked(BladeOfFaith) && RoyalAuthorityCount > 0;
-                bool inAtonementPhase = HasEffect(Buffs.AtonementReady) || HasEffect(Buffs.SupplicationReady) || HasEffect(Buffs.SepulchreReady);
-                bool isDivineMightExpiring = GetBuffRemainingTime(Buffs.DivineMight) < 6;
-                bool isAtonementExpiring = (HasEffect(Buffs.AtonementReady) && GetBuffRemainingTime(Buffs.AtonementReady) < 6) ||
-                                            (HasEffect(Buffs.SupplicationReady) && GetBuffRemainingTime(Buffs.SupplicationReady) < 6) ||
-                                            (HasEffect(Buffs.SepulchreReady) && GetBuffRemainingTime(Buffs.SepulchreReady) < 6);
-                #endregion
+            #region Variables
+            float durationFightOrFlight = GetBuffRemainingTime(Buffs.FightOrFlight);
+            float cooldownFightOrFlight = GetCooldownRemainingTime(FightOrFlight);
+            float cooldownRequiescat = GetCooldownRemainingTime(Requiescat);
+            uint playerMP = LocalPlayer.CurrentMp;
+            bool canWeave = CanWeave();
+            bool canEarlyWeave = CanWeave(1.5f);
+            bool hasRequiescat = HasEffect(Buffs.Requiescat);
+            bool hasDivineMight = HasEffect(Buffs.DivineMight);
+            bool hasFightOrFlight = HasEffect(Buffs.FightOrFlight);
+            bool hasDivineMagicMP = playerMP >= GetResourceCost(HolySpirit);
+            bool hasRequiescatMP = playerMP >= GetResourceCost(HolySpirit) * 3.6;
+            bool inBurstWindow = JustUsed(FightOrFlight, 30f);
+            bool inAtonementStarter = HasEffect(Buffs.AtonementReady);
+            bool inAtonementFinisher = HasEffect(Buffs.SepulchreReady);
+            bool afterOpener = LevelChecked(BladeOfFaith) && RoyalAuthorityCount > 0;
+            bool inAtonementPhase = HasEffect(Buffs.AtonementReady) || HasEffect(Buffs.SupplicationReady) || HasEffect(Buffs.SepulchreReady);
+            bool isDivineMightExpiring = GetBuffRemainingTime(Buffs.DivineMight) < 6;
+            bool isAtonementExpiring = (HasEffect(Buffs.AtonementReady) && GetBuffRemainingTime(Buffs.AtonementReady) < 6) ||
+                                        (HasEffect(Buffs.SupplicationReady) && GetBuffRemainingTime(Buffs.SupplicationReady) < 6) ||
+                                        (HasEffect(Buffs.SepulchreReady) && GetBuffRemainingTime(Buffs.SepulchreReady) < 6);
+            #endregion
 
             if (actionID is FastBlade)
             {
@@ -111,13 +47,13 @@ internal partial class PLD
                     PlayerHealthPercentageHp() <= Config.PLD_VariantCure)
                     return Variant.VariantCure;
 
-                    if (Opener().FullOpener(ref actionID))
-                        return actionID;
+                if (Opener().FullOpener(ref actionID))
+                    return actionID;
 
-                    if (HasBattleTarget())
-                    {
-                        // Variant DoT Check
-                        Status? sustainedDamage = FindTargetEffect(Variant.Debuffs.SustainedDamage);
+                if (HasBattleTarget())
+                {
+                    // Variant DoT Check
+                    Status? sustainedDamage = FindTargetEffect(Variant.Debuffs.SustainedDamage);
 
                     // Weavables
                     if (canWeave)
@@ -236,19 +172,19 @@ internal partial class PLD
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.PLD_AoE_SimpleMode;
 
-            protected override uint Invoke(uint actionID, uint lastComboActionID, float comboTime, byte level)
-            {
-                #region Variables
-                float cooldownFightOrFlight = GetCooldownRemainingTime(FightOrFlight);
-                float cooldownRequiescat = GetCooldownRemainingTime(Requiescat);
-                uint playerMP = LocalPlayer.CurrentMp;
-                bool canWeave = CanWeave();
-                bool canEarlyWeave = CanWeave(1.5f);
-                bool hasRequiescat = HasEffect(Buffs.Requiescat);
-                bool hasDivineMight = HasEffect(Buffs.DivineMight);
-                bool hasDivineMagicMP = playerMP >= GetResourceCost(HolySpirit);
-                bool hasRequiescatMP = playerMP >= GetResourceCost(HolySpirit) * 3.6;
-                #endregion
+        protected override uint Invoke(uint actionID, uint lastComboActionID, float comboTime, byte level)
+        {
+            #region Variables
+            float cooldownFightOrFlight = GetCooldownRemainingTime(FightOrFlight);
+            float cooldownRequiescat = GetCooldownRemainingTime(Requiescat);
+            uint playerMP = LocalPlayer.CurrentMp;
+            bool canWeave = CanWeave();
+            bool canEarlyWeave = CanWeave(1.5f);
+            bool hasRequiescat = HasEffect(Buffs.Requiescat);
+            bool hasDivineMight = HasEffect(Buffs.DivineMight);
+            bool hasDivineMagicMP = playerMP >= GetResourceCost(HolySpirit);
+            bool hasRequiescatMP = playerMP >= GetResourceCost(HolySpirit) * 3.6;
+            #endregion
 
             if (actionID is TotalEclipse)
             {
@@ -324,35 +260,35 @@ internal partial class PLD
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.PLD_ST_AdvancedMode;
         internal static int RoyalAuthorityCount => ActionWatching.CombatActions.Count(x => x == OriginalHook(RageOfHalone));
 
-            protected override uint Invoke(uint actionID, uint lastComboActionID, float comboTime, byte level)
-            {
-                #region Variables
-                float durationFightOrFlight = GetBuffRemainingTime(Buffs.FightOrFlight);
-                float cooldownFightOrFlight = GetCooldownRemainingTime(FightOrFlight);
-                float cooldownRequiescat = GetCooldownRemainingTime(Requiescat);
-                uint playerMP = LocalPlayer.CurrentMp;
-                bool canWeave = CanWeave();
-                bool canEarlyWeave = CanWeave(1.5f);
-                bool hasRequiescat = HasEffect(Buffs.Requiescat);
-                bool hasDivineMight = HasEffect(Buffs.DivineMight);
-                bool hasFightOrFlight = HasEffect(Buffs.FightOrFlight);
-                bool hasDivineMagicMP = playerMP >= GetResourceCost(HolySpirit);
-                bool hasJustUsedMitigation = JustUsed(OriginalHook(Sheltron), 3f) || JustUsed(OriginalHook(Sentinel), 5f) ||
-                                             JustUsed(All.Rampart, 5f) || JustUsed(HallowedGround, 9f);
-                bool hasRequiescatMP = (IsNotEnabled(CustomComboPreset.PLD_ST_AdvancedMode_MP_Reserve) && playerMP >= GetResourceCost(HolySpirit) * 3.6) ||
-                                       (IsEnabled(CustomComboPreset.PLD_ST_AdvancedMode_MP_Reserve) && playerMP >= (GetResourceCost(HolySpirit) * 3.6) + Config.PLD_ST_MP_Reserve);
-                bool inBurstWindow = JustUsed(FightOrFlight, 30f);
-                bool inAtonementStarter = HasEffect(Buffs.AtonementReady);
-                bool inAtonementFinisher = HasEffect(Buffs.SepulchreReady);
-                bool afterOpener = LevelChecked(BladeOfFaith) && RoyalAuthorityCount > 0;
-                bool isDivineMightExpiring = GetBuffRemainingTime(Buffs.DivineMight) < 6;
-                bool isAboveMPReserve = IsNotEnabled(CustomComboPreset.PLD_ST_AdvancedMode_MP_Reserve) ||
-                                        (IsEnabled(CustomComboPreset.PLD_ST_AdvancedMode_MP_Reserve) && playerMP >= GetResourceCost(HolySpirit) + Config.PLD_ST_MP_Reserve);
-                bool inAtonementPhase = HasEffect(Buffs.AtonementReady) || HasEffect(Buffs.SupplicationReady) || HasEffect(Buffs.SepulchreReady);
-                bool isAtonementExpiring = (HasEffect(Buffs.AtonementReady) && GetBuffRemainingTime(Buffs.AtonementReady) < 6) ||
-                                            (HasEffect(Buffs.SupplicationReady) && GetBuffRemainingTime(Buffs.SupplicationReady) < 6) ||
-                                            (HasEffect(Buffs.SepulchreReady) && GetBuffRemainingTime(Buffs.SepulchreReady) < 6);
-                #endregion
+        protected override uint Invoke(uint actionID, uint lastComboActionID, float comboTime, byte level)
+        {
+            #region Variables
+            float durationFightOrFlight = GetBuffRemainingTime(Buffs.FightOrFlight);
+            float cooldownFightOrFlight = GetCooldownRemainingTime(FightOrFlight);
+            float cooldownRequiescat = GetCooldownRemainingTime(Requiescat);
+            uint playerMP = LocalPlayer.CurrentMp;
+            bool canWeave = CanWeave();
+            bool canEarlyWeave = CanWeave(1.5f);
+            bool hasRequiescat = HasEffect(Buffs.Requiescat);
+            bool hasDivineMight = HasEffect(Buffs.DivineMight);
+            bool hasFightOrFlight = HasEffect(Buffs.FightOrFlight);
+            bool hasDivineMagicMP = playerMP >= GetResourceCost(HolySpirit);
+            bool hasJustUsedMitigation = JustUsed(OriginalHook(Sheltron), 3f) || JustUsed(OriginalHook(Sentinel), 5f) ||
+                                         JustUsed(All.Rampart, 5f) || JustUsed(HallowedGround, 9f);
+            bool hasRequiescatMP = (IsNotEnabled(CustomComboPreset.PLD_ST_AdvancedMode_MP_Reserve) && playerMP >= GetResourceCost(HolySpirit) * 3.6) ||
+                                   (IsEnabled(CustomComboPreset.PLD_ST_AdvancedMode_MP_Reserve) && playerMP >= (GetResourceCost(HolySpirit) * 3.6) + Config.PLD_ST_MP_Reserve);
+            bool inBurstWindow = JustUsed(FightOrFlight, 30f);
+            bool inAtonementStarter = HasEffect(Buffs.AtonementReady);
+            bool inAtonementFinisher = HasEffect(Buffs.SepulchreReady);
+            bool afterOpener = LevelChecked(BladeOfFaith) && RoyalAuthorityCount > 0;
+            bool isDivineMightExpiring = GetBuffRemainingTime(Buffs.DivineMight) < 6;
+            bool isAboveMPReserve = IsNotEnabled(CustomComboPreset.PLD_ST_AdvancedMode_MP_Reserve) ||
+                                    (IsEnabled(CustomComboPreset.PLD_ST_AdvancedMode_MP_Reserve) && playerMP >= GetResourceCost(HolySpirit) + Config.PLD_ST_MP_Reserve);
+            bool inAtonementPhase = HasEffect(Buffs.AtonementReady) || HasEffect(Buffs.SupplicationReady) || HasEffect(Buffs.SepulchreReady);
+            bool isAtonementExpiring = (HasEffect(Buffs.AtonementReady) && GetBuffRemainingTime(Buffs.AtonementReady) < 6) ||
+                                        (HasEffect(Buffs.SupplicationReady) && GetBuffRemainingTime(Buffs.SupplicationReady) < 6) ||
+                                        (HasEffect(Buffs.SepulchreReady) && GetBuffRemainingTime(Buffs.SepulchreReady) < 6);
+            #endregion
 
             if (actionID is FastBlade)
             {
@@ -361,14 +297,14 @@ internal partial class PLD
                     PlayerHealthPercentageHp() <= Config.PLD_VariantCure)
                     return Variant.VariantCure;
 
-                    if (IsEnabled(CustomComboPreset.PLD_ST_AdvancedMode_BalanceOpener) &&
-                        Opener().FullOpener(ref actionID))
-                        return actionID;
+                if (IsEnabled(CustomComboPreset.PLD_ST_AdvancedMode_BalanceOpener) &&
+                    Opener().FullOpener(ref actionID))
+                    return actionID;
 
-                    if (HasBattleTarget())
-                    {
-                        // Variant DoT Check
-                        Status? sustainedDamage = FindTargetEffect(Variant.Debuffs.SustainedDamage);
+                if (HasBattleTarget())
+                {
+                    // Variant DoT Check
+                    Status? sustainedDamage = FindTargetEffect(Variant.Debuffs.SustainedDamage);
 
                     // Weavables
                     if (canWeave)
@@ -532,24 +468,24 @@ internal partial class PLD
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.PLD_AoE_AdvancedMode;
 
-            protected override uint Invoke(uint actionID, uint lastComboActionID, float comboTime, byte level)
-            {
-                #region Variables
-                float cooldownFightOrFlight = GetCooldownRemainingTime(FightOrFlight);
-                float cooldownRequiescat = GetCooldownRemainingTime(Requiescat);
-                uint playerMP = LocalPlayer.CurrentMp;
-                bool canWeave = CanWeave();
-                bool canEarlyWeave = CanWeave(1.5f);
-                bool hasRequiescat = HasEffect(Buffs.Requiescat);
-                bool hasDivineMight = HasEffect(Buffs.DivineMight);
-                bool hasDivineMagicMP = playerMP >= GetResourceCost(HolySpirit);
-                bool hasJustUsedMitigation = JustUsed(OriginalHook(Sheltron), 3f) || JustUsed(OriginalHook(Sentinel), 5f) ||
-                                             JustUsed(All.Rampart, 5f) || JustUsed(HallowedGround, 9f);
-                bool hasRequiescatMP = (IsNotEnabled(CustomComboPreset.PLD_AoE_AdvancedMode_MP_Reserve) && playerMP >= GetResourceCost(HolySpirit) * 3.6) ||
-                                       (IsEnabled(CustomComboPreset.PLD_AoE_AdvancedMode_MP_Reserve) && playerMP >= (GetResourceCost(HolySpirit) * 3.6) + Config.PLD_AoE_MP_Reserve);
-                bool isAboveMPReserve = IsNotEnabled(CustomComboPreset.PLD_AoE_AdvancedMode_MP_Reserve) ||
-                                        (IsEnabled(CustomComboPreset.PLD_AoE_AdvancedMode_MP_Reserve) && playerMP >= GetResourceCost(HolySpirit) + Config.PLD_AoE_MP_Reserve);
-                #endregion
+        protected override uint Invoke(uint actionID, uint lastComboActionID, float comboTime, byte level)
+        {
+            #region Variables
+            float cooldownFightOrFlight = GetCooldownRemainingTime(FightOrFlight);
+            float cooldownRequiescat = GetCooldownRemainingTime(Requiescat);
+            uint playerMP = LocalPlayer.CurrentMp;
+            bool canWeave = CanWeave();
+            bool canEarlyWeave = CanWeave(1.5f);
+            bool hasRequiescat = HasEffect(Buffs.Requiescat);
+            bool hasDivineMight = HasEffect(Buffs.DivineMight);
+            bool hasDivineMagicMP = playerMP >= GetResourceCost(HolySpirit);
+            bool hasJustUsedMitigation = JustUsed(OriginalHook(Sheltron), 3f) || JustUsed(OriginalHook(Sentinel), 5f) ||
+                                         JustUsed(All.Rampart, 5f) || JustUsed(HallowedGround, 9f);
+            bool hasRequiescatMP = (IsNotEnabled(CustomComboPreset.PLD_AoE_AdvancedMode_MP_Reserve) && playerMP >= GetResourceCost(HolySpirit) * 3.6) ||
+                                   (IsEnabled(CustomComboPreset.PLD_AoE_AdvancedMode_MP_Reserve) && playerMP >= (GetResourceCost(HolySpirit) * 3.6) + Config.PLD_AoE_MP_Reserve);
+            bool isAboveMPReserve = IsNotEnabled(CustomComboPreset.PLD_AoE_AdvancedMode_MP_Reserve) ||
+                                    (IsEnabled(CustomComboPreset.PLD_AoE_AdvancedMode_MP_Reserve) && playerMP >= GetResourceCost(HolySpirit) + Config.PLD_AoE_MP_Reserve);
+            #endregion
 
             if (actionID is TotalEclipse)
             {
@@ -726,10 +662,7 @@ internal partial class PLD
 
     #region ID's
 
-    public const byte ClassID = 1;
-    public const byte JobID = 19;
-
-    public const float CooldownThreshold = 0.5f;
+    internal static PLDGauge Gauge => CustomComboFunctions.GetJobGauge<PLDGauge>();
 
     public const uint
         FastBlade = 9,
@@ -760,8 +693,8 @@ internal partial class PLD
         BladeOfValor = 25750,
         FightOrFlight = 20,
         Atonement = 16460,
-        //Supplication = 36918, // Second Atonement
-        //Sepulchre = 36919, // Third Atonement
+        Supplication = 36918, // Second Atonement
+        Sepulchre = 36919, // Third Atonement
         Intervene = 16461,
         BladeOfHonor = 36922,
         Sheltron = 3542;

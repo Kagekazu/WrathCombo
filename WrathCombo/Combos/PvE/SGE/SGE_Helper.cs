@@ -140,6 +140,7 @@ internal static partial class SGE
 
         return 0;
     }
+
     internal class SGEOpenerMaxLevel1 : WrathOpener
     {
         public override int MinOpenerLevel => 92;

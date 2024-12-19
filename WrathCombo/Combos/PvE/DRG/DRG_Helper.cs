@@ -24,14 +24,6 @@ internal static partial class DRG
         TargetNeedsPositionals() && ActionReady(All.TrueNorth) &&
         !HasEffect(All.Buffs.TrueNorth);
 
-    internal static WrathOpener Opener()
-    {
-        if (Opener1.LevelChecked)
-            return Opener1;
-
-        return WrathOpener.Dummy;
-    }
-
     internal static readonly List<uint> FastLocks =
     [
         BattleLitany,
@@ -55,6 +47,14 @@ internal static partial class DRG
     ];
 
     internal static uint SlowLock => Stardiver;
+
+    internal static WrathOpener Opener()
+    {
+        if (Opener1.LevelChecked)
+            return Opener1;
+
+        return WrathOpener.Dummy;
+    }
 
     internal static bool CanDRGWeave(uint oGCD)
     {

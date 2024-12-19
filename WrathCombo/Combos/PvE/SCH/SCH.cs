@@ -216,75 +216,74 @@ internal static partial class SCH
                     OpenerState = OpenerState.InOpener;
                 }
 
-                    if (IsEnabled(CustomComboPreset.SCH_DPS_Variant_Rampart) &&
-                        IsEnabled(Variant.VariantRampart) &&
-                        IsOffCooldown(Variant.VariantRampart) &&
-                        CanSpellWeave())
-                        return Variant.VariantRampart;
+                if (IsEnabled(CustomComboPreset.SCH_DPS_Variant_Rampart) &&
+                    IsEnabled(Variant.VariantRampart) &&
+                    IsOffCooldown(Variant.VariantRampart) &&
+                    CanSpellWeave())
+                    return Variant.VariantRampart;
 
-                    // Dissipation
-                    if (IsEnabled(CustomComboPreset.SCH_DPS_Dissipation_Opener) &&
-                        ActionReady(Dissipation) && HasPetPresent() && !Gauge.HasAetherflow() &&
-                        (openerState == OpenerState.InOpener) && InCombat() && CanSpellWeave())
-                        return Dissipation;
+                // Dissipation
+                if (IsEnabled(CustomComboPreset.SCH_DPS_Dissipation_Opener) &&
+                    ActionReady(Dissipation) && HasPetPresent() && !Gauge.HasAetherflow() &&
+                    (openerState == OpenerState.InOpener) && InCombat() && CanSpellWeave())
+                    return Dissipation;
 
-                    // Aetherflow
-                    if (IsEnabled(CustomComboPreset.SCH_DPS_Aetherflow) && !WasLastAction(Dissipation) &&
-                        ActionReady(Aetherflow) && !Gauge.HasAetherflow() &&
-                        InCombat() && CanSpellWeave())
-                        return Aetherflow;
+                // Aetherflow
+                if (IsEnabled(CustomComboPreset.SCH_DPS_Aetherflow) && !WasLastAction(Dissipation) &&
+                    ActionReady(Aetherflow) && !Gauge.HasAetherflow() &&
+                    InCombat() && CanSpellWeave())
+                    return Aetherflow;
 
-                    // Lucid Dreaming
-                    if (IsEnabled(CustomComboPreset.SCH_DPS_Lucid) &&
-                        ActionReady(All.LucidDreaming) &&
-                        LocalPlayer.CurrentMp <= Config.SCH_ST_DPS_LucidOption &&
-                        CanSpellWeave())
-                        return All.LucidDreaming;
+                // Lucid Dreaming
+                if (IsEnabled(CustomComboPreset.SCH_DPS_Lucid) &&
+                    ActionReady(All.LucidDreaming) &&
+                    LocalPlayer.CurrentMp <= Config.SCH_ST_DPS_LucidOption &&
+                    CanSpellWeave())
+                    return All.LucidDreaming;
 
-                    //Target based options
-                    if (HasBattleTarget())
+                //Target based options
+                if (HasBattleTarget())
+                {
+                    // Energy Drain
+                    if (IsEnabled(CustomComboPreset.SCH_DPS_EnergyDrain))
                     {
-                        // Energy Drain
-                        if (IsEnabled(CustomComboPreset.SCH_DPS_EnergyDrain))
-                        {
-                            float edTime = Config.SCH_ST_DPS_EnergyDrain_Adv ? Config.SCH_ST_DPS_EnergyDrain : 10f;
-                            if (LevelChecked(EnergyDrain) && InCombat() &&
-                                Gauge.HasAetherflow() &&
-                                GetCooldownRemainingTime(Aetherflow) <= edTime &&
-                                (!IsEnabled(CustomComboPreset.SCH_DPS_EnergyDrain_BurstSaver) || (LevelChecked(ChainStratagem) && GetCooldownRemainingTime(ChainStratagem) > 10) || (!ChainStratagem.LevelChecked())) &&
-                                CanSpellWeave())
-                                return EnergyDrain;
-                        }
+                        float edTime = Config.SCH_ST_DPS_EnergyDrain_Adv ? Config.SCH_ST_DPS_EnergyDrain : 10f;
+                        if (LevelChecked(EnergyDrain) && InCombat() &&
+                            Gauge.HasAetherflow() &&
+                            GetCooldownRemainingTime(Aetherflow) <= edTime &&
+                            (!IsEnabled(CustomComboPreset.SCH_DPS_EnergyDrain_BurstSaver) || (LevelChecked(ChainStratagem) && GetCooldownRemainingTime(ChainStratagem) > 10) || (!ChainStratagem.LevelChecked())) &&
+                            CanSpellWeave())
+                            return EnergyDrain;
+                    }
 
-                        // Chain Stratagem
-                        if (IsEnabled(CustomComboPreset.SCH_DPS_ChainStrat))
-                        {
-                            // If CS is available and usable, or if the Impact Buff is on Player
-                            if (ActionReady(ChainStratagem) &&
-                                !TargetHasEffectAny(Debuffs.ChainStratagem) && (openerState == OpenerState.PostOpener) &&
-                                GetTargetHPPercent() > Config.SCH_ST_DPS_ChainStratagemOption &&
-                                InCombat() &&
-                                CanSpellWeave())
-                                return ChainStratagem;
+                    // Chain Stratagem
+                    if (IsEnabled(CustomComboPreset.SCH_DPS_ChainStrat))
+                    {
+                        // If CS is available and usable, or if the Impact Buff is on Player
+                        if (ActionReady(ChainStratagem) &&
+                            !TargetHasEffectAny(Debuffs.ChainStratagem) && (openerState == OpenerState.PostOpener) &&
+                            GetTargetHPPercent() > Config.SCH_ST_DPS_ChainStratagemOption &&
+                            InCombat() &&
+                            CanSpellWeave())
+                            return ChainStratagem;
 
-                            if (LevelChecked(BanefulImpaction) &&
-                                HasEffect(Buffs.ImpactImminent) &&
-                                InCombat() &&
-                                CanSpellWeave())
-                                return BanefulImpaction;
-                            // Don't use OriginalHook(ChainStratagem), because player can disable ingame action replacement
-                        }
+                        if (LevelChecked(BanefulImpaction) &&
+                            HasEffect(Buffs.ImpactImminent) &&
+                            InCombat() &&
+                            CanSpellWeave())
+                            return BanefulImpaction;
+                        // Don't use OriginalHook(ChainStratagem), because player can disable ingame action replacement
+                    }
 
-
-                        //Bio/Biolysis
-                        if (IsEnabled(CustomComboPreset.SCH_DPS_Bio) && LevelChecked(Bio) && InCombat() &&
-                            BioList.TryGetValue(OriginalHook(Bio), out ushort dotDebuffID))
-                        {
-                            if (IsEnabled(CustomComboPreset.SCH_DPS_Variant_SpiritDart) &&
-                                IsEnabled(Variant.VariantSpiritDart) &&
-                                GetDebuffRemainingTime(Variant.Debuffs.SustainedDamage) <= 3 &&
-                                CanSpellWeave())
-                                return Variant.VariantSpiritDart;
+                    //Bio/Biolysis
+                    if (IsEnabled(CustomComboPreset.SCH_DPS_Bio) && LevelChecked(Bio) && InCombat() &&
+                        BioList.TryGetValue(OriginalHook(Bio), out ushort dotDebuffID))
+                    {
+                        if (IsEnabled(CustomComboPreset.SCH_DPS_Variant_SpiritDart) &&
+                            IsEnabled(Variant.VariantSpiritDart) &&
+                            GetDebuffRemainingTime(Variant.Debuffs.SustainedDamage) <= 3 &&
+                            CanSpellWeave())
+                            return Variant.VariantSpiritDart;
 
                         float refreshtimer = Config.SCH_ST_DPS_Bio_Adv ? Config.SCH_ST_DPS_Bio_Threshold : 3;
                         if (GetDebuffRemainingTime(dotDebuffID) <= refreshtimer &&
@@ -303,48 +302,48 @@ internal static partial class SCH
         }
     }
 
-        /*
-        * SCH_AoE
-        * Overrides main AoE DPS ability, Art of War
-        * Lucid Dreaming and Aetherflow weave options
-       */
-        internal class SCH_AoE : CustomCombo
+    /*
+    * SCH_AoE
+    * Overrides main AoE DPS ability, Art of War
+    * Lucid Dreaming and Aetherflow weave options
+   */
+    internal class SCH_AoE : CustomCombo
+    {
+        protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.SCH_AoE;
+        protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
         {
-            protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.SCH_AoE;
-            protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
+            if (actionID is ArtOfWar or ArtOfWarII)
             {
-                if (actionID is ArtOfWar or ArtOfWarII)
-                {
-                    if (IsEnabled(CustomComboPreset.SCH_DPS_Variant_Rampart) &&
-                        IsEnabled(Variant.VariantRampart) &&
-                        IsOffCooldown(Variant.VariantRampart) &&
-                        CanSpellWeave())
-                        return Variant.VariantRampart;
+                if (IsEnabled(CustomComboPreset.SCH_DPS_Variant_Rampart) &&
+                    IsEnabled(Variant.VariantRampart) &&
+                    IsOffCooldown(Variant.VariantRampart) &&
+                    CanSpellWeave())
+                    return Variant.VariantRampart;
 
-                    Status? sustainedDamage = FindTargetEffect(Variant.Debuffs.SustainedDamage);
-                    if (IsEnabled(CustomComboPreset.SCH_DPS_Variant_SpiritDart) &&
-                        IsEnabled(Variant.VariantSpiritDart) &&
-                        (sustainedDamage is null || sustainedDamage?.RemainingTime <= 3) &&
-                        HasBattleTarget() &&
-                        CanSpellWeave())
-                        return Variant.VariantSpiritDart;
+                Status? sustainedDamage = FindTargetEffect(Variant.Debuffs.SustainedDamage);
+                if (IsEnabled(CustomComboPreset.SCH_DPS_Variant_SpiritDart) &&
+                    IsEnabled(Variant.VariantSpiritDart) &&
+                    (sustainedDamage is null || sustainedDamage?.RemainingTime <= 3) &&
+                    HasBattleTarget() &&
+                    CanSpellWeave())
+                    return Variant.VariantSpiritDart;
 
-                    // Aetherflow
-                    if (IsEnabled(CustomComboPreset.SCH_AoE_Aetherflow) &&
-                        ActionReady(Aetherflow) && !Gauge.HasAetherflow() &&
-                        InCombat() && CanSpellWeave())
-                        return Aetherflow;
+                // Aetherflow
+                if (IsEnabled(CustomComboPreset.SCH_AoE_Aetherflow) &&
+                    ActionReady(Aetherflow) && !Gauge.HasAetherflow() &&
+                    InCombat() && CanSpellWeave())
+                    return Aetherflow;
 
-                    // Lucid Dreaming
-                    if (IsEnabled(CustomComboPreset.SCH_AoE_Lucid) &&
-                        ActionReady(All.LucidDreaming) &&
-                        LocalPlayer.CurrentMp <= Config.SCH_AoE_LucidOption &&
-                        CanSpellWeave())
-                        return All.LucidDreaming;
-                }
-                return actionID;
+                // Lucid Dreaming
+                if (IsEnabled(CustomComboPreset.SCH_AoE_Lucid) &&
+                    ActionReady(All.LucidDreaming) &&
+                    LocalPlayer.CurrentMp <= Config.SCH_AoE_LucidOption &&
+                    CanSpellWeave())
+                    return All.LucidDreaming;
             }
+            return actionID;
         }
+    }
 
     /*
     * SCH_AoE_Heal
@@ -423,23 +422,23 @@ internal static partial class SCH
         }
     }
 
-        /*
-        * SCH_ST_Heal
-        * Overrides main AoE Healing abiility, Succor
-        * Lucid Dreaming and Atherflow weave options
-        */
-        internal class SCH_ST_Heal : CustomCombo
+    /*
+    * SCH_ST_Heal
+    * Overrides main AoE Healing abiility, Succor
+    * Lucid Dreaming and Atherflow weave options
+    */
+    internal class SCH_ST_Heal : CustomCombo
+    {
+        protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.SCH_ST_Heal;
+        protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
         {
-            protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.SCH_ST_Heal;
-            protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
+            if (actionID is Physick)
             {
-                if (actionID is Physick)
-                {
-                    // Aetherflow
-                    if (IsEnabled(CustomComboPreset.SCH_ST_Heal_Aetherflow) &&
-                        ActionReady(Aetherflow) && !Gauge.HasAetherflow() &&
-                        InCombat() && CanSpellWeave())
-                        return Aetherflow;
+                // Aetherflow
+                if (IsEnabled(CustomComboPreset.SCH_ST_Heal_Aetherflow) &&
+                    ActionReady(Aetherflow) && !Gauge.HasAetherflow() &&
+                    InCombat() && CanSpellWeave())
+                    return Aetherflow;
 
                 if (IsEnabled(CustomComboPreset.SCH_ST_Heal_Dissipation)
                     && ActionReady(Dissipation)
@@ -447,12 +446,12 @@ internal static partial class SCH
                     && InCombat())
                     return Dissipation;
 
-                    // Lucid Dreaming
-                    if (IsEnabled(CustomComboPreset.SCH_ST_Heal_Lucid) &&
-                        ActionReady(All.LucidDreaming) &&
-                        LocalPlayer.CurrentMp <= Config.SCH_ST_Heal_LucidOption &&
-                        CanSpellWeave())
-                        return All.LucidDreaming;
+                // Lucid Dreaming
+                if (IsEnabled(CustomComboPreset.SCH_ST_Heal_Lucid) &&
+                    ActionReady(All.LucidDreaming) &&
+                    LocalPlayer.CurrentMp <= Config.SCH_ST_Heal_LucidOption &&
+                    CanSpellWeave())
+                    return All.LucidDreaming;
 
                 //Grab our target (Soft->Hard->Self)
                 IGameObject? healTarget = OptionalTarget ?? GetHealTarget(Config.SCH_ST_Heal_Adv && Config.SCH_ST_Heal_UIMouseOver);

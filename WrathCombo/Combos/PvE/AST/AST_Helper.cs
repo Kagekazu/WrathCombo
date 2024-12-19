@@ -249,11 +249,11 @@ internal static partial class AST
         }
     }
 
-        internal class ASTOpenerMaxLevel1 : WrathOpener
-        {
-            public override List<uint> OpenerActions { get; set; } =
-            [
-                EarthlyStar,
+    internal class ASTOpenerMaxLevel1 : WrathOpener
+    {
+        public override List<uint> OpenerActions { get; set; } =
+        [
+            EarthlyStar,
                 FallMalefic,
                 Combust3,
                 Lightspeed,
@@ -275,7 +275,7 @@ internal static partial class AST
                 Combust3,
                 FallMalefic
 
-        ];
+    ];
         public override int MinOpenerLevel => 92;
         public override int MaxOpenerLevel => 109;
 

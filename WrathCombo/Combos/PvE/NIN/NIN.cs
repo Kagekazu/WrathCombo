@@ -5,152 +5,47 @@ using WrathCombo.CustomComboNS;
 using WrathCombo.Data;
 using WrathCombo.Extensions;
 
-namespace WrathCombo.Combos.PvE
+namespace WrathCombo.Combos.PvE;
+
+internal partial class NIN
 {
-    internal partial class NIN
+    internal class NIN_ST_AdvancedMode : CustomCombo
     {
-        public const byte ClassID = 29;
-        public const byte JobID = 30;
-
-        public const uint
-            SpinningEdge = 2240,
-            ShadeShift = 2241,
-            GustSlash = 2242,
-            Hide = 2245,
-            Assassinate = 2246,
-            ThrowingDaggers = 2247,
-            Mug = 2248,
-            DeathBlossom = 2254,
-            AeolianEdge = 2255,
-            TrickAttack = 2258,
-            Kassatsu = 2264,
-            ArmorCrush = 3563,
-            DreamWithinADream = 3566,
-            TenChiJin = 7403,
-            Bhavacakra = 7402,
-            HakkeMujinsatsu = 16488,
-            Meisui = 16489,
-            Bunshin = 16493,
-            PhantomKamaitachi = 25774,
-            ForkedRaiju = 25777,
-            FleetingRaiju = 25778,
-            Hellfrog = 7401,
-            HollowNozuchi = 25776,
-            TenriJendo = 36961,
-            KunaisBane = 36958,
-            ZeshoMeppo = 36960,
-            Dokumori = 36957,
-
-            //Mudras
-            Ninjutsu = 2260,
-            Rabbit = 2272,
-
-            //-- initial state mudras (the ones with charges)
-            Ten = 2259,
-            Chi = 2261,
-            Jin = 2263,
-
-            //-- mudras used for combos (the ones used while you have the mudra buff)
-            TenCombo = 18805,
-            ChiCombo = 18806,
-            JinCombo = 18807,
-
-            //Ninjutsu
-            FumaShuriken = 2265,
-            Hyoton = 2268,
-            Doton = 2270,
-            Katon = 2266,
-            Suiton = 2271,
-            Raiton = 2267,
-            Huton = 2269,
-            GokaMekkyaku = 16491,
-            HyoshoRanryu = 16492,
-
-            //TCJ Jutsus (why they have another ID I will never know)
-            TCJFumaShurikenTen = 18873,
-            TCJFumaShurikenChi = 18874,
-            TCJFumaShurikenJin = 18875,
-            TCJKaton = 18876,
-            TCJRaiton = 18877,
-            TCJHyoton = 18878,
-            TCJHuton = 18879,
-            TCJDoton = 18880,
-            TCJSuiton = 18881;
-
-        public static class Buffs
-        {
-            public const ushort
-                Mudra = 496,
-                Kassatsu = 497,
-                //Suiton = 507,
-                Higi = 3850,
-                TenriJendo = 3851,
-                ShadowWalker = 3848,
-                Hidden = 614,
-                TenChiJin = 1186,
-                AssassinateReady = 1955,
-                RaijuReady = 2690,
-                PhantomReady = 2723,
-                Meisui = 2689,
-                Doton = 501,
-                Bunshin = 1954;
-        }
-
-        public static class Debuffs
-        {
-            public const ushort
-                Dokumori = 3849,
-                TrickAttack = 3254,
-                KunaisBane = 3906,
-                Mug = 638;
-        }
-
-        public static class Traits
-        {
-            public const uint
-                EnhancedKasatsu = 250;
-        }
-
-
-
-        internal class NIN_ST_AdvancedMode : CustomCombo
-        {
-            protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.NIN_ST_AdvancedMode;
+        protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.NIN_ST_AdvancedMode;
 
         protected internal MudraCasting MudraState = new();
 
-            protected internal static NINOpenerMaxLevel4thGCDKunai NINOpener = new();
+        protected internal static NINOpenerMaxLevel4thGCDKunai NINOpener = new();
 
-            protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
+        protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
+        {
+            if (actionID == SpinningEdge)
             {
-                if (actionID == SpinningEdge)
-                {
-                    NINGauge gauge = GetJobGauge<NINGauge>();
-                    bool canWeave = CanWeave();
-                    var canDelayedWeave = CanDelayedWeave();
-                    bool inTrickBurstSaveWindow = IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode_TrickAttack_Cooldowns) && IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode_TrickAttack) && GetCooldownRemainingTime(TrickAttack) <= GetOptionValue(Config.Advanced_Trick_Cooldown);
-                    bool useBhakaBeforeTrickWindow = GetCooldownRemainingTime(TrickAttack) >= 3;
-                    bool setupSuitonWindow = GetCooldownRemainingTime(OriginalHook(TrickAttack)) <= GetOptionValue(Config.Trick_CooldownRemaining) && !HasEffect(Buffs.ShadowWalker);
-                    bool setupKassatsuWindow = GetCooldownRemainingTime(TrickAttack) <= 10 && HasEffect(Buffs.ShadowWalker);
-                    bool chargeCheck = IsNotEnabled(CustomComboPreset.NIN_ST_AdvancedMode_Ninjitsus_ChargeHold) || (IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode_Ninjitsus_ChargeHold) && (InMudra || GetRemainingCharges(Ten) == 2 || (GetRemainingCharges(Ten) == 1 && GetCooldownChargeRemainingTime(Ten) < 3)));
-                    bool poolCharges = !GetOptionBool(Config.Advanced_ChargePool) || (GetRemainingCharges(Ten) == 1 && GetCooldownChargeRemainingTime(Ten) < 2) || TrickDebuff || InMudra;
-                    bool raitonUptime = IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode_Raiton_Uptime);
-                    bool suitonUptime = IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode_Suiton_Uptime);
-                    int bhavaPool = GetOptionValue(Config.Ninki_BhavaPooling);
-                    int bunshinPool = GetOptionValue(Config.Ninki_BunshinPoolingST);
-                    int burnKazematoi = GetOptionValue(Config.BurnKazematoi);
-                    int SecondWindThreshold = PluginConfiguration.GetCustomIntValue(Config.SecondWindThresholdST);
-                    int ShadeShiftThreshold = PluginConfiguration.GetCustomIntValue(Config.ShadeShiftThresholdST);
-                    int BloodbathThreshold = PluginConfiguration.GetCustomIntValue(Config.BloodbathThresholdST);
-                    double playerHP = PlayerHealthPercentageHp();
-                    bool phantomUptime = IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode_Phantom_Uptime);
-                    var comboLength = GetCooldown(GustSlash).CooldownTotal * 3;
-                    bool trueNorthArmor = IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode_TrueNorth) && TargetNeedsPositionals() && !OnTargetsFlank() && GetRemainingCharges(All.TrueNorth) > 0 && All.TrueNorth.LevelChecked() && !HasEffect(All.Buffs.TrueNorth) && canDelayedWeave;
-                    bool trueNorthEdge = IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode_TrueNorth) && TargetNeedsPositionals() && IsNotEnabled(CustomComboPreset.NIN_ST_AdvancedMode_TrueNorth_ArmorCrush) && !OnTargetsRear() && GetRemainingCharges(All.TrueNorth) > 0 && All.TrueNorth.LevelChecked() && !HasEffect(All.Buffs.TrueNorth) && canDelayedWeave;
-                    bool dynamic = IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode_Dynamic);
+                bool canWeave = CanWeave();
+                bool canDelayedWeave = CanDelayedWeave();
+                bool inTrickBurstSaveWindow = IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode_TrickAttack_Cooldowns) && IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode_TrickAttack) && GetCooldownRemainingTime(TrickAttack) <= GetOptionValue(Config.Advanced_Trick_Cooldown);
+                bool useBhakaBeforeTrickWindow = GetCooldownRemainingTime(TrickAttack) >= 3;
+                bool setupSuitonWindow = GetCooldownRemainingTime(OriginalHook(TrickAttack)) <= GetOptionValue(Config.Trick_CooldownRemaining) && !HasEffect(Buffs.ShadowWalker);
+                bool setupKassatsuWindow = GetCooldownRemainingTime(TrickAttack) <= 10 && HasEffect(Buffs.ShadowWalker);
+                bool chargeCheck = IsNotEnabled(CustomComboPreset.NIN_ST_AdvancedMode_Ninjitsus_ChargeHold) || (IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode_Ninjitsus_ChargeHold) && (InMudra || GetRemainingCharges(Ten) == 2 || (GetRemainingCharges(Ten) == 1 && GetCooldownChargeRemainingTime(Ten) < 3)));
+                bool poolCharges = !GetOptionBool(Config.Advanced_ChargePool) || (GetRemainingCharges(Ten) == 1 && GetCooldownChargeRemainingTime(Ten) < 2) || TrickDebuff || InMudra;
+                bool raitonUptime = IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode_Raiton_Uptime);
+                bool suitonUptime = IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode_Suiton_Uptime);
+                int bhavaPool = Config.Ninki_BhavaPooling;
+                int bunshinPool = Config.Ninki_BunshinPoolingST;
+                int burnKazematoi = Config.BurnKazematoi;
+                int secondWindThreshold = Config.SecondWindThresholdST;
+                int shadeShiftThreshold = Config.ShadeShiftThresholdST;
+                int bloodbathThreshold = Config.BloodbathThresholdST;
+                double playerHP = PlayerHealthPercentageHp();
+                bool phantomUptime = IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode_Phantom_Uptime);
+                float comboLength = GetCooldown(GustSlash).CooldownTotal * 3;
+                bool trueNorthArmor = IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode_TrueNorth) && TargetNeedsPositionals() && !OnTargetsFlank() && GetRemainingCharges(All.TrueNorth) > 0 && All.TrueNorth.LevelChecked() && !HasEffect(All.Buffs.TrueNorth) && canDelayedWeave;
+                bool trueNorthEdge = IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode_TrueNorth) && TargetNeedsPositionals() && IsNotEnabled(CustomComboPreset.NIN_ST_AdvancedMode_TrueNorth_ArmorCrush) && !OnTargetsRear() && GetRemainingCharges(All.TrueNorth) > 0 && All.TrueNorth.LevelChecked() && !HasEffect(All.Buffs.TrueNorth) && canDelayedWeave;
+                bool dynamic = IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode_Dynamic);
 
-                    if (IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode_BalanceOpener) && Opener().FullOpener(ref actionID))
-                        return actionID;
+                if (IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode_BalanceOpener) && Opener().FullOpener(ref actionID))
+                    return actionID;
 
                 if (IsNotEnabled(CustomComboPreset.NIN_ST_AdvancedMode_Ninjitsus) || (ActionWatching.TimeSinceLastAction.TotalSeconds >= 5 && !InCombat()))
                     MudraState.CurrentMudra = MudraCasting.MudraState.None;
@@ -164,11 +59,11 @@ namespace WrathCombo.Combos.PvE
                 if (OriginalHook(Ninjutsu) is Rabbit)
                     return OriginalHook(Ninjutsu);
 
-                    if (InMudra)
-                    {
-                        if (mudraState.ContinueCurrentMudra(ref actionID))
-                            return actionID;
-                    }
+                if (InMudra)
+                {
+                    if (MudraState.ContinueCurrentMudra(ref actionID))
+                        return actionID;
+                }
 
                 if (!Suiton.LevelChecked()) //For low level
                 {
@@ -191,24 +86,24 @@ namespace WrathCombo.Combos.PvE
                         return OriginalHook(Jin);
                 }
 
-                    if (IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode_Kassatsu_HyoshoRaynryu) &&
-                        HasEffect(Buffs.Kassatsu) &&
-                        TrickDebuff &&
-                        (IsNotEnabled(CustomComboPreset.NIN_ST_AdvancedMode_Mug) || (IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode_Mug) && IsOnCooldown(Mug))) &&
-                        mudraState.CastHyoshoRanryu(ref actionID))
-                        return actionID;
+                if (IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode_Kassatsu_HyoshoRaynryu) &&
+                    HasEffect(Buffs.Kassatsu) &&
+                    TrickDebuff &&
+                    (IsNotEnabled(CustomComboPreset.NIN_ST_AdvancedMode_Mug) || (IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode_Mug) && IsOnCooldown(Mug))) &&
+                    MudraState.CastHyoshoRanryu(ref actionID))
+                    return actionID;
 
                 if (IsEnabled(CustomComboPreset.NIN_Variant_Cure) && IsEnabled(Variant.VariantCure) && PlayerHealthPercentageHp() <= GetOptionValue(Config.NIN_VariantCure))
                     return Variant.VariantCure;
 
-                    if (InCombat() && !InMeleeRange())
-                    {
-                        if (IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode_Bunshin_Phantom) &&
-                            HasEffect(Buffs.PhantomReady) &&
-                            ((GetCooldownRemainingTime(TrickAttack) > GetBuffRemainingTime(Buffs.PhantomReady) && GetBuffRemainingTime(Buffs.PhantomReady) < 5) || TrickDebuff || (HasEffect(Buffs.Bunshin) && TargetHasEffect(Debuffs.Mug))) &&
-                            PhantomKamaitachi.LevelChecked()
-                            && phantomUptime)
-                            return OriginalHook(PhantomKamaitachi);
+                if (InCombat() && !InMeleeRange())
+                {
+                    if (IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode_Bunshin_Phantom) &&
+                        HasEffect(Buffs.PhantomReady) &&
+                        ((GetCooldownRemainingTime(TrickAttack) > GetBuffRemainingTime(Buffs.PhantomReady) && GetBuffRemainingTime(Buffs.PhantomReady) < 5) || TrickDebuff || (HasEffect(Buffs.Bunshin) && TargetHasEffect(Debuffs.Mug))) &&
+                        PhantomKamaitachi.LevelChecked()
+                        && phantomUptime)
+                        return OriginalHook(PhantomKamaitachi);
 
                     if (IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode_Ninjitsus_Suiton) &&
                         setupSuitonWindow &&
@@ -231,12 +126,12 @@ namespace WrathCombo.Combos.PvE
                         return OriginalHook(ThrowingDaggers);
                 }
 
-                    if (canWeave && !InMudra)
-                    {
-                        if (IsEnabled(CustomComboPreset.NIN_Variant_Rampart) &&
-                            IsEnabled(Variant.VariantRampart) &&
-                            IsOffCooldown(Variant.VariantRampart))
-                            return Variant.VariantRampart;
+                if (canWeave && !InMudra)
+                {
+                    if (IsEnabled(CustomComboPreset.NIN_Variant_Rampart) &&
+                        IsEnabled(Variant.VariantRampart) &&
+                        IsOffCooldown(Variant.VariantRampart))
+                        return Variant.VariantRampart;
 
                     if (IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode_Mug) &&
                         IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode_Mug_AlignBefore) &&
@@ -255,14 +150,14 @@ namespace WrathCombo.Combos.PvE
                         IsNotEnabled(CustomComboPreset.NIN_ST_AdvancedMode_TrickAttack_Delayed)))
                         return OriginalHook(TrickAttack);
 
-                        if (IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode_TenriJindo) && HasEffect(Buffs.TenriJendo) && ((TrickDebuff && MugDebuff) || GetBuffRemainingTime(Buffs.TenriJendo) <= 3))
-                            return OriginalHook(TenriJendo);
+                    if (IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode_TenriJindo) && HasEffect(Buffs.TenriJendo) && ((TrickDebuff && MugDebuff) || GetBuffRemainingTime(Buffs.TenriJendo) <= 3))
+                        return OriginalHook(TenriJendo);
 
                     if (IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode_Bunshin) && Bunshin.LevelChecked() && IsOffCooldown(Bunshin) && Gauge.Ninki >= bunshinPool)
                         return OriginalHook(Bunshin);
 
-                        if (IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode_Kassatsu) && (TrickDebuff || setupKassatsuWindow) && IsOffCooldown(Kassatsu) && Kassatsu.LevelChecked())
-                            return OriginalHook(Kassatsu);
+                    if (IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode_Kassatsu) && (TrickDebuff || setupKassatsuWindow) && IsOffCooldown(Kassatsu) && Kassatsu.LevelChecked())
+                        return OriginalHook(Kassatsu);
 
                     //healing - please move if not appropriate priority
                     if (IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode_SecondWind) && All.SecondWind.LevelChecked() && playerHP <= secondWindThreshold && IsOffCooldown(All.SecondWind))
@@ -274,25 +169,25 @@ namespace WrathCombo.Combos.PvE
                     if (IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode_Bloodbath) && All.Bloodbath.LevelChecked() && playerHP <= bloodbathThreshold && IsOffCooldown(All.Bloodbath))
                         return All.Bloodbath;
 
-                        if (IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode_Bhavacakra) &&
-                            ((TrickDebuff && gauge.Ninki >= 50) || (useBhakaBeforeTrickWindow && gauge.Ninki == 100)) &&
-                            (IsNotEnabled(CustomComboPreset.NIN_ST_AdvancedMode_Mug) || (IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode_Mug) && IsOnCooldown(Mug))) &&
-                            Bhavacakra.LevelChecked())
-                            return OriginalHook(Bhavacakra);
+                    if (IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode_Bhavacakra) &&
+                        ((TrickDebuff && Gauge.Ninki >= 50) || (useBhakaBeforeTrickWindow && Gauge.Ninki == 100)) &&
+                        (IsNotEnabled(CustomComboPreset.NIN_ST_AdvancedMode_Mug) || (IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode_Mug) && IsOnCooldown(Mug))) &&
+                        Bhavacakra.LevelChecked())
+                        return OriginalHook(Bhavacakra);
 
-                        if (IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode_Bhavacakra) &&
-                            ((TrickDebuff && gauge.Ninki >= 50) || (useBhakaBeforeTrickWindow && gauge.Ninki >= 60)) &&
-                            (IsNotEnabled(CustomComboPreset.NIN_ST_AdvancedMode_Mug) || (IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode_Mug) && IsOnCooldown(Mug))) &&
-                            !Bhavacakra.LevelChecked() && Hellfrog.LevelChecked())
-                            return OriginalHook(Hellfrog);
+                    if (IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode_Bhavacakra) &&
+                        ((TrickDebuff && Gauge.Ninki >= 50) || (useBhakaBeforeTrickWindow && Gauge.Ninki >= 60)) &&
+                        (IsNotEnabled(CustomComboPreset.NIN_ST_AdvancedMode_Mug) || (IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode_Mug) && IsOnCooldown(Mug))) &&
+                        !Bhavacakra.LevelChecked() && Hellfrog.LevelChecked())
+                        return OriginalHook(Hellfrog);
 
-                        if (!inTrickBurstSaveWindow)
+                    if (!inTrickBurstSaveWindow)
+                    {
+                        if (IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode_Mug) && IsOffCooldown(Mug) && Mug.LevelChecked())
                         {
-                            if (IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode_Mug) && IsOffCooldown(Mug) && Mug.LevelChecked())
-                            {
-                                if (IsNotEnabled(CustomComboPreset.NIN_ST_AdvancedMode_Mug_AlignAfter) || (IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode_Mug_AlignAfter) && TrickDebuff))
-                                    return OriginalHook(Mug);
-                            }
+                            if (IsNotEnabled(CustomComboPreset.NIN_ST_AdvancedMode_Mug_AlignAfter) || (IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode_Mug_AlignAfter) && TrickDebuff))
+                                return OriginalHook(Mug);
+                        }
 
                         if (IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode_Meisui) && HasEffect(Buffs.ShadowWalker) && Gauge.Ninki <= 50 && IsOffCooldown(Meisui) && Meisui.LevelChecked())
                             return OriginalHook(Meisui);
@@ -327,11 +222,11 @@ namespace WrathCombo.Combos.PvE
                     return OriginalHook(FleetingRaiju);
                 }
 
-                    if (IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode_Bunshin_Phantom) &&
-                        HasEffect(Buffs.PhantomReady) &&
-                        ((GetCooldownRemainingTime(TrickAttack) > GetBuffRemainingTime(Buffs.PhantomReady) && GetBuffRemainingTime(Buffs.PhantomReady) < 5) || TrickDebuff || (HasEffect(Buffs.Bunshin) && TargetHasEffect(Debuffs.Mug))) &&
-                        PhantomKamaitachi.LevelChecked())
-                        return OriginalHook(PhantomKamaitachi);
+                if (IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode_Bunshin_Phantom) &&
+                    HasEffect(Buffs.PhantomReady) &&
+                    ((GetCooldownRemainingTime(TrickAttack) > GetBuffRemainingTime(Buffs.PhantomReady) && GetBuffRemainingTime(Buffs.PhantomReady) < 5) || TrickDebuff || (HasEffect(Buffs.Bunshin) && TargetHasEffect(Debuffs.Mug))) &&
+                    PhantomKamaitachi.LevelChecked())
+                    return OriginalHook(PhantomKamaitachi);
 
                 if (IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode_Kassatsu_HyoshoRaynryu) &&
                     !inTrickBurstSaveWindow &&
@@ -380,74 +275,72 @@ namespace WrathCombo.Combos.PvE
                                     return OriginalHook(AeolianEdge);
                             }
 
-                                if (gauge.Kazematoi == 0)
+                            if (Gauge.Kazematoi == 0)
+                            {
+                                if (trueNorthArmor)
+                                    return OriginalHook(All.TrueNorth);
+                                else
+                                    return OriginalHook(ArmorCrush);
+                            }
+                            if ((Gauge.Kazematoi > 0) && (Gauge.Kazematoi < 4))
+                            {
+                                if (OnTargetsFlank())
+                                    return OriginalHook(ArmorCrush);
+                                else
+                                    return OriginalHook(AeolianEdge);
+                            }
+                        }
+                        if (!dynamic)
+                        {
+                            if (!MugDebuff && GetTargetHPPercent() > burnKazematoi)
+                            {
+                                if (Gauge.Kazematoi < 4)
                                 {
                                     if (trueNorthArmor)
                                         return OriginalHook(All.TrueNorth);
                                     else
                                         return OriginalHook(ArmorCrush);
                                 }
-                                if ((gauge.Kazematoi > 0) && (gauge.Kazematoi < 4))
+                                else
                                 {
-                                    if (OnTargetsFlank())
-                                        return OriginalHook(ArmorCrush);
+                                    if (trueNorthEdge)
+                                        return OriginalHook(All.TrueNorth);
                                     else
                                         return OriginalHook(AeolianEdge);
                                 }
-
-
                             }
-                            if (!dynamic)
+                            if (MugDebuff || GetTargetHPPercent() <= burnKazematoi)
                             {
-                                if (!MugDebuff && GetTargetHPPercent() > burnKazematoi)
+                                if (Gauge.Kazematoi == 0)
                                 {
-                                    if (gauge.Kazematoi < 4)
-                                    {
-                                        if (trueNorthArmor)
-                                            return OriginalHook(All.TrueNorth);
-                                        else
-                                            return OriginalHook(ArmorCrush);
-                                    }
+                                    if (trueNorthArmor)
+                                        return OriginalHook(All.TrueNorth);
                                     else
-                                    {
-                                        if (trueNorthEdge)
-                                            return OriginalHook(All.TrueNorth);
-                                        else
-                                            return OriginalHook(AeolianEdge);
-                                    }
+                                        return OriginalHook(ArmorCrush);
                                 }
-                                if (MugDebuff || GetTargetHPPercent() <= burnKazematoi)
+                                else
                                 {
-                                    if (gauge.Kazematoi == 0)
-                                    {
-                                        if (trueNorthArmor)
-                                            return OriginalHook(All.TrueNorth);
-                                        else
-                                            return OriginalHook(ArmorCrush);
-                                    }
+                                    if (trueNorthEdge)
+                                        return OriginalHook(All.TrueNorth);
                                     else
-                                    {
-                                        if (trueNorthEdge)
-                                            return OriginalHook(All.TrueNorth);
-                                        else
-                                            return OriginalHook(AeolianEdge);
-                                    }
+                                        return OriginalHook(AeolianEdge);
                                 }
                             }
-                        }
-                        if (lastComboMove == GustSlash && !ArmorCrush.LevelChecked() && AeolianEdge.LevelChecked())
-                        {
-                            if (trueNorthEdge)
-                                return OriginalHook(All.TrueNorth);
-                            else
-                                return OriginalHook(AeolianEdge);
                         }
                     }
-                    return OriginalHook(SpinningEdge);
+                    if (lastComboMove == GustSlash && !ArmorCrush.LevelChecked() && AeolianEdge.LevelChecked())
+                    {
+                        if (trueNorthEdge)
+                            return OriginalHook(All.TrueNorth);
+                        else
+                            return OriginalHook(AeolianEdge);
+                    }
                 }
-                return actionID;
+                return OriginalHook(SpinningEdge);
             }
+            return actionID;
         }
+    }
 
     internal class NIN_AoE_AdvancedMode : CustomCombo
     {
@@ -455,24 +348,23 @@ namespace WrathCombo.Combos.PvE
 
         protected internal MudraCasting mudraState = new();
 
-            protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
+        protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
+        {
+            if (actionID == DeathBlossom)
             {
-                if (actionID == DeathBlossom)
-                {
-                    Status? dotonBuff = FindEffect(Buffs.Doton);
-                    NINGauge? gauge = GetJobGauge<NINGauge>();
-                    bool canWeave = CanWeave();
-                    bool chargeCheck = IsNotEnabled(CustomComboPreset.NIN_AoE_AdvancedMode_Ninjitsus_ChargeHold) || (IsEnabled(CustomComboPreset.NIN_AoE_AdvancedMode_Ninjitsus_ChargeHold) && GetRemainingCharges(Ten) == 2);
-                    bool inMudraState = InMudra;
-                    int hellfrogPool = GetOptionValue(Config.Ninki_HellfrogPooling);
-                    int dotonTimer = GetOptionValue(Config.Advanced_DotonTimer);
-                    int dotonThreshold = GetOptionValue(Config.Advanced_DotonHP);
-                    int tcjPath = GetOptionValue(Config.Advanced_TCJEnderAoE);
-                    int bunshingPool = GetOptionValue(Config.Ninki_BunshinPoolingAoE);
-                    int SecondWindThreshold = PluginConfiguration.GetCustomIntValue(Config.SecondWindThresholdAoE);
-                    int ShadeShiftThreshold = PluginConfiguration.GetCustomIntValue(Config.ShadeShiftThresholdAoE);
-                    int BloodbathThreshold = PluginConfiguration.GetCustomIntValue(Config.BloodbathThresholdAoE);
-                    double playerHP = PlayerHealthPercentageHp();
+                Status? dotonBuff = FindEffect(Buffs.Doton);
+                bool canWeave = CanWeave();
+                bool chargeCheck = IsNotEnabled(CustomComboPreset.NIN_AoE_AdvancedMode_Ninjitsus_ChargeHold) || (IsEnabled(CustomComboPreset.NIN_AoE_AdvancedMode_Ninjitsus_ChargeHold) && GetRemainingCharges(Ten) == 2);
+                bool inMudraState = InMudra;
+                int hellfrogPool = GetOptionValue(Config.Ninki_HellfrogPooling);
+                int dotonTimer = GetOptionValue(Config.Advanced_DotonTimer);
+                int dotonThreshold = GetOptionValue(Config.Advanced_DotonHP);
+                int tcjPath = GetOptionValue(Config.Advanced_TCJEnderAoE);
+                int bunshingPool = GetOptionValue(Config.Ninki_BunshinPoolingAoE);
+                int secondWindThreshold = Config.SecondWindThresholdAoE;
+                int shadeShiftThreshold = Config.ShadeShiftThresholdAoE;
+                int bloodbathThreshold = Config.BloodbathThresholdAoE;
+                double playerHP = PlayerHealthPercentageHp();
 
                 if (IsNotEnabled(CustomComboPreset.NIN_AoE_AdvancedMode_Ninjitsus) || (ActionWatching.TimeSinceLastAction.TotalSeconds >= 5 && !InCombat()))
                     mudraState.CurrentMudra = MudraCasting.MudraState.None;
@@ -480,11 +372,11 @@ namespace WrathCombo.Combos.PvE
                 if (OriginalHook(Ninjutsu) is Rabbit)
                     return OriginalHook(Ninjutsu);
 
-                    if (InMudra)
-                    {
-                        if (mudraState.ContinueCurrentMudra(ref actionID))
-                            return actionID;
-                    }
+                if (InMudra)
+                {
+                    if (mudraState.ContinueCurrentMudra(ref actionID))
+                        return actionID;
+                }
 
                 if (HasEffect(Buffs.TenChiJin))
                 {
@@ -628,31 +520,30 @@ namespace WrathCombo.Combos.PvE
 
         protected internal MudraCasting mudraState = new();
 
-            protected internal static NINOpenerMaxLevel4thGCDKunai NINOpener = new();
+        protected internal static NINOpenerMaxLevel4thGCDKunai NINOpener = new();
 
-            protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
+        protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
+        {
+            if (actionID == SpinningEdge)
             {
-                if (actionID == SpinningEdge)
-                {
-                    NINGauge gauge = GetJobGauge<NINGauge>();
-                    bool canWeave = CanWeave(0.6) && !ActionWatching.HasDoubleWeaved();
-                    bool inTrickBurstSaveWindow = GetCooldownRemainingTime(TrickAttack) <= 15 && Suiton.LevelChecked();
-                    bool useBhakaBeforeTrickWindow = GetCooldownRemainingTime(TrickAttack) >= 3;
-                    var canDelayedWeave = CanDelayedWeave();
-                    bool trueNorthArmor = TargetNeedsPositionals() && !OnTargetsFlank() && GetRemainingCharges(All.TrueNorth) > 0 && All.TrueNorth.LevelChecked() && !HasEffect(All.Buffs.TrueNorth) && canDelayedWeave;
-                    bool trueNorthEdge = TargetNeedsPositionals() && !OnTargetsRear() && GetRemainingCharges(All.TrueNorth) > 0 && All.TrueNorth.LevelChecked() && !HasEffect(All.Buffs.TrueNorth) && canDelayedWeave;
+                bool canWeave = CanWeave(0.6) && !ActionWatching.HasDoubleWeaved();
+                bool inTrickBurstSaveWindow = GetCooldownRemainingTime(TrickAttack) <= 15 && Suiton.LevelChecked();
+                bool useBhakaBeforeTrickWindow = GetCooldownRemainingTime(TrickAttack) >= 3;
+                bool canDelayedWeave = CanDelayedWeave();
+                bool trueNorthArmor = TargetNeedsPositionals() && !OnTargetsFlank() && GetRemainingCharges(All.TrueNorth) > 0 && All.TrueNorth.LevelChecked() && !HasEffect(All.Buffs.TrueNorth) && canDelayedWeave;
+                bool trueNorthEdge = TargetNeedsPositionals() && !OnTargetsRear() && GetRemainingCharges(All.TrueNorth) > 0 && All.TrueNorth.LevelChecked() && !HasEffect(All.Buffs.TrueNorth) && canDelayedWeave;
 
                 if (OriginalHook(Ninjutsu) is Rabbit)
                     return OriginalHook(Ninjutsu);
 
-                    if (InMudra)
-                    {
-                        if (mudraState.ContinueCurrentMudra(ref actionID))
-                            return actionID;
-                    }
-
-                    if (IsEnabled(CustomComboPreset.NIN_ST_SimpleMode_BalanceOpener) && Opener().FullOpener(ref actionID))
+                if (InMudra)
+                {
+                    if (mudraState.ContinueCurrentMudra(ref actionID))
                         return actionID;
+                }
+
+                if (IsEnabled(CustomComboPreset.NIN_ST_SimpleMode_BalanceOpener) && Opener().FullOpener(ref actionID))
+                    return actionID;
 
                 if (HasEffect(Buffs.TenChiJin))
                 {
@@ -682,12 +573,12 @@ namespace WrathCombo.Combos.PvE
                         return actionID;
                 }
 
-                    if (canWeave && !InMudra)
-                    {
-                        if (IsEnabled(CustomComboPreset.NIN_Variant_Rampart) &&
-                            IsEnabled(Variant.VariantRampart) &&
-                            IsOffCooldown(Variant.VariantRampart))
-                            return Variant.VariantRampart;
+                if (canWeave && !InMudra)
+                {
+                    if (IsEnabled(CustomComboPreset.NIN_Variant_Rampart) &&
+                        IsEnabled(Variant.VariantRampart) &&
+                        IsOffCooldown(Variant.VariantRampart))
+                        return Variant.VariantRampart;
 
                     if (HasEffect(Buffs.TenriJendo))
                         return OriginalHook(TenriJendo);
@@ -698,11 +589,11 @@ namespace WrathCombo.Combos.PvE
                     if (HasEffect(Buffs.ShadowWalker) && IsOffCooldown(TrickAttack))
                         return OriginalHook(TrickAttack);
 
-                        if (Bhavacakra.LevelChecked() && ((TrickDebuff && gauge.Ninki >= 50) || useBhakaBeforeTrickWindow && gauge.Ninki == 100))
-                            return OriginalHook(Bhavacakra);
+                    if (Bhavacakra.LevelChecked() && ((TrickDebuff && Gauge.Ninki >= 50) || (useBhakaBeforeTrickWindow && Gauge.Ninki == 100)))
+                        return OriginalHook(Bhavacakra);
 
-                        if ((TrickDebuff && gauge.Ninki >= 50) || (useBhakaBeforeTrickWindow && gauge.Ninki == 100) && !Bhavacakra.LevelChecked() && Hellfrog.LevelChecked())
-                            return OriginalHook(Hellfrog);
+                    if ((TrickDebuff && Gauge.Ninki >= 50) || (useBhakaBeforeTrickWindow && Gauge.Ninki == 100 && !Bhavacakra.LevelChecked() && Hellfrog.LevelChecked()))
+                        return OriginalHook(Hellfrog);
 
                     if (!inTrickBurstSaveWindow)
                     {
@@ -739,56 +630,56 @@ namespace WrathCombo.Combos.PvE
                     if (lastComboMove == SpinningEdge && GustSlash.LevelChecked())
                         return OriginalHook(GustSlash);
 
-                        if (lastComboMove == GustSlash && ArmorCrush.LevelChecked())
+                    if (lastComboMove == GustSlash && ArmorCrush.LevelChecked())
+                    {
+                        if (!MugDebuff)
                         {
-                            if (!MugDebuff)
+                            if (Gauge.Kazematoi < 4)
                             {
-                                if (gauge.Kazematoi < 4)
-                                {
-                                    if (trueNorthArmor)
-                                        return OriginalHook(All.TrueNorth);
-                                    else
-                                        return OriginalHook(ArmorCrush);
-                                }
+                                if (trueNorthArmor)
+                                    return OriginalHook(All.TrueNorth);
                                 else
-                                {
-                                    if (trueNorthEdge)
-                                        return OriginalHook(All.TrueNorth);
-                                    else
-                                        return OriginalHook(AeolianEdge);
-                                }
+                                    return OriginalHook(ArmorCrush);
                             }
-                            if (MugDebuff)
+                            else
                             {
-                                if (gauge.Kazematoi == 0)
-                                {
-                                    if (trueNorthArmor)
-                                        return OriginalHook(All.TrueNorth);
-                                    else
-                                        return OriginalHook(ArmorCrush);
-                                }
+                                if (trueNorthEdge)
+                                    return OriginalHook(All.TrueNorth);
                                 else
-                                {
-                                    if (trueNorthEdge)
-                                        return OriginalHook(All.TrueNorth);
-                                    else
-                                        return OriginalHook(AeolianEdge);
-                                }
+                                    return OriginalHook(AeolianEdge);
                             }
                         }
-                        if (lastComboMove == GustSlash && !ArmorCrush.LevelChecked() && AeolianEdge.LevelChecked())
+                        if (MugDebuff)
                         {
-                            if (trueNorthEdge)
-                                return OriginalHook(All.TrueNorth);
+                            if (Gauge.Kazematoi == 0)
+                            {
+                                if (trueNorthArmor)
+                                    return OriginalHook(All.TrueNorth);
+                                else
+                                    return OriginalHook(ArmorCrush);
+                            }
                             else
-                                return OriginalHook(AeolianEdge);
+                            {
+                                if (trueNorthEdge)
+                                    return OriginalHook(All.TrueNorth);
+                                else
+                                    return OriginalHook(AeolianEdge);
+                            }
                         }
                     }
-                    return OriginalHook(SpinningEdge);
+                    if (lastComboMove == GustSlash && !ArmorCrush.LevelChecked() && AeolianEdge.LevelChecked())
+                    {
+                        if (trueNorthEdge)
+                            return OriginalHook(All.TrueNorth);
+                        else
+                            return OriginalHook(AeolianEdge);
+                    }
                 }
-                return actionID;
+                return OriginalHook(SpinningEdge);
             }
+            return actionID;
         }
+    }
 
     internal class NIN_AoE_SimpleMode : CustomCombo
     {
@@ -796,13 +687,12 @@ namespace WrathCombo.Combos.PvE
 
         private MudraCasting mudraState = new();
 
-            protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
+        protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
+        {
+            if (actionID == DeathBlossom)
             {
-                if (actionID == DeathBlossom)
-                {
-                    var dotonBuff = FindEffect(Buffs.Doton);
-                    var gauge = GetJobGauge<NINGauge>();
-                    var canWeave = CanWeave();
+                Status? dotonBuff = FindEffect(Buffs.Doton);
+                bool canWeave = CanWeave();
 
                 if (ActionWatching.TimeSinceLastAction.TotalSeconds >= 5 && !InCombat())
                     mudraState.CurrentMudra = MudraCasting.MudraState.None;
@@ -810,11 +700,11 @@ namespace WrathCombo.Combos.PvE
                 if (OriginalHook(Ninjutsu) is Rabbit)
                     return OriginalHook(Ninjutsu);
 
-                    if (InMudra)
-                    {
-                        if (mudraState.ContinueCurrentMudra(ref actionID))
-                            return actionID;
-                    }
+                if (InMudra)
+                {
+                    if (mudraState.ContinueCurrentMudra(ref actionID))
+                        return actionID;
+                }
 
                 if (HasEffect(Buffs.TenChiJin))
                 {
@@ -858,13 +748,12 @@ namespace WrathCombo.Combos.PvE
                 else if (mudraState.CurrentMudra == MudraCasting.MudraState.CastingDoton)
                     mudraState.CurrentMudra = MudraCasting.MudraState.None;
 
-
-                    if (canWeave && !InMudra)
-                    {
-                        if (IsEnabled(CustomComboPreset.NIN_Variant_Rampart) &&
-                            IsEnabled(Variant.VariantRampart) &&
-                            IsOffCooldown(Variant.VariantRampart))
-                            return Variant.VariantRampart;
+                if (canWeave && !InMudra)
+                {
+                    if (IsEnabled(CustomComboPreset.NIN_Variant_Rampart) &&
+                        IsEnabled(Variant.VariantRampart) &&
+                        IsOffCooldown(Variant.VariantRampart))
+                        return Variant.VariantRampart;
 
                     if (IsOffCooldown(TenChiJin) && TenChiJin.LevelChecked())
                         return OriginalHook(TenChiJin);
@@ -1179,6 +1068,7 @@ namespace WrathCombo.Combos.PvE
         TenriJendo = 36961,
         KunaisBane = 36958,
         ZeshoMeppo = 36960,
+        Dokumori = 36957,
 
         //Mudras
         Ninjutsu = 2260,

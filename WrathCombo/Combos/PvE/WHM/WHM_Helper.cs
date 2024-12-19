@@ -20,51 +20,13 @@ internal partial class WHM
         return WrathOpener.Dummy;
     }
 
-
-    internal class WHMOpenerMaxLevel1 : WrathOpener
-    {
-        public override int MinOpenerLevel => 100;
-
-        public override int MaxOpenerLevel => 109;
-
-        public override List<uint> OpenerActions { get; set; } =
-        [
-            Glare3,
-            Dia,
-            Glare3,
-            Glare3,
-            PresenceOfMind,
-            Glare4,
-            Assize,
-            Glare4,
-            Glare3,
-            Glare3,
-            Glare3,
-            Glare3,
-            Glare3,
-            Glare3,
-            Glare4,
-            Dia
-        ];
-
-        public override bool HasCooldowns()
-        {
-            if (!ActionReady(PresenceOfMind))
-                return false;
-
-            if (!ActionReady(Assize))
-                return false;
-
-            return true;
-        }
-    }
-
-    internal static class WHMHelper
+    public static int GetMatchingConfigST(int i, IGameObject? optionalTarget, out uint action,
+        out bool enabled)
     {
         //var healTarget = optionalTarget ?? GetHealTarget(Config.WHM_STHeals_UIMouseOver);
         //leaving incase Regen gets a slider and is added
 
-            bool canWeave = CanWeave(0.3);
+        bool canWeave = CanWeave(0.3);
 
         switch (i)
         {
@@ -109,13 +71,14 @@ internal partial class WHM
 
         return 0;
     }
+
     internal class WHMOpenerMaxLevel1 : WrathOpener
     {
         public override int MinOpenerLevel => 100;
 
         public override int MaxOpenerLevel => 109;
 
-        public override List<uint> OpenerActions { get; protected set; } =
+        public override List<uint> OpenerActions { get; set; } =
         [
             Glare3,
             Dia,

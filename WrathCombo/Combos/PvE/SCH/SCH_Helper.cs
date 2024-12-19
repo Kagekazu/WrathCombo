@@ -1,14 +1,13 @@
 ﻿using Dalamud.Game.ClientState.JobGauge.Types;
-using WrathCombo.CustomComboNS.Functions;
 using static WrathCombo.CustomComboNS.Functions.CustomComboFunctions;
 
-namespace WrathCombo.Combos.PvE
+namespace WrathCombo.Combos.PvE;
+
+internal static partial class SCH
 {
-    internal static partial class SCH
-    {
-        // Class Gauge
-        internal static SCHGauge Gauge => GetJobGauge<SCHGauge>();
-        internal static bool HasAetherflow(this SCHGauge gauge) => (gauge.Aetherflow > 0);
+    // Class Gauge
+    internal static SCHGauge Gauge => GetJobGauge<SCHGauge>();
+    internal static bool HasAetherflow(this SCHGauge gauge) => gauge.Aetherflow > 0;
 
     internal enum OpenerState
     {

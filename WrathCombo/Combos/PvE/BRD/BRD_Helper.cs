@@ -1,5 +1,4 @@
-﻿using ECommons.DalamudServices;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using WrathCombo.CustomComboNS;
 using WrathCombo.CustomComboNS.Functions;
@@ -45,7 +44,7 @@ internal partial class BRD
 
         ];
 
-        public override List<(int[], uint, Func<bool>)> ProcSteps { get; set; } =
+        public override List<(int [], uint, Func<bool>)> ProcSteps { get; set; } =
         [
             ([6, 9, 16, 17, 20], RefulgentArrow, () => CustomComboFunctions.HasEffect(Buffs.HawksEye)),
         ];

@@ -15,7 +15,7 @@ internal partial class BLM
     internal static BLMGauge Gauge = GetJobGauge<BLMGauge>();
     internal static BLMOpenerMaxLevel1 Opener1 = new();
 
-    internal static bool canWeave => CanSpellWeave();
+    internal static bool CanWeave => CanSpellWeave();
 
     internal static uint? CurMp => LocalPlayer?.CurrentMp;
 

@@ -1,7 +1,5 @@
 ﻿using WrathCombo.Combos.PvE.Content;
-using WrathCombo.Core;
 using WrathCombo.CustomComboNS;
-using WrathCombo.Data;
 using WrathCombo.Extensions;
 
 namespace WrathCombo.Combos.PvE;
@@ -12,13 +10,11 @@ internal partial class PCT
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.PCT_ST_SimpleMode;
 
-
-            protected override uint Invoke(uint actionID, uint lastComboActionID, float comboTime, byte level)
+        protected override uint Invoke(uint actionID, uint lastComboActionID, float comboTime, byte level)
+        {
+            if (actionID is FireInRed)
             {
-                if (actionID is FireInRed)
-                {
-                    PCTGauge gauge = GetJobGauge<PCTGauge>();
-                    bool canWeave = CanSpellWeave() || CanSpellWeave();
+                bool canWeave = CanSpellWeave() || CanSpellWeave();
 
                 // Lvl 100 Opener
                 if (StarPrism.LevelChecked())
@@ -228,9 +224,8 @@ internal partial class PCT
                     }
                 }
 
-
-                    if (All.LucidDreaming.LevelChecked() && ActionReady(All.LucidDreaming) && CanSpellWeave() && LocalPlayer.CurrentMp <= 6500)
-                        return All.LucidDreaming;
+                if (All.LucidDreaming.LevelChecked() && ActionReady(All.LucidDreaming) && CanSpellWeave() && LocalPlayer.CurrentMp <= 6500)
+                    return All.LucidDreaming;
 
                 if (BlizzardIIinCyan.LevelChecked() && HasEffect(Buffs.SubtractivePalette))
                     return OriginalHook(BlizzardinCyan);
@@ -244,20 +239,19 @@ internal partial class PCT
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.PCT_ST_AdvancedMode;
 
-            protected override uint Invoke(uint actionID, uint lastComboActionID, float comboTime, byte level)
+        protected override uint Invoke(uint actionID, uint lastComboActionID, float comboTime, byte level)
+        {
+            if (actionID is FireInRed)
             {
-                if (actionID is FireInRed)
-                {
-                    PCTGauge gauge = GetJobGauge<PCTGauge>();
-                    bool canWeave = CanSpellWeave() || CanSpellWeave();
-                    int creatureStop = PluginConfiguration.GetCustomIntValue(Config.PCT_ST_CreatureStop);
-                    int landscapeStop = PluginConfiguration.GetCustomIntValue(Config.PCT_ST_LandscapeStop);
-                    int weaponStop = PluginConfiguration.GetCustomIntValue(Config.PCT_ST_WeaponStop);
+                bool canWeave = CanSpellWeave() || CanSpellWeave();
+                int creatureStop = Config.PCT_ST_CreatureStop;
+                int landscapeStop = Config.PCT_ST_LandscapeStop;
+                int weaponStop = Config.PCT_ST_WeaponStop;
 
                 // Variant Cure
                 if (IsEnabled(CustomComboPreset.PCT_Variant_Cure) &&
                     IsEnabled(Variant.VariantCure) &&
-                    PlayerHealthPercentageHp() <= GetOptionValue(Config.PCT_VariantCure))
+                    PlayerHealthPercentageHp() <= Config.PCT_VariantCure)
                     return Variant.VariantCure;
 
                 // Variant Rampart
@@ -513,9 +507,8 @@ internal partial class PCT
                     }
                 }
 
-
-                    if (IsEnabled(CustomComboPreset.PCT_ST_AdvancedMode_LucidDreaming) && All.LucidDreaming.LevelChecked() && ActionReady(All.LucidDreaming) && CanSpellWeave() && LocalPlayer.CurrentMp <= Config.PCT_ST_AdvancedMode_LucidOption)
-                        return All.LucidDreaming;
+                if (IsEnabled(CustomComboPreset.PCT_ST_AdvancedMode_LucidDreaming) && All.LucidDreaming.LevelChecked() && ActionReady(All.LucidDreaming) && CanSpellWeave() && LocalPlayer.CurrentMp <= Config.PCT_ST_AdvancedMode_LucidOption)
+                    return All.LucidDreaming;
 
                 if (IsEnabled(CustomComboPreset.PCT_ST_AdvancedMode_BlizzardInCyan) && BlizzardIIinCyan.LevelChecked() && HasEffect(Buffs.SubtractivePalette))
                     return OriginalHook(BlizzardinCyan);
@@ -529,17 +522,16 @@ internal partial class PCT
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.PCT_AoE_SimpleMode;
 
-            protected override uint Invoke(uint actionID, uint lastComboActionID, float comboTime, byte level)
+        protected override uint Invoke(uint actionID, uint lastComboActionID, float comboTime, byte level)
+        {
+            if (actionID is FireIIinRed)
             {
-                if (actionID is FireIIinRed)
-                {
-                    var gauge = GetJobGauge<PCTGauge>();
-                    bool canWeave = CanSpellWeave();
+                bool canWeave = CanSpellWeave();
 
                 // Variant Cure
                 if (IsEnabled(CustomComboPreset.PCT_Variant_Cure) &&
                     IsEnabled(Variant.VariantCure) &&
-                    PlayerHealthPercentageHp() <= GetOptionValue(Config.PCT_VariantCure))
+                    PlayerHealthPercentageHp() <= Config.PCT_VariantCure)
                     return Variant.VariantCure;
 
                 // Variant Rampart
@@ -716,8 +708,8 @@ internal partial class PCT
                 if (HolyInWhite.LevelChecked() && Gauge.Paint >= 2)
                     return OriginalHook(HolyInWhite);
 
-                    if (All.LucidDreaming.LevelChecked() && ActionReady(All.LucidDreaming) && CanSpellWeave() && LocalPlayer.CurrentMp <= 6500)
-                        return All.LucidDreaming;
+                if (All.LucidDreaming.LevelChecked() && ActionReady(All.LucidDreaming) && CanSpellWeave() && LocalPlayer.CurrentMp <= 6500)
+                    return All.LucidDreaming;
 
                 if (BlizzardIIinCyan.LevelChecked() && HasEffect(Buffs.SubtractivePalette))
                     return OriginalHook(BlizzardIIinCyan);
@@ -730,20 +722,19 @@ internal partial class PCT
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.PCT_AoE_AdvancedMode;
 
-            protected override uint Invoke(uint actionID, uint lastComboActionID, float comboTime, byte level)
+        protected override uint Invoke(uint actionID, uint lastComboActionID, float comboTime, byte level)
+        {
+            if (actionID is FireIIinRed)
             {
-                if (actionID is FireIIinRed)
-                {
-                    var gauge = GetJobGauge<PCTGauge>();
-                    bool canWeave = CanSpellWeave();
-                    int creatureStop = PluginConfiguration.GetCustomIntValue(Config.PCT_AoE_CreatureStop);
-                    int landscapeStop = PluginConfiguration.GetCustomIntValue(Config.PCT_AoE_LandscapeStop);
-                    int weaponStop = PluginConfiguration.GetCustomIntValue(Config.PCT_AoE_WeaponStop);
+                bool canWeave = CanSpellWeave();
+                int creatureStop = Config.PCT_AoE_CreatureStop;
+                int landscapeStop = Config.PCT_AoE_LandscapeStop;
+                int weaponStop = Config.PCT_AoE_WeaponStop;
 
                 // Variant Cure
                 if (IsEnabled(CustomComboPreset.PCT_Variant_Cure) &&
                     IsEnabled(Variant.VariantCure) &&
-                    PlayerHealthPercentageHp() <= GetOptionValue(Config.PCT_VariantCure))
+                    PlayerHealthPercentageHp() <= Config.PCT_VariantCure)
                     return Variant.VariantCure;
 
                 // Variant Rampart
@@ -949,8 +940,8 @@ internal partial class PCT
                     }
                 }
 
-                    if (IsEnabled(CustomComboPreset.PCT_AoE_AdvancedMode_LucidDreaming) && All.LucidDreaming.LevelChecked() && ActionReady(All.LucidDreaming) && CanSpellWeave() && LocalPlayer.CurrentMp <= Config.PCT_ST_AdvancedMode_LucidOption)
-                        return All.LucidDreaming;
+                if (IsEnabled(CustomComboPreset.PCT_AoE_AdvancedMode_LucidDreaming) && All.LucidDreaming.LevelChecked() && ActionReady(All.LucidDreaming) && CanSpellWeave() && LocalPlayer.CurrentMp <= Config.PCT_ST_AdvancedMode_LucidOption)
+                    return All.LucidDreaming;
 
                 if (IsEnabled(CustomComboPreset.PCT_AoE_AdvancedMode_BlizzardInCyan) && BlizzardIIinCyan.LevelChecked() && HasEffect(Buffs.SubtractivePalette))
                     return OriginalHook(BlizzardIIinCyan);

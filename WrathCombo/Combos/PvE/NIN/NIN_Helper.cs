@@ -1,7 +1,7 @@
-﻿using Dalamud.Game.ClientState.Statuses;
+﻿using Dalamud.Game.ClientState.JobGauge.Types;
+using Dalamud.Game.ClientState.Statuses;
 using System.Collections.Generic;
 using WrathCombo.CustomComboNS;
-using WrathCombo.CustomComboNS.Functions;
 using WrathCombo.Data;
 using WrathCombo.Extensions;
 using static WrathCombo.CustomComboNS.Functions.CustomComboFunctions;
@@ -10,46 +10,44 @@ namespace WrathCombo.Combos.PvE;
 
 internal partial class NIN
 {
+    internal static NINGauge Gauge = GetJobGauge<NINGauge>();
     internal static bool InMudra = false;
     internal static NINOpenerMaxLevel4thGCDKunai Opener1 = new();
     internal static NINOpenerMaxLevel3rdGCDDokumori Opener2 = new();
     internal static NINOpenerMaxLevel3rdGCDKunai Opener3 = new();
 
-    internal static WrathOpener Opener()
-    {
-        if (CustomComboFunctions.IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode))
-        {
-            if (Config.NIN_Adv_Opener_Selection == 0 && Opener1.LevelChecked) return Opener1;
-            if (Config.NIN_Adv_Opener_Selection == 1 && Opener2.LevelChecked) return Opener2;
-            if (Config.NIN_Adv_Opener_Selection == 2 && Opener3.LevelChecked) return Opener3;
-        }
+    internal static bool OriginalJutsu => IsOriginal(Ninjutsu);
 
-        if (Opener1.LevelChecked) return Opener1;
-        return WrathOpener.Dummy;
-    }
+    private static bool TargetHasTrickDebuff() => TargetHasEffect(Debuffs.TrickAttack) ||
+               TargetHasEffect(Debuffs.KunaisBane);
 
-    internal static bool OriginalJutsu => CustomComboFunctions.IsOriginal(Ninjutsu);
+    private static bool TargetHasMugDebuff() => TargetHasEffect(Debuffs.Mug) ||
+               TargetHasEffect(Debuffs.Dokumori);
+
+    public static Status? MudraBuff => FindEffect(Buffs.Mudra);
+
+    public static uint CurrentNinjutsu => OriginalHook(Ninjutsu);
 
     internal static bool TrickDebuff => TargetHasTrickDebuff();
 
     internal static bool MugDebuff => TargetHasMugDebuff();
 
-    private static bool TargetHasTrickDebuff()
+    internal static WrathOpener Opener()
     {
-        return CustomComboFunctions.TargetHasEffect(Debuffs.TrickAttack) ||
-               CustomComboFunctions.TargetHasEffect(Debuffs.KunaisBane);
+        if (IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode))
+        {
+            if (Config.NIN_Adv_Opener_Selection == 0 && Opener1.LevelChecked)
+                return Opener1;
+            if (Config.NIN_Adv_Opener_Selection == 1 && Opener2.LevelChecked)
+                return Opener2;
+            if (Config.NIN_Adv_Opener_Selection == 2 && Opener3.LevelChecked)
+                return Opener3;
+        }
+
+        if (Opener1.LevelChecked)
+            return Opener1;
+        return WrathOpener.Dummy;
     }
-
-    private static bool TargetHasMugDebuff()
-    {
-        return CustomComboFunctions.TargetHasEffect(Debuffs.Mug) ||
-               CustomComboFunctions.TargetHasEffect(Debuffs.Dokumori);
-    }
-
-    public static Status? MudraBuff => CustomComboFunctions.FindEffect(Buffs.Mudra);
-
-    public static uint CurrentNinjutsu => CustomComboFunctions.OriginalHook(Ninjutsu);
-
 
     internal class MudraCasting
     {
@@ -72,7 +70,8 @@ internal partial class NIN
         ///<summary> Checks if the player is in a state to be able to cast a ninjitsu.</summary>
         private static bool CanCast()
         {
-            if (InMudra) return true;
+            if (InMudra)
+                return true;
 
             float gcd = GetCooldown(GustSlash).CooldownTotal;
 
@@ -543,14 +542,22 @@ internal partial class NIN
 
         public override bool HasCooldowns()
         {
-            if (CustomComboFunctions.GetRemainingCharges(Ten) < 1) return false;
-            if (CustomComboFunctions.IsOnCooldown(Mug)) return false;
-            if (CustomComboFunctions.IsOnCooldown(TenChiJin)) return false;
-            if (CustomComboFunctions.IsOnCooldown(PhantomKamaitachi)) return false;
-            if (CustomComboFunctions.IsOnCooldown(Bunshin)) return false;
-            if (CustomComboFunctions.IsOnCooldown(DreamWithinADream)) return false;
-            if (CustomComboFunctions.IsOnCooldown(Kassatsu)) return false;
-            if (CustomComboFunctions.IsOnCooldown(TrickAttack)) return false;
+            if (GetRemainingCharges(Ten) < 1)
+                return false;
+            if (IsOnCooldown(Mug))
+                return false;
+            if (IsOnCooldown(TenChiJin))
+                return false;
+            if (IsOnCooldown(PhantomKamaitachi))
+                return false;
+            if (IsOnCooldown(Bunshin))
+                return false;
+            if (IsOnCooldown(DreamWithinADream))
+                return false;
+            if (IsOnCooldown(Kassatsu))
+                return false;
+            if (IsOnCooldown(TrickAttack))
+                return false;
 
             return true;
         }
@@ -607,14 +614,22 @@ internal partial class NIN
 
         public override bool HasCooldowns()
         {
-            if (CustomComboFunctions.GetRemainingCharges(Ten) < 1) return false;
-            if (CustomComboFunctions.IsOnCooldown(Mug)) return false;
-            if (CustomComboFunctions.IsOnCooldown(TenChiJin)) return false;
-            if (CustomComboFunctions.IsOnCooldown(PhantomKamaitachi)) return false;
-            if (CustomComboFunctions.IsOnCooldown(Bunshin)) return false;
-            if (CustomComboFunctions.IsOnCooldown(DreamWithinADream)) return false;
-            if (CustomComboFunctions.IsOnCooldown(Kassatsu)) return false;
-            if (CustomComboFunctions.IsOnCooldown(TrickAttack)) return false;
+            if (GetRemainingCharges(Ten) < 1)
+                return false;
+            if (IsOnCooldown(Mug))
+                return false;
+            if (IsOnCooldown(TenChiJin))
+                return false;
+            if (IsOnCooldown(PhantomKamaitachi))
+                return false;
+            if (IsOnCooldown(Bunshin))
+                return false;
+            if (IsOnCooldown(DreamWithinADream))
+                return false;
+            if (IsOnCooldown(Kassatsu))
+                return false;
+            if (IsOnCooldown(TrickAttack))
+                return false;
 
             return true;
         }
@@ -670,14 +685,22 @@ internal partial class NIN
 
         public override bool HasCooldowns()
         {
-            if (CustomComboFunctions.GetRemainingCharges(Ten) < 1) return false;
-            if (CustomComboFunctions.IsOnCooldown(Mug)) return false;
-            if (CustomComboFunctions.IsOnCooldown(TenChiJin)) return false;
-            if (CustomComboFunctions.IsOnCooldown(PhantomKamaitachi)) return false;
-            if (CustomComboFunctions.IsOnCooldown(Bunshin)) return false;
-            if (CustomComboFunctions.IsOnCooldown(DreamWithinADream)) return false;
-            if (CustomComboFunctions.IsOnCooldown(Kassatsu)) return false;
-            if (CustomComboFunctions.IsOnCooldown(TrickAttack)) return false;
+            if (GetRemainingCharges(Ten) < 1)
+                return false;
+            if (IsOnCooldown(Mug))
+                return false;
+            if (IsOnCooldown(TenChiJin))
+                return false;
+            if (IsOnCooldown(PhantomKamaitachi))
+                return false;
+            if (IsOnCooldown(Bunshin))
+                return false;
+            if (IsOnCooldown(DreamWithinADream))
+                return false;
+            if (IsOnCooldown(Kassatsu))
+                return false;
+            if (IsOnCooldown(TrickAttack))
+                return false;
 
             return true;
         }

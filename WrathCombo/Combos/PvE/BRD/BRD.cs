@@ -278,21 +278,21 @@ internal partial class BRD
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.BRD_AoE_AdvMode;
 
-            protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
+        protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
+        {
+            if (actionID is Ladonsbite or QuickNock)
             {
-                if (actionID is Ladonsbite or QuickNock)
-                {
-                    BRDGauge? gauge = GetJobGauge<BRDGauge>();
-                    bool canWeave = CanWeave() && !ActionWatching.HasDoubleWeaved();                    
-                    bool canWeaveDelayed = CanDelayedWeave(0.9) && !ActionWatching.HasDoubleWeaved();
-                    int songTimerInSeconds = gauge.SongTimer / 1000;
-                    bool songNone = gauge.Song == Song.NONE;
-                    bool songWanderer = gauge.Song == Song.WANDERER;
-                    bool songMage = gauge.Song == Song.MAGE;
-                    bool songArmy = gauge.Song == Song.ARMY;
-                    int targetHPThreshold = PluginConfiguration.GetCustomIntValue(Config.BRD_AoENoWasteHPPercentage);
-                    bool isEnemyHealthHigh = !IsEnabled(CustomComboPreset.BRD_AoE_Adv_NoWaste) || GetTargetHPPercent() > targetHPThreshold;
-                    bool hasTarget = HasBattleTarget();
+                BRDGauge? gauge = GetJobGauge<BRDGauge>();
+                bool canWeave = CanWeave() && !ActionWatching.HasDoubleWeaved();
+                bool canWeaveDelayed = CanDelayedWeave(0.9) && !ActionWatching.HasDoubleWeaved();
+                int songTimerInSeconds = gauge.SongTimer / 1000;
+                bool songNone = gauge.Song == Song.NONE;
+                bool songWanderer = gauge.Song == Song.WANDERER;
+                bool songMage = gauge.Song == Song.MAGE;
+                bool songArmy = gauge.Song == Song.ARMY;
+                int targetHPThreshold = PluginConfiguration.GetCustomIntValue(Config.BRD_AoENoWasteHPPercentage);
+                bool isEnemyHealthHigh = !IsEnabled(CustomComboPreset.BRD_AoE_Adv_NoWaste) || GetTargetHPPercent() > targetHPThreshold;
+                bool hasTarget = HasBattleTarget();
 
                 #region Variants
 
@@ -530,21 +530,21 @@ internal partial class BRD
         internal static bool usedPitchPerfect = false;
         internal delegate bool DotRecast(int value);
 
-            protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
+        protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
+        {
+            if (actionID is HeavyShot or BurstShot)
             {
-                if (actionID is HeavyShot or BurstShot)
-                {
-                    BRDGauge? gauge = GetJobGauge<BRDGauge>();
-                    bool canWeave = CanWeave() && !ActionWatching.HasDoubleWeaved();
-                    bool canWeaveDelayed = CanDelayedWeave(0.9) && !ActionWatching.HasDoubleWeaved();
-                    bool songNone = gauge.Song == Song.NONE;
-                    bool songWanderer = gauge.Song == Song.WANDERER;
-                    bool songMage = gauge.Song == Song.MAGE;
-                    bool songArmy = gauge.Song == Song.ARMY;
-                    int songTimerInSeconds = gauge.SongTimer / 1000;
-                    int targetHPThreshold = PluginConfiguration.GetCustomIntValue(Config.BRD_NoWasteHPPercentage);
-                    bool isEnemyHealthHigh = !IsEnabled(CustomComboPreset.BRD_Adv_NoWaste) || GetTargetHPPercent() > targetHPThreshold;
-                    bool hasTarget = HasBattleTarget();
+                BRDGauge? gauge = GetJobGauge<BRDGauge>();
+                bool canWeave = CanWeave() && !ActionWatching.HasDoubleWeaved();
+                bool canWeaveDelayed = CanDelayedWeave(0.9) && !ActionWatching.HasDoubleWeaved();
+                bool songNone = gauge.Song == Song.NONE;
+                bool songWanderer = gauge.Song == Song.WANDERER;
+                bool songMage = gauge.Song == Song.MAGE;
+                bool songArmy = gauge.Song == Song.ARMY;
+                int songTimerInSeconds = gauge.SongTimer / 1000;
+                int targetHPThreshold = PluginConfiguration.GetCustomIntValue(Config.BRD_NoWasteHPPercentage);
+                bool isEnemyHealthHigh = !IsEnabled(CustomComboPreset.BRD_Adv_NoWaste) || GetTargetHPPercent() > targetHPThreshold;
+                bool hasTarget = HasBattleTarget();
 
                 #region Variants
 
@@ -559,23 +559,23 @@ internal partial class BRD
 
                 #endregion
 
-                    if (IsEnabled(CustomComboPreset.BRD_ST_Adv_Balance_Standard) &&
-                        Opener().FullOpener(ref actionID))
+                if (IsEnabled(CustomComboPreset.BRD_ST_Adv_Balance_Standard) &&
+                    Opener().FullOpener(ref actionID))
+                {
+                    if (ActionWatching.GetAttackType(Opener().CurrentOpenerAction) != ActionWatching.ActionAttackType.Ability && canWeave)
                     {
-                        if (ActionWatching.GetAttackType(Opener().CurrentOpenerAction) != ActionWatching.ActionAttackType.Ability && canWeave)
-                        {
-                            if (gauge.Repertoire == 3 || gauge.Repertoire == 2 && GetCooldownRemainingTime(EmpyrealArrow) < 2)
-                                return OriginalHook(PitchPerfect);
+                        if (gauge.Repertoire == 3 || (gauge.Repertoire == 2 && GetCooldownRemainingTime(EmpyrealArrow) < 2))
+                            return OriginalHook(PitchPerfect);
 
-                            if (ActionReady(HeartbreakShot))
-                                return HeartbreakShot;
-                        }
-
-                        return actionID;
-
+                        if (ActionReady(HeartbreakShot))
+                            return HeartbreakShot;
                     }
 
-                    #region Songs
+                    return actionID;
+
+                }
+
+                #region Songs
 
                 if (IsEnabled(CustomComboPreset.BRD_Adv_Song) && isEnemyHealthHigh)
                 {
@@ -839,21 +839,21 @@ internal partial class BRD
 
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.BRD_AoE_SimpleMode;
 
-            protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
+        protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
+        {
+            if (actionID is Ladonsbite or QuickNock)
             {
-                if (actionID is Ladonsbite or QuickNock)
-                {
-                    BRDGauge? gauge = GetJobGauge<BRDGauge>();
-                    bool canWeave = CanWeave() && !ActionWatching.HasDoubleWeaved();
-                    bool canWeaveDelayed = CanDelayedWeave(0.9) && !ActionWatching.HasDoubleWeaved();
-                    int songTimerInSeconds = gauge.SongTimer / 1000;
-                    bool songNone = gauge.Song == Song.NONE;
-                    bool songWanderer = gauge.Song == Song.WANDERER;
-                    bool songMage = gauge.Song == Song.MAGE;
-                    bool songArmy = gauge.Song == Song.ARMY;                    
-                    int targetHPThreshold = PluginConfiguration.GetCustomIntValue(Config.BRD_AoENoWasteHPPercentage);
-                    bool isEnemyHealthHigh = GetTargetHPPercent() > 5;
-                    bool hasTarget = HasBattleTarget();
+                BRDGauge? gauge = GetJobGauge<BRDGauge>();
+                bool canWeave = CanWeave() && !ActionWatching.HasDoubleWeaved();
+                bool canWeaveDelayed = CanDelayedWeave(0.9) && !ActionWatching.HasDoubleWeaved();
+                int songTimerInSeconds = gauge.SongTimer / 1000;
+                bool songNone = gauge.Song == Song.NONE;
+                bool songWanderer = gauge.Song == Song.WANDERER;
+                bool songMage = gauge.Song == Song.MAGE;
+                bool songArmy = gauge.Song == Song.ARMY;
+                int targetHPThreshold = PluginConfiguration.GetCustomIntValue(Config.BRD_AoENoWasteHPPercentage);
+                bool isEnemyHealthHigh = GetTargetHPPercent() > 5;
+                bool hasTarget = HasBattleTarget();
 
                 #region Variants
 
@@ -1060,20 +1060,20 @@ internal partial class BRD
         internal static bool usedPitchPerfect = false;
         internal delegate bool DotRecast(int value);
 
-            protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
+        protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
+        {
+            if (actionID is HeavyShot or BurstShot)
             {
-                if (actionID is HeavyShot or BurstShot)
-                {
-                    BRDGauge? gauge = GetJobGauge<BRDGauge>();
-                    bool canWeave = CanWeave() && !ActionWatching.HasDoubleWeaved();
-                    bool canWeaveDelayed = CanDelayedWeave(0.9) && !ActionWatching.HasDoubleWeaved();
-                    bool songNone = gauge.Song == Song.NONE;
-                    bool songWanderer = gauge.Song == Song.WANDERER;
-                    bool songMage = gauge.Song == Song.MAGE;
-                    bool songArmy = gauge.Song == Song.ARMY;
-                    bool isEnemyHealthHigh = GetTargetHPPercent() > 1;
-                    int songTimerInSeconds = gauge.SongTimer / 1000;
-                    bool hasTarget = HasBattleTarget();
+                BRDGauge? gauge = GetJobGauge<BRDGauge>();
+                bool canWeave = CanWeave() && !ActionWatching.HasDoubleWeaved();
+                bool canWeaveDelayed = CanDelayedWeave(0.9) && !ActionWatching.HasDoubleWeaved();
+                bool songNone = gauge.Song == Song.NONE;
+                bool songWanderer = gauge.Song == Song.WANDERER;
+                bool songMage = gauge.Song == Song.MAGE;
+                bool songArmy = gauge.Song == Song.ARMY;
+                bool isEnemyHealthHigh = GetTargetHPPercent() > 1;
+                int songTimerInSeconds = gauge.SongTimer / 1000;
+                bool hasTarget = HasBattleTarget();
 
                 #region Variants
                 if (IsEnabled(Variant.VariantCure) && PlayerHealthPercentageHp() <= 50)

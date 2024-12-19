@@ -2,7 +2,6 @@ using Dalamud.Game.ClientState.JobGauge.Enums;
 using Dalamud.Game.ClientState.JobGauge.Types;
 using WrathCombo.Combos.PvE.Content;
 using WrathCombo.CustomComboNS;
-using WrathCombo.Data;
 using WrathCombo.Extensions;
 
 namespace WrathCombo.Combos.PvE;
@@ -18,7 +17,7 @@ internal static partial class SAM
             if (actionID is Yukikaze)
             {
                 if (Config.SAM_Yukaze_KenkiOvercap && CanWeave() &&
-                    gauge.Kenki >= Config.SAM_Yukaze_KenkiOvercapAmount && LevelChecked(Shinten))
+                    Gauge.Kenki >= Config.SAM_Yukaze_KenkiOvercapAmount && LevelChecked(Shinten))
                     return OriginalHook(Shinten);
 
                 if (HasEffect(Buffs.MeikyoShisui) && LevelChecked(Yukikaze))
@@ -44,7 +43,7 @@ internal static partial class SAM
             if (actionID is Kasha)
             {
                 if (Config.SAM_Kasha_KenkiOvercap && CanWeave() &&
-                    gauge.Kenki >= Config.SAM_Kasha_KenkiOvercapAmount && LevelChecked(Shinten))
+                    Gauge.Kenki >= Config.SAM_Kasha_KenkiOvercapAmount && LevelChecked(Shinten))
                     return OriginalHook(Shinten);
 
                 if (HasEffect(Buffs.MeikyoShisui))
@@ -75,7 +74,7 @@ internal static partial class SAM
             if (actionID is Gekko)
             {
                 if (Config.SAM_Gekko_KenkiOvercap && CanWeave() &&
-                    gauge.Kenki >= Config.SAM_Gekko_KenkiOvercapAmount && LevelChecked(Shinten))
+                    Gauge.Kenki >= Config.SAM_Gekko_KenkiOvercapAmount && LevelChecked(Shinten))
                     return OriginalHook(Shinten);
 
                 if (HasEffect(Buffs.MeikyoShisui))
@@ -161,7 +160,7 @@ internal static partial class SAM
                     return Guren;
 
                 //Zanshin Usage
-                if (LevelChecked(Zanshin) && gauge.Kenki >= 50 &&
+                if (LevelChecked(Zanshin) && Gauge.Kenki >= 50 &&
                     CanWeave() && HasEffect(Buffs.ZanshinReady) &&
                     (JustUsed(Higanbana, 7f) || (SenCount is 1 && HasEffect(Buffs.OgiNamikiriReady)) ||
                      GetBuffRemainingTime(Buffs.ZanshinReady) <= 6)) //Protection for scuffed runs
@@ -353,7 +352,7 @@ internal static partial class SAM
 
                     //Zanshin Usage
                     if (IsEnabled(CustomComboPreset.SAM_ST_CDs_Zanshin) &&
-                        LevelChecked(Zanshin) && gauge.Kenki >= 50 &&
+                        LevelChecked(Zanshin) && Gauge.Kenki >= 50 &&
                         CanWeave() && HasEffect(Buffs.ZanshinReady) &&
                         (JustUsed(Higanbana, 7f) || (SenCount is 1 && HasEffect(Buffs.OgiNamikiriReady)) ||
                          GetBuffRemainingTime(Buffs.ZanshinReady) <= 6))
@@ -496,7 +495,7 @@ internal static partial class SAM
         {
             if (actionID is Oka)
             {
-                if (Config.SAM_Oka_KenkiOvercap && gauge.Kenki >= Config.SAM_Oka_KenkiOvercapAmount &&
+                if (Config.SAM_Oka_KenkiOvercap && Gauge.Kenki >= Config.SAM_Oka_KenkiOvercapAmount &&
                     LevelChecked(Kyuten) && CanWeave())
                     return Kyuten;
 
@@ -522,7 +521,7 @@ internal static partial class SAM
         {
             if (actionID is Mangetsu)
             {
-                if (Config.SAM_Mangetsu_KenkiOvercap && gauge.Kenki >= Config.SAM_Mangetsu_KenkiOvercapAmount &&
+                if (Config.SAM_Mangetsu_KenkiOvercap && Gauge.Kenki >= Config.SAM_Mangetsu_KenkiOvercapAmount &&
                     LevelChecked(Kyuten) && CanWeave())
                     return Kyuten;
 
