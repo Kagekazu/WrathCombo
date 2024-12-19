@@ -3,7 +3,6 @@ using System.Linq;
 using Dalamud.Game.ClientState.JobGauge.Enums;
 using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Game.ClientState.Statuses;
-using WrathCombo.Combos.PvE.ALL;
 using WrathCombo.Combos.PvE.Content;
 using WrathCombo.CustomComboNS;
 using WrathCombo.Data;
@@ -17,22 +16,28 @@ internal static partial class AST
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.AST_Benefic;
 
-        protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
-            => actionID is Benefic2 && !ActionReady(Benefic2) ? Benefic : actionID;
+        protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)            =>
+            actionID is Benefic2 && !ActionReady(Benefic2)
+            ? Benefic 
+            : actionID;
     }
 
     internal class AST_Raise_Alternative : CustomCombo
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.AST_Raise_Alternative;
 
-        protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
-            => actionID is All.Swiftcast && IsOnCooldown(All.Swiftcast) ? Ascend : actionID;
+        protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)            => 
+            actionID is All.Swiftcast && IsOnCooldown(All.Swiftcast) 
+            ? Ascend 
+            : actionID;
     }
 
     internal class AST_ST_DPS : CustomCombo
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.AST_ST_DPS;
+
         internal static int MaleficCount => ActionWatching.CombatActions.Count(x => x == OriginalHook(Malefic));
+
         internal static int CombustCount => ActionWatching.CombatActions.Count(x => x == OriginalHook(Combust));
 
         protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
@@ -46,9 +51,9 @@ internal static partial class AST
                 spellsSinceDraw = 1;
             }
 
-            bool AlternateMode = GetIntOptionAsBool(Config.AST_DPS_AltMode); //(0 or 1 radio values)
-            bool actionFound = (!AlternateMode && MaleficList.Contains(actionID)) ||
-                (AlternateMode && CombustList.ContainsKey(actionID));
+            bool alternateMode = GetIntOptionAsBool(Config.AST_DPS_AltMode); //(0 or 1 radio values)
+            bool actionFound = (!alternateMode && MaleficList.Contains(actionID)) ||
+                (alternateMode && CombustList.ContainsKey(actionID));
 
             if (!actionFound)
                 return actionID;
@@ -98,7 +103,7 @@ internal static partial class AST
                 //Play Card
                 if (IsEnabled(CustomComboPreset.AST_DPS_AutoPlay) &&
                     ActionReady(Play1) &&
-                    Gauge.DrawnCards [0] is not CardType.NONE &&
+                    Gauge.DrawnCards[0] is not CardType.NONE &&
                     CanSpellWeave() &&
                     spellsSinceDraw >= Config.AST_ST_DPS_Play_SpeedSetting)
                     return OriginalHook(Play1);
@@ -157,7 +162,7 @@ internal static partial class AST
                             return OriginalHook(Combust);
 
                         //Alternate Mode (idles as Malefic)
-                        if (AlternateMode)
+                        if (alternateMode)
                             return OriginalHook(Malefic);
                     }
                 }
@@ -215,7 +220,7 @@ internal static partial class AST
                 //Play Card
                 if (IsEnabled(CustomComboPreset.AST_AOE_AutoPlay) &&
                     ActionReady(Play1) &&
-                    Gauge.DrawnCards [0] is not CardType.NONE &&
+                    Gauge.DrawnCards[0] is not CardType.NONE &&
                     CanSpellWeave())
                     return OriginalHook(Play1);
 
@@ -338,28 +343,28 @@ internal static partial class AST
                     return All.Esuna;
 
                 if (IsEnabled(CustomComboPreset.AST_ST_SimpleHeals_Spire) &&
-                    Gauge.DrawnCards [2] == CardType.SPIRE &&
+                    Gauge.DrawnCards[2] == CardType.SPIRE &&
                     GetTargetHPPercent(healTarget, Config.AST_ST_SimpleHeals_IncludeShields) <= Config.AST_Spire &&
                     ActionReady(Play3) &&
                     canSpire)
                     return OriginalHook(Play3);
 
                 if (IsEnabled(CustomComboPreset.AST_ST_SimpleHeals_Ewer) &&
-                    Gauge.DrawnCards [2] == CardType.EWER &&
+                    Gauge.DrawnCards[2] == CardType.EWER &&
                     GetTargetHPPercent(healTarget, Config.AST_ST_SimpleHeals_IncludeShields) <= Config.AST_Ewer &&
                     ActionReady(Play3) &&
                     canEwer)
                     return OriginalHook(Play3);
 
                 if (IsEnabled(CustomComboPreset.AST_ST_SimpleHeals_Arrow) &&
-                    Gauge.DrawnCards [1] == CardType.ARROW &&
+                    Gauge.DrawnCards[1] == CardType.ARROW &&
                     GetTargetHPPercent(healTarget, Config.AST_ST_SimpleHeals_IncludeShields) <= Config.AST_Arrow &&
                     ActionReady(Play2) &&
                     canArrow)
                     return OriginalHook(Play2);
 
                 if (IsEnabled(CustomComboPreset.AST_ST_SimpleHeals_Bole) &&
-                    Gauge.DrawnCards [1] == CardType.BOLE &&
+                    Gauge.DrawnCards[1] == CardType.BOLE &&
                     GetTargetHPPercent(healTarget, Config.AST_ST_SimpleHeals_IncludeShields) <= Config.AST_Bole &&
                     ActionReady(Play2) &&
                     canBole)

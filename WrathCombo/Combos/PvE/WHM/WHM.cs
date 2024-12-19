@@ -1,7 +1,7 @@
-﻿using Dalamud.Game.ClientState.Objects.Types;
-using Dalamud.Game.ClientState.Statuses;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using Dalamud.Game.ClientState.Objects.Types;
+using Dalamud.Game.ClientState.Statuses;
 using WrathCombo.Combos.PvE.Content;
 using WrathCombo.CustomComboNS;
 using WrathCombo.Data;
@@ -71,9 +71,9 @@ internal partial class WHM
 
             if (Config.WHM_ST_MainCombo_Adv && Config.WHM_ST_MainCombo_Adv_Actions.Count > 0)
             {
-                bool onStones = Config.WHM_ST_MainCombo_Adv_Actions [0] && StoneGlareList.Contains(actionID);
-                bool onAeros = Config.WHM_ST_MainCombo_Adv_Actions [1] && AeroList.ContainsKey(actionID);
-                bool onStone2 = Config.WHM_ST_MainCombo_Adv_Actions [2] && actionID is Stone2;
+                bool onStones = Config.WHM_ST_MainCombo_Adv_Actions[0] && StoneGlareList.Contains(actionID);
+                bool onAeros = Config.WHM_ST_MainCombo_Adv_Actions[1] && AeroList.ContainsKey(actionID);
+                bool onStone2 = Config.WHM_ST_MainCombo_Adv_Actions[2] && actionID is Stone2;
                 actionFound = onStones || onAeros || onStone2;
             }
             else

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using WrathCombo.Combos.PvE.ALL;
 using WrathCombo.Combos.PvE.Content;
 using WrathCombo.CustomComboNS;
 using WrathCombo.Data;
@@ -464,7 +463,7 @@ internal static partial class BLM
                  ThunderDebuffAoE is null) || ThunderDebuffAoE?.RemainingTime < 3)
                 return OriginalHook(Thunder2);
 
-            if (ActionReady(Amplifier) && remainingPolyglotCD >= 20000 && CanSpellWeave())
+            if (ActionReady(Amplifier) && RemainingPolyglotCD >= 20000 && CanSpellWeave())
                 return Amplifier;
 
             if (IsMoving())
@@ -606,7 +605,7 @@ internal static partial class BLM
                 return OriginalHook(Thunder2);
 
             if (IsEnabled(CustomComboPreset.BLM_AoE_Amplifier) &&
-                ActionReady(Amplifier) && remainingPolyglotCD >= 20000 && CanSpellWeave())
+                ActionReady(Amplifier) && RemainingPolyglotCD >= 20000 && CanSpellWeave())
                 return Amplifier;
 
             if (IsMoving())

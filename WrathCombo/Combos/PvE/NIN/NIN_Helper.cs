@@ -1,6 +1,6 @@
-﻿using Dalamud.Game.ClientState.JobGauge.Types;
+﻿using System.Collections.Generic;
+using Dalamud.Game.ClientState.JobGauge.Types;
 using Dalamud.Game.ClientState.Statuses;
-using System.Collections.Generic;
 using WrathCombo.CustomComboNS;
 using WrathCombo.Data;
 using WrathCombo.Extensions;

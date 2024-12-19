@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using Dalamud.Game.ClientState.JobGauge.Types;
 using Dalamud.Game.ClientState.Statuses;
-using WrathCombo.Combos.PvE.ALL;
 using WrathCombo.Combos.PvE.Content;
 using WrathCombo.CustomComboNS;
 using WrathCombo.CustomComboNS.Functions;
@@ -662,6 +661,11 @@ internal partial class PLD
     }
 
     #region ID's
+
+    public const byte ClassID = 1;
+    public const byte JobID = 19;
+
+    public const float CooldownThreshold = 0.5f;
 
     internal static PLDGauge Gauge => CustomComboFunctions.GetJobGauge<PLDGauge>();
 

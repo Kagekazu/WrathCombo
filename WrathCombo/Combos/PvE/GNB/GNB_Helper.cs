@@ -1,5 +1,4 @@
-﻿using FFXIVClientStructs.FFXIV.Client.Game;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using WrathCombo.CustomComboNS;
 using WrathCombo.CustomComboNS.Functions;

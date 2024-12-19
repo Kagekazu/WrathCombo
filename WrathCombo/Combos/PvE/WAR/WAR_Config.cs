@@ -1,5 +1,4 @@
-﻿using WrathCombo.Combos.PvE.ALL;
-using WrathCombo.Combos.PvP;
+﻿using WrathCombo.Combos.PvP;
 using WrathCombo.CustomComboNS.Functions;
 using WrathCombo.Extensions;
 using WrathCombo.Window.Functions;

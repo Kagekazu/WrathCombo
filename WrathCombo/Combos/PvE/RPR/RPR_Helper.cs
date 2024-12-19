@@ -1,8 +1,6 @@
-﻿#region
-
+﻿using System.Collections.Generic;
 using Dalamud.Game.ClientState.JobGauge.Types;
 using FFXIVClientStructs.FFXIV.Client.Game;
-using System.Collections.Generic;
 using WrathCombo.CustomComboNS;
 using static WrathCombo.CustomComboNS.Functions.CustomComboFunctions;
 

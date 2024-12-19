@@ -1,8 +1,6 @@
 ﻿using System;
 using Dalamud.Game.ClientState.JobGauge.Types;
-using WrathCombo.Combos.PvE.ALL;
 using WrathCombo.Combos.PvE.Content;
-using WrathCombo.Core;
 using WrathCombo.CustomComboNS;
 
 namespace WrathCombo.Combos.PvE;
@@ -153,7 +151,7 @@ internal partial class SMN
                 {
                     if (LevelChecked(Slipstream) && HasEffect(Buffs.GarudasFavor))
                     {
-                        if (CanSpellWeave() && IsGarudaAttuned && IsOffCooldown(All.Swiftcast))
+                        if (CanSpellWeave() && isGarudaAttuned && IsOffCooldown(All.Swiftcast))
                             return All.Swiftcast;
 
                         if (HasEffect(Buffs.GarudasFavor) && HasEffect(All.Buffs.Swiftcast))
@@ -211,7 +209,9 @@ internal partial class SMN
 
             if (actionID is Outburst)
             {
-                if (IsEnabled(CustomComboPreset.SMN_Variant_Cure) && IsEnabled(Variant.VariantCure) && PlayerHealthPercentageHp() <= GetOptionValue(Config.SMN_VariantCure))
+                if (IsEnabled(CustomComboPreset.SMN_Variant_Cure) &&
+                    IsEnabled(Variant.VariantCure) &&
+                    PlayerHealthPercentageHp() <= Config.SMN_VariantCure)
                     return Variant.VariantCure;
 
                 if (IsEnabled(CustomComboPreset.SMN_Variant_Rampart) &&
@@ -276,7 +276,7 @@ internal partial class SMN
                 {
                     if (LevelChecked(Slipstream) && HasEffect(Buffs.GarudasFavor))
                     {
-                        if (CanSpellWeave() && IsGarudaAttuned && IsOffCooldown(All.Swiftcast))
+                        if (CanSpellWeave() && isGarudaAttuned && IsOffCooldown(All.Swiftcast))
                             return All.Swiftcast;
 
                         if (HasEffect(Buffs.GarudasFavor) && HasEffect(All.Buffs.Swiftcast))
@@ -287,9 +287,8 @@ internal partial class SMN
                         return All.Swiftcast;
                 }
 
-                if (IsIfritAttuned && gauge.Attunement >= 1 && HasEffect(All.Buffs.Swiftcast) && LevelChecked(PreciousBrilliance) && lastComboMove is not CrimsonCyclone)
+                if (isIfritAttuned && gauge.Attunement >= 1 && HasEffect(All.Buffs.Swiftcast) && LevelChecked(PreciousBrilliance) && lastComboMove is not CrimsonCyclone)
                     return OriginalHook(PreciousBrilliance);
-
 
                 if ((HasEffect(Buffs.GarudasFavor) && gauge.Attunement is 0) ||
                     (HasEffect(Buffs.TitansFavor) && lastComboMove is TopazRite or TopazCata && CanSpellWeave()) ||
@@ -331,11 +330,11 @@ internal partial class SMN
         protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
         {
             SMNGauge gauge = GetJobGauge<SMNGauge>();
-            int summonerPrimalChoice = PluginConfiguration.GetCustomIntValue(Config.SMN_PrimalChoice);
-            int summonerBurstPhase = PluginConfiguration.GetCustomIntValue(Config.SMN_BurstPhase);
-            int lucidThreshold = PluginConfiguration.GetCustomIntValue(Config.SMN_Lucid);
-            int swiftcastPhase = PluginConfiguration.GetCustomIntValue(Config.SMN_SwiftcastPhase);
-            int burstDelay = PluginConfiguration.GetCustomIntValue(Config.SMN_Burst_Delay);
+            int summonerPrimalChoice = Config.SMN_PrimalChoice;
+            int summonerBurstPhase = Config.SMN_BurstPhase;
+            int lucidThreshold = Config.SMN_Lucid;
+            int swiftcastPhase = Config.SMN_SwiftcastPhase;
+            int burstDelay = Config.SMN_Burst_Delay;
             bool inOpener = CombatEngageDuration().TotalSeconds < 40;
 
             bool isGarudaAttuned = OriginalHook(Gemshine) is EmeralRuin1 or EmeralRuin2 or EmeralRuin3 or EmeraldRite;
@@ -386,10 +385,10 @@ internal partial class SMN
                     {
                         if (IsEnabled(CustomComboPreset.SMN_SearingLight_Burst))
                         {
-                            if ((SummonerBurstPhase is 0 or 1 && ((!LevelChecked(SummonSolarBahamut) && OriginalHook(Ruin) is AstralImpulse) || OriginalHook(Ruin) is UmbralImpulse) && DemiAttackCount >= 1) ||
-                                (SummonerBurstPhase == 2 && OriginalHook(Ruin) == FountainOfFire) ||
-                                (SummonerBurstPhase == 3 && OriginalHook(Ruin) is AstralImpulse or UmbralImpulse or FountainOfFire) ||
-                                (SummonerBurstPhase == 4))
+                            if ((summonerBurstPhase is 0 or 1 && ((!LevelChecked(SummonSolarBahamut) && OriginalHook(Ruin) is AstralImpulse) || OriginalHook(Ruin) is UmbralImpulse) && DemiAttackCount >= 1) ||
+                                (summonerBurstPhase == 2 && OriginalHook(Ruin) == FountainOfFire) ||
+                                (summonerBurstPhase == 3 && OriginalHook(Ruin) is AstralImpulse or UmbralImpulse or FountainOfFire) ||
+                                (summonerBurstPhase == 4))
                                 return SearingLight;
                         }
                         else
@@ -533,10 +532,10 @@ internal partial class SMN
                     // Swiftcast Garuda Feature
                     if (swiftcastPhase is 0 or 1 && LevelChecked(Slipstream) && HasEffect(Buffs.GarudasFavor))
                     {
-                        if (CanSpellWeave() && IsGarudaAttuned && IsOffCooldown(All.Swiftcast))
+                        if (CanSpellWeave() && isGarudaAttuned && IsOffCooldown(All.Swiftcast))
                             return All.Swiftcast;
 
-                        if (Config.SMN_ST_Egi_AstralFlow [2] &&
+                        if (Config.SMN_ST_Egi_AstralFlow[2] &&
                             ((HasEffect(Buffs.GarudasFavor) && HasEffect(All.Buffs.Swiftcast)) || (gauge.Attunement == 0)))     // Astral Flow if Swiftcast is not ready throughout Garuda
                             return OriginalHook(AstralFlow);
                     }
@@ -544,9 +543,9 @@ internal partial class SMN
                     // Swiftcast Ifrit Feature (Conditions to allow for SpS Ruins to still be under the effect of Swiftcast)
                     if (swiftcastPhase == 2)
                     {
-                        if (IsOffCooldown(All.Swiftcast) && IsIfritAttuned && lastComboMove is not CrimsonCyclone)
+                        if (IsOffCooldown(All.Swiftcast) && isIfritAttuned && lastComboMove is not CrimsonCyclone)
                         {
-                            if (!Config.SMN_ST_Egi_AstralFlow [1] || (Config.SMN_ST_Egi_AstralFlow [1] && gauge.Attunement >= 1))
+                            if (!Config.SMN_ST_Egi_AstralFlow[1] || (Config.SMN_ST_Egi_AstralFlow[1] && gauge.Attunement >= 1))
                                 return All.Swiftcast;
                         }
                     }
@@ -556,10 +555,10 @@ internal partial class SMN
                         // Swiftcast Garuda Feature
                         if (LevelChecked(Slipstream) && HasEffect(Buffs.GarudasFavor))
                         {
-                            if (CanSpellWeave() && IsGarudaAttuned && IsOffCooldown(All.Swiftcast))
+                            if (CanSpellWeave() && isGarudaAttuned && IsOffCooldown(All.Swiftcast))
                                 return All.Swiftcast;
 
-                            if (Config.SMN_ST_Egi_AstralFlow [2] &&
+                            if (Config.SMN_ST_Egi_AstralFlow[2] &&
                                 ((HasEffect(Buffs.GarudasFavor) && HasEffect(All.Buffs.Swiftcast)) || (gauge.Attunement == 0)))     // Astral Flow if Swiftcast is not ready throughout Garuda
                                 return OriginalHook(AstralFlow);
                         }
@@ -567,7 +566,7 @@ internal partial class SMN
                         // Swiftcast Ifrit Feature (Conditions to allow for SpS Ruins to still be under the effect of Swiftcast)
                         if (IsOffCooldown(All.Swiftcast) && isIfritAttuned && lastComboMove is not CrimsonCyclone)
                         {
-                            if (!Config.SMN_ST_Egi_AstralFlow [1] || (Config.SMN_ST_Egi_AstralFlow [1] && gauge.Attunement >= 1))
+                            if (!Config.SMN_ST_Egi_AstralFlow[1] || (Config.SMN_ST_Egi_AstralFlow[1] && gauge.Attunement >= 1))
                                 return All.Swiftcast;
                         }
                     }
@@ -579,10 +578,10 @@ internal partial class SMN
                      (HasEffect(Buffs.GarudasFavor) && gauge.Attunement >= 1 && !HasEffect(All.Buffs.Swiftcast) && IsMoving())))
                     return OriginalHook(Gemshine);
 
-                if ((Config.SMN_ST_Egi_AstralFlow [2] && HasEffect(Buffs.GarudasFavor) && (IsNotEnabled(CustomComboPreset.SMN_DemiEgiMenu_SwiftcastEgi) || swiftcastPhase == 2)) ||                 // Garuda
-                    (Config.SMN_ST_Egi_AstralFlow [0] && HasEffect(Buffs.TitansFavor) && lastComboMove is TopazRite or TopazCata && CanSpellWeave()) ||                                  // Titan
-                    (Config.SMN_ST_Egi_AstralFlow [1] && ((HasEffect(Buffs.IfritsFavor) && !Config.SMN_ST_CrimsonCycloneMelee && (IsMoving() || gauge.Attunement == 0)) || (lastComboMove is CrimsonCyclone && InMeleeRange()))) ||
-                    (Config.SMN_ST_Egi_AstralFlow [1] && HasEffect(Buffs.IfritsFavor) && Config.SMN_ST_CrimsonCycloneMelee && InMeleeRange()))  // Ifrit
+                if ((Config.SMN_ST_Egi_AstralFlow[2] && HasEffect(Buffs.GarudasFavor) && (IsNotEnabled(CustomComboPreset.SMN_DemiEgiMenu_SwiftcastEgi) || swiftcastPhase == 2)) ||                 // Garuda
+                    (Config.SMN_ST_Egi_AstralFlow[0] && HasEffect(Buffs.TitansFavor) && lastComboMove is TopazRite or TopazCata && CanSpellWeave()) ||                                  // Titan
+                    (Config.SMN_ST_Egi_AstralFlow[1] && ((HasEffect(Buffs.IfritsFavor) && !Config.SMN_ST_CrimsonCycloneMelee && (IsMoving() || gauge.Attunement == 0)) || (lastComboMove is CrimsonCyclone && InMeleeRange()))) ||
+                    (Config.SMN_ST_Egi_AstralFlow[1] && HasEffect(Buffs.IfritsFavor) && Config.SMN_ST_CrimsonCycloneMelee && InMeleeRange()))  // Ifrit
                     return OriginalHook(AstralFlow);
 
                 // Gemshine
@@ -632,11 +631,11 @@ internal partial class SMN
         protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
         {
             SMNGauge gauge = GetJobGauge<SMNGauge>();
-            int summonerPrimalChoice = PluginConfiguration.GetCustomIntValue(Config.SMN_PrimalChoice);
-            int summonerBurstPhase = PluginConfiguration.GetCustomIntValue(Config.SMN_BurstPhase);
-            int lucidThreshold = PluginConfiguration.GetCustomIntValue(Config.SMN_Lucid);
-            int swiftcastPhase = PluginConfiguration.GetCustomIntValue(Config.SMN_SwiftcastPhase);
-            int burstDelay = PluginConfiguration.GetCustomIntValue(Config.SMN_Burst_Delay);
+            int summonerPrimalChoice = Config.SMN_PrimalChoice;
+            int summonerBurstPhase = Config.SMN_BurstPhase;
+            int lucidThreshold = Config.SMN_Lucid;
+            int swiftcastPhase = Config.SMN_SwiftcastPhase;
+            int burstDelay = Config.SMN_Burst_Delay;
             bool inOpener = CombatEngageDuration().TotalSeconds < 40;
             bool isGarudaAttuned = OriginalHook(Gemshine) is EmeralRuin1 or EmeralRuin2 or EmeralRuin3 or EmeraldRite;
             bool isTitanAttuned = OriginalHook(Gemshine) is TopazRuin1 or TopazRuin2 or TopazRuin3 or TopazRite;
@@ -686,10 +685,10 @@ internal partial class SMN
                     {
                         if (IsEnabled(CustomComboPreset.SMN_SearingLight_Burst_AoE))
                         {
-                            if ((SummonerBurstPhase is 0 or 1 && ((!LevelChecked(SummonSolarBahamut) && OriginalHook(Ruin) is AstralImpulse) || OriginalHook(Ruin) is UmbralImpulse) && DemiAttackCount >= 1) ||
-                                (SummonerBurstPhase == 2 && OriginalHook(Ruin) == FountainOfFire) ||
-                                (SummonerBurstPhase == 3 && OriginalHook(Ruin) is AstralImpulse or UmbralImpulse or FountainOfFire) ||
-                                (SummonerBurstPhase == 4))
+                            if ((summonerBurstPhase is 0 or 1 && ((!LevelChecked(SummonSolarBahamut) && OriginalHook(Ruin) is AstralImpulse) || OriginalHook(Ruin) is UmbralImpulse) && DemiAttackCount >= 1) ||
+                                (summonerBurstPhase == 2 && OriginalHook(Ruin) == FountainOfFire) ||
+                                (summonerBurstPhase == 3 && OriginalHook(Ruin) is AstralImpulse or UmbralImpulse or FountainOfFire) ||
+                                (summonerBurstPhase == 4))
                                 return SearingLight;
                         }
                         else
@@ -833,10 +832,10 @@ internal partial class SMN
                     // Swiftcast Garuda Feature
                     if (swiftcastPhase is 0 or 1 && LevelChecked(Slipstream) && HasEffect(Buffs.GarudasFavor))
                     {
-                        if (CanSpellWeave() && IsGarudaAttuned && IsOffCooldown(All.Swiftcast))
+                        if (CanSpellWeave() && isGarudaAttuned && IsOffCooldown(All.Swiftcast))
                             return All.Swiftcast;
 
-                        if (Config.SMN_ST_Egi_AstralFlow [2] &&
+                        if (Config.SMN_ST_Egi_AstralFlow[2] &&
                             ((HasEffect(Buffs.GarudasFavor) && HasEffect(All.Buffs.Swiftcast)) || (gauge.Attunement == 0)))     // Astral Flow if Swiftcast is not ready throughout Garuda
                             return OriginalHook(AstralFlow);
                     }
@@ -844,9 +843,9 @@ internal partial class SMN
                     // Swiftcast Ifrit Feature (Conditions to allow for SpS Ruins to still be under the effect of Swiftcast)
                     if (swiftcastPhase == 2)
                     {
-                        if (IsOffCooldown(All.Swiftcast) && IsIfritAttuned && lastComboMove is not CrimsonCyclone)
+                        if (IsOffCooldown(All.Swiftcast) && isIfritAttuned && lastComboMove is not CrimsonCyclone)
                         {
-                            if (!Config.SMN_ST_Egi_AstralFlow [1] || (Config.SMN_ST_Egi_AstralFlow [1] && gauge.Attunement >= 1))
+                            if (!Config.SMN_ST_Egi_AstralFlow[1] || (Config.SMN_ST_Egi_AstralFlow[1] && gauge.Attunement >= 1))
                                 return All.Swiftcast;
                         }
                     }
@@ -857,10 +856,10 @@ internal partial class SMN
                         // Swiftcast Garuda Feature
                         if (LevelChecked(Slipstream) && HasEffect(Buffs.GarudasFavor))
                         {
-                            if (CanSpellWeave() && IsGarudaAttuned && IsOffCooldown(All.Swiftcast))
+                            if (CanSpellWeave() && isGarudaAttuned && IsOffCooldown(All.Swiftcast))
                                 return All.Swiftcast;
 
-                            if (Config.SMN_ST_Egi_AstralFlow [2] &&
+                            if (Config.SMN_ST_Egi_AstralFlow[2] &&
                                 ((HasEffect(Buffs.GarudasFavor) && HasEffect(All.Buffs.Swiftcast)) || (gauge.Attunement == 0)))     // Astral Flow if Swiftcast is not ready throughout Garuda
                                 return OriginalHook(AstralFlow);
                         }
@@ -868,7 +867,7 @@ internal partial class SMN
                         // Swiftcast Ifrit Feature (Conditions to allow for SpS Ruins to still be under the effect of Swiftcast)
                         if (IsOffCooldown(All.Swiftcast) && isIfritAttuned && lastComboMove is not CrimsonCyclone)
                         {
-                            if (!Config.SMN_ST_Egi_AstralFlow [1] || (Config.SMN_ST_Egi_AstralFlow [1] && gauge.Attunement >= 1))
+                            if (!Config.SMN_ST_Egi_AstralFlow[1] || (Config.SMN_ST_Egi_AstralFlow[1] && gauge.Attunement >= 1))
                                 return All.Swiftcast;
                         }
                     }
@@ -880,10 +879,10 @@ internal partial class SMN
                      (HasEffect(Buffs.GarudasFavor) && gauge.Attunement >= 1 && !HasEffect(All.Buffs.Swiftcast) && IsMoving())))
                     return OriginalHook(PreciousBrilliance);
 
-                if ((Config.SMN_ST_Egi_AstralFlow [2] && HasEffect(Buffs.GarudasFavor) && (IsNotEnabled(CustomComboPreset.SMN_DemiEgiMenu_SwiftcastEgi_AoE) || swiftcastPhase == 2)) ||                 // Garuda
-                    (Config.SMN_ST_Egi_AstralFlow [0] && HasEffect(Buffs.TitansFavor) && lastComboMove is TopazRite or TopazCata && CanSpellWeave()) ||                                  // Titan
-                    (Config.SMN_ST_Egi_AstralFlow [1] && ((HasEffect(Buffs.IfritsFavor) && !Config.SMN_ST_CrimsonCycloneMelee && (IsMoving() || gauge.Attunement == 0)) || (lastComboMove is CrimsonCyclone && InMeleeRange()))) ||
-                    (Config.SMN_ST_Egi_AstralFlow [1] && HasEffect(Buffs.IfritsFavor) && Config.SMN_ST_CrimsonCycloneMelee && InMeleeRange()))  // Ifrit
+                if ((Config.SMN_ST_Egi_AstralFlow[2] && HasEffect(Buffs.GarudasFavor) && (IsNotEnabled(CustomComboPreset.SMN_DemiEgiMenu_SwiftcastEgi_AoE) || swiftcastPhase == 2)) ||                 // Garuda
+                    (Config.SMN_ST_Egi_AstralFlow[0] && HasEffect(Buffs.TitansFavor) && lastComboMove is TopazRite or TopazCata && CanSpellWeave()) ||                                  // Titan
+                    (Config.SMN_ST_Egi_AstralFlow[1] && ((HasEffect(Buffs.IfritsFavor) && !Config.SMN_ST_CrimsonCycloneMelee && (IsMoving() || gauge.Attunement == 0)) || (lastComboMove is CrimsonCyclone && InMeleeRange()))) ||
+                    (Config.SMN_ST_Egi_AstralFlow[1] && HasEffect(Buffs.IfritsFavor) && Config.SMN_ST_CrimsonCycloneMelee && InMeleeRange()))  // Ifrit
                     return OriginalHook(AstralFlow);
 
                 // Precious Brilliance

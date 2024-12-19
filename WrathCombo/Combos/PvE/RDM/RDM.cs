@@ -1,5 +1,4 @@
-﻿using WrathCombo.Combos.PvE.ALL;
-using WrathCombo.Combos.PvE.Content;
+﻿using WrathCombo.Combos.PvE.Content;
 using WrathCombo.CustomComboNS;
 
 namespace WrathCombo.Combos.PvE;
@@ -105,10 +104,10 @@ internal partial class RDM
                 bool actionFound =
                     (!Config.RDM_ST_oGCD_OnAction_Adv && actionID is Jolt or Jolt2 or Jolt3) ||
                       (Config.RDM_ST_oGCD_OnAction_Adv &&
-                        ((Config.RDM_ST_oGCD_OnAction [0] && actionID is Jolt or Jolt2 or Jolt3) ||
-                         (Config.RDM_ST_oGCD_OnAction [1] && actionID is Fleche) ||
-                         (Config.RDM_ST_oGCD_OnAction [2] && actionID is Riposte) ||
-                         (Config.RDM_ST_oGCD_OnAction [3] && actionID is Reprise)
+                        ((Config.RDM_ST_oGCD_OnAction[0] && actionID is Jolt or Jolt2 or Jolt3) ||
+                         (Config.RDM_ST_oGCD_OnAction[1] && actionID is Fleche) ||
+                         (Config.RDM_ST_oGCD_OnAction[2] && actionID is Riposte) ||
+                         (Config.RDM_ST_oGCD_OnAction[3] && actionID is Reprise)
                         )
                       );
 
@@ -132,9 +131,9 @@ internal partial class RDM
                 bool actionFound =
                     (!Config.RDM_ST_MeleeFinisher_Adv && actionID is Jolt or Jolt2 or Jolt3) ||
                     (Config.RDM_ST_MeleeFinisher_Adv &&
-                        ((Config.RDM_ST_MeleeFinisher_OnAction [0] && actionID is Jolt or Jolt2 or Jolt3) ||
-                         (Config.RDM_ST_MeleeFinisher_OnAction [1] && actionID is Riposte or EnchantedRiposte) ||
-                         (Config.RDM_ST_MeleeFinisher_OnAction [2] && actionID is Veraero or Veraero3 or Verthunder or Verthunder3)));
+                        ((Config.RDM_ST_MeleeFinisher_OnAction[0] && actionID is Jolt or Jolt2 or Jolt3) ||
+                         (Config.RDM_ST_MeleeFinisher_OnAction[1] && actionID is Riposte or EnchantedRiposte) ||
+                         (Config.RDM_ST_MeleeFinisher_OnAction[2] && actionID is Veraero or Veraero3 or Verthunder or Verthunder3)));
 
                 if (actionFound && MeleeCombo.TryMeleeFinisher(lastComboMove, out uint finisherAction))
                     return finisherAction;
@@ -148,8 +147,8 @@ internal partial class RDM
                 bool actionFound =
                     (!Config.RDM_ST_MeleeCombo_Adv && (actionID is Jolt or Jolt2 or Jolt3)) ||
                     (Config.RDM_ST_MeleeCombo_Adv &&
-                        ((Config.RDM_ST_MeleeCombo_OnAction [0] && actionID is Jolt or Jolt2 or Jolt3) ||
-                         (Config.RDM_ST_MeleeCombo_OnAction [1] && actionID is Riposte or EnchantedRiposte)));
+                        ((Config.RDM_ST_MeleeCombo_OnAction[0] && actionID is Jolt or Jolt2 or Jolt3) ||
+                         (Config.RDM_ST_MeleeCombo_OnAction[1] && actionID is Riposte or EnchantedRiposte)));
 
                 if (actionFound)
                 {
@@ -276,9 +275,9 @@ internal partial class RDM
                 bool actionFound =
                     (!Config.RDM_AoE_MeleeFinisher_Adv && actionID is Scatter or Impact) ||
                     (Config.RDM_AoE_MeleeFinisher_Adv &&
-                        ((Config.RDM_AoE_MeleeFinisher_OnAction [0] && actionID is Scatter or Impact) ||
-                         (Config.RDM_AoE_MeleeFinisher_OnAction [1] && actionID is Moulinet) ||
-                         (Config.RDM_AoE_MeleeFinisher_OnAction [2] && actionID is Veraero2 or Verthunder2)));
+                        ((Config.RDM_AoE_MeleeFinisher_OnAction[0] && actionID is Scatter or Impact) ||
+                         (Config.RDM_AoE_MeleeFinisher_OnAction[1] && actionID is Moulinet) ||
+                         (Config.RDM_AoE_MeleeFinisher_OnAction[2] && actionID is Veraero2 or Verthunder2)));
 
                 if (actionFound && MeleeCombo.TryMeleeFinisher(lastComboMove, out uint finisherAction))
                     return finisherAction;
@@ -291,8 +290,8 @@ internal partial class RDM
                 bool actionFound =
                     (!Config.RDM_AoE_MeleeCombo_Adv && actionID is Scatter or Impact) ||
                     (Config.RDM_AoE_MeleeCombo_Adv &&
-                        ((Config.RDM_AoE_MeleeCombo_OnAction [0] && actionID is Scatter or Impact) ||
-                            (Config.RDM_AoE_MeleeCombo_OnAction [1] && actionID is Moulinet)));
+                        ((Config.RDM_AoE_MeleeCombo_OnAction[0] && actionID is Scatter or Impact) ||
+                            (Config.RDM_AoE_MeleeCombo_OnAction[1] && actionID is Moulinet)));
 
                 if (actionFound)
                 {

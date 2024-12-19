@@ -2,8 +2,8 @@
 using System.Linq;
 using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Game.ClientState.Statuses;
-using WrathCombo.Combos.PvE.ALL;
 using WrathCombo.Combos.PvE.Content;
+using WrathCombo.Combos.PvE.Enums;
 using WrathCombo.CustomComboNS;
 using WrathCombo.Data;
 using WrathCombo.Extensions;
@@ -50,7 +50,7 @@ internal static partial class SCH
         {
             if (actionID is Recitation && HasEffect(Buffs.Recitation))
             {
-                switch ((int) Config.SCH_Recitation_Mode)
+                switch ((int)Config.SCH_Recitation_Mode)
                 {
                     case 0: return OriginalHook(Adloquium);
                     case 1: return OriginalHook(Succor);
@@ -192,9 +192,9 @@ internal static partial class SCH
 
             if (Config.SCH_ST_DPS_Adv && Config.SCH_ST_DPS_Adv_Actions.Count > 0)
             {
-                bool onBroils = Config.SCH_ST_DPS_Adv_Actions [0] && BroilList.Contains(actionID);
-                bool onBios = Config.SCH_ST_DPS_Adv_Actions [1] && BioList.ContainsKey(actionID);
-                bool onRuinII = Config.SCH_ST_DPS_Adv_Actions [2] && actionID is Ruin2;
+                bool onBroils = Config.SCH_ST_DPS_Adv_Actions[0] && BroilList.Contains(actionID);
+                bool onBios = Config.SCH_ST_DPS_Adv_Actions[1] && BioList.ContainsKey(actionID);
+                bool onRuinII = Config.SCH_ST_DPS_Adv_Actions[2] && actionID is Ruin2;
                 actionFound = onBroils || onBios || onRuinII;
             }
             else
@@ -226,7 +226,7 @@ internal static partial class SCH
                 // Dissipation
                 if (IsEnabled(CustomComboPreset.SCH_DPS_Dissipation_Opener) &&
                     ActionReady(Dissipation) && HasPetPresent() && !Gauge.HasAetherflow() &&
-                    (openerState == OpenerState.InOpener) && InCombat() && CanSpellWeave())
+                    (OpenerState == OpenerState.InOpener) && InCombat() && CanSpellWeave())
                     return Dissipation;
 
                 // Aetherflow
@@ -262,7 +262,7 @@ internal static partial class SCH
                     {
                         // If CS is available and usable, or if the Impact Buff is on Player
                         if (ActionReady(ChainStratagem) &&
-                            !TargetHasEffectAny(Debuffs.ChainStratagem) && (openerState == OpenerState.PostOpener) &&
+                            !TargetHasEffectAny(Debuffs.ChainStratagem) && (OpenerState == OpenerState.PostOpener) &&
                             GetTargetHPPercent() > Config.SCH_ST_DPS_ChainStratagemOption &&
                             InCombat() &&
                             CanSpellWeave())
@@ -480,11 +480,11 @@ internal static partial class SCH
                     ActionReady(Adloquium) &&
                     GetTargetHPPercent(healTarget, Config.SCH_ST_Heal_IncludeShields) <= Config.SCH_ST_Heal_AdloquiumOption)
                 {
-                    if (Config.SCH_ST_Heal_AldoquimOpts [2] && ActionReady(EmergencyTactics))
+                    if (Config.SCH_ST_Heal_AldoquimOpts[2] && ActionReady(EmergencyTactics))
                         return EmergencyTactics;
 
-                    if ((Config.SCH_ST_Heal_AldoquimOpts [0] || FindEffectOnMember(Buffs.Galvanize, healTarget) is null) && //Ignore existing shield check
-                        (!Config.SCH_ST_Heal_AldoquimOpts [1] ||
+                    if ((Config.SCH_ST_Heal_AldoquimOpts[0] || FindEffectOnMember(Buffs.Galvanize, healTarget) is null) && //Ignore existing shield check
+                        (!Config.SCH_ST_Heal_AldoquimOpts[1] ||
                         (FindEffectOnMember(SGE.Buffs.EukrasianDiagnosis, healTarget) is null && FindEffectOnMember(SGE.Buffs.EukrasianPrognosis, healTarget) is null)
                     )) //Eukrasia Shield Check
                         return OriginalHook(Adloquium);
