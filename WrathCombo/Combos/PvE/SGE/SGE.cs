@@ -182,120 +182,120 @@ internal static partial class SGE
             uint toxikonID = OriginalHook(Toxikon);
             bool actionFound = actionID is Dosis2 || (!Config.SGE_ST_DPS_Adv && DosisList.ContainsKey(actionID));
 
-            switch (actionFound)
+            if (actionFound)
             {
-                case true:
+                // Kardia Reminder
+                if (IsEnabled(CustomComboPreset.SGE_ST_DPS_Kardia) &&
+                    LevelChecked(Kardia) && FindEffect(Buffs.Kardia) is null)
+                    return Kardia;
+
+                // Opener for SGE
+                if (IsEnabled(CustomComboPreset.SGE_ST_DPS_Opener))
+                    if (Opener().FullOpener(ref actionID))
+                        return actionID;
+
+                if (CanSpellWeave())
                 {
-                    // Kardia Reminder
-                    if (IsEnabled(CustomComboPreset.SGE_ST_DPS_Kardia) &&
-                        LevelChecked(Kardia) && FindEffect(Buffs.Kardia) is null)
-                        return Kardia;
 
-                    // Opener for SGE
-                    if (IsEnabled(CustomComboPreset.SGE_ST_DPS_Opener))
-                        if (Opener().FullOpener(ref actionID))
-                            return actionID;
+                    // Lucid Dreaming
+                    if (IsEnabled(CustomComboPreset.SGE_ST_DPS_Lucid) &&
+                        All.CanUseLucid(actionID, Config.SGE_ST_DPS_Lucid))
+                        return All.LucidDreaming;
 
-                    if (CanSpellWeave())
-                    {
-                        // Lucid Dreaming
-                        // Variant
-                        if (IsEnabled(CustomComboPreset.SGE_DPS_Variant_Rampart) &&
-                            IsEnabled(Variant.VariantRampart) &&
-                            IsOffCooldown(Variant.VariantRampart))
-                            return Variant.VariantRampart;
+                    // Variant
+                    if (IsEnabled(CustomComboPreset.SGE_DPS_Variant_Rampart) &&
+                        IsEnabled(Variant.VariantRampart) &&
+                        IsOffCooldown(Variant.VariantRampart))
+                        return Variant.VariantRampart;
 
-                        // Psyche
-                        if (IsEnabled(CustomComboPreset.SGE_ST_DPS_Psyche) &&
-                            ActionReady(Psyche) && InCombat())
-                            return Psyche;
+                    // Psyche
+                    if (IsEnabled(CustomComboPreset.SGE_ST_DPS_Psyche) &&
+                        ActionReady(Psyche) && InCombat())
+                        return Psyche;
 
-                        // Rhizomata
-                        if (IsEnabled(CustomComboPreset.SGE_ST_DPS_Rhizo) &&
-                            ActionReady(Rhizomata) && Gauge.Addersgall <= Config.SGE_ST_DPS_Rhizo)
-                            return Rhizomata;
+                    // Rhizomata
+                    if (IsEnabled(CustomComboPreset.SGE_ST_DPS_Rhizo) &&
+                        ActionReady(Rhizomata) && Gauge.Addersgall <= Config.SGE_ST_DPS_Rhizo)
+                        return Rhizomata;
 
-                        //Soteria
-                        if (IsEnabled(CustomComboPreset.SGE_ST_DPS_Soteria) &&
-                            ActionReady(Soteria) && HasEffect(Buffs.Kardia))
-                            return Soteria;
+                    //Soteria
+                    if (IsEnabled(CustomComboPreset.SGE_ST_DPS_Soteria) &&
+                        ActionReady(Soteria) && HasEffect(Buffs.Kardia))
+                        return Soteria;
 
-                        // Addersgall Protection
-                        if (IsEnabled(CustomComboPreset.SGE_ST_DPS_AddersgallProtect) &&
-                            ActionReady(Druochole) && Gauge.Addersgall >= Config.SGE_ST_DPS_AddersgallProtect)
-                            return Druochole;
-                    }
+                    // Addersgall Protection
+                    if (IsEnabled(CustomComboPreset.SGE_ST_DPS_AddersgallProtect) &&
+                        ActionReady(Druochole) && Gauge.Addersgall >= Config.SGE_ST_DPS_AddersgallProtect)
+                        return Druochole;
+                }
 
-                    // Addersting Protection
-                    if (Gauge.Addersting is 3 && HasEffect(Buffs.EukrasianPrognosis) &&
-                        ActionReady(toxikonID) && HasBattleTarget() &&
-                        InActionRange(toxikonID) && Gauge.HasAddersting())
-                        return toxikonID;
+                // Addersting Protection
+                if (Gauge.Addersting is 3 && HasEffect(Buffs.EukrasianPrognosis) &&
+                    ActionReady(toxikonID) && HasBattleTarget() &&
+                    InActionRange(toxikonID) && Gauge.HasAddersting())
+                    return toxikonID;
 
-                    if (HasBattleTarget() && !HasEffect(Buffs.Eukrasia))
-                    // Buff check Above. Without it, Toxikon and any future option will interfere in the Eukrasia->Eukrasia Dosis combo
-                    {
-                        // Eukrasian Dosis.
-                        // If we're too low level to use Eukrasia, we can stop here.
-                        if (IsEnabled(CustomComboPreset.SGE_ST_DPS_EDosis) && LevelChecked(Eukrasia) && InCombat())
+                if (HasBattleTarget() && !HasEffect(Buffs.Eukrasia))
+                // Buff check Above. Without it, Toxikon and any future option will interfere in the Eukrasia->Eukrasia Dosis combo
+                {
+                    // Eukrasian Dosis.
+                    // If we're too low level to use Eukrasia, we can stop here.
+                    if (IsEnabled(CustomComboPreset.SGE_ST_DPS_EDosis) && LevelChecked(Eukrasia) && InCombat())
 
-                            // Grab current Dosis via OriginalHook, grab it's fellow debuff ID from Dictionary, then check for the debuff
-                            // Using TryGetValue due to edge case where the actionID would be read as Eukrasian Dosis instead of Dosis
-                            // EDosis will show for half a second if the buff is removed manually or some other act of God
-                            if (DosisList.TryGetValue(OriginalHook(actionID), out ushort dotDebuffID))
-                            {
-                                if (IsEnabled(CustomComboPreset.SGE_DPS_Variant_SpiritDart) &&
-                                    IsEnabled(Variant.VariantSpiritDart) &&
-                                    GetDebuffRemainingTime(Variant.Debuffs.SustainedDamage) <= 3 &&
-                                    CanSpellWeave(actionID))
-                                    return Variant.VariantSpiritDart;
-
-                                // Dosis DoT Debuff
-                                float dotDebuff = GetDebuffRemainingTime(dotDebuffID);
-
-                                // Check for the AoE DoT.  These DoTs overlap, so get time remaining of any of them
-                                if (TraitLevelChecked(Traits.OffensiveMagicMasteryII))
-                                    dotDebuff = Math.Max(dotDebuff, GetDebuffRemainingTime(Debuffs.EukrasianDyskrasia));
-
-                                float refreshtimer = Config.SGE_ST_DPS_EDosis_Adv
-                                    ? Config.SGE_ST_DPS_EDosisThreshold
-                                    : 6;
-
-                                if (dotDebuff <= refreshtimer &&
-                                    GetTargetHPPercent() > Config.SGE_ST_DPS_EDosisHPPer)
-                                    return Eukrasia;
-                            }
-
-                        // Phlegma
-                        if (IsEnabled(CustomComboPreset.SGE_ST_DPS_Phlegma) && InCombat() &&
-                            InActionRange(phlegmaID) && ActionReady(phlegmaID) &&
-                            (!LevelChecked(Psyche) ||
-                             (LevelChecked(Psyche) &&
-                              ((GetCooldownRemainingTime(Psyche) >= 37 &&
-                                GetRemainingCharges(phlegmaID) == GetMaxCharges(phlegmaID)) ||
-                               ActionReady(Psyche) ||
-                               JustUsed(Psyche)))))
-                            return phlegmaID;
-
-                        // Movement Options
-                        if (IsEnabled(CustomComboPreset.SGE_ST_DPS_Movement) &&
-                            InCombat() && IsMoving())
+                        // Grab current Dosis via OriginalHook, grab it's fellow debuff ID from Dictionary, then check for the debuff
+                        // Using TryGetValue due to edge case where the actionID would be read as Eukrasian Dosis instead of Dosis
+                        // EDosis will show for half a second if the buff is removed manually or some other act of God
+                        if (DosisList.TryGetValue(OriginalHook(actionID), out ushort dotDebuffID))
                         {
-                            // Toxikon
-                            if (Config.SGE_ST_DPS_Movement[0] && LevelChecked(Toxikon) && Gauge.HasAddersting())
-                                return OriginalHook(Toxikon);
+                            if (IsEnabled(CustomComboPreset.SGE_DPS_Variant_SpiritDart) &&
+                                IsEnabled(Variant.VariantSpiritDart) &&
+                                GetDebuffRemainingTime(Variant.Debuffs.SustainedDamage) <= 3 &&
+                                CanSpellWeave(actionID))
+                                return Variant.VariantSpiritDart;
 
-                            // Dyskrasia
-                            if (Config.SGE_ST_DPS_Movement[1] && LevelChecked(Dyskrasia) && InActionRange(Dyskrasia))
-                                return OriginalHook(Dyskrasia);
+                            // Dosis DoT Debuff
+                            float dotDebuff = GetDebuffRemainingTime(dotDebuffID);
 
-                            // Eukrasia
-                            if (Config.SGE_ST_DPS_Movement[2] && LevelChecked(Eukrasia))
+                            // Check for the AoE DoT.  These DoTs overlap, so get time remaining of any of them
+                            if (TraitLevelChecked(Traits.OffensiveMagicMasteryII))
+                                dotDebuff = Math.Max(dotDebuff, GetDebuffRemainingTime(Debuffs.EukrasianDyskrasia));
+
+                            float refreshtimer = Config.SGE_ST_DPS_EDosis_Adv
+                                ? Config.SGE_ST_DPS_EDosisThreshold
+                                : 6;
+
+                            if (dotDebuff <= refreshtimer &&
+                                GetTargetHPPercent() > Config.SGE_ST_DPS_EDosisHPPer)
                                 return Eukrasia;
                         }
-                    }
 
-                    break;
+                    // Phlegma
+                    if (IsEnabled(CustomComboPreset.SGE_ST_DPS_Phlegma) && InCombat() &&
+                        InActionRange(phlegmaID) && ActionReady(phlegmaID) &&
+                        (!LevelChecked(Psyche) ||
+                         (LevelChecked(Psyche) &&
+                          ((GetCooldownRemainingTime(Psyche) >= 37 &&
+                            GetRemainingCharges(phlegmaID) == GetMaxCharges(phlegmaID)) ||
+                           ActionReady(Psyche) ||
+                           JustUsed(Psyche)))))
+                        return phlegmaID;
+
+                    // Movement Options
+                    if (IsEnabled(CustomComboPreset.SGE_ST_DPS_Movement) &&
+                        InCombat() && IsMoving())
+                    {
+                        // Toxikon
+                        if (Config.SGE_ST_DPS_Movement[0] && LevelChecked(Toxikon) && Gauge.HasAddersting())
+                            return OriginalHook(Toxikon);
+
+                        // Dyskrasia
+                        if (Config.SGE_ST_DPS_Movement[1] && LevelChecked(Dyskrasia) && InActionRange(Dyskrasia))
+                            return OriginalHook(Dyskrasia);
+
+                        // Eukrasia
+                        if (Config.SGE_ST_DPS_Movement[2] && LevelChecked(Eukrasia))
+                            return Eukrasia;
+                    }
                 }
             }
 
