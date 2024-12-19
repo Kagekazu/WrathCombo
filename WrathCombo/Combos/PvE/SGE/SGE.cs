@@ -174,7 +174,7 @@ internal static partial class SGE
      */
     internal class SGE_ST_DPS : CustomCombo
     {
-        protected internal override CustomComboPreset Preset => throw new NotImplementedException();
+        protected internal override CustomComboPreset Preset => CustomComboPreset.SGE_ST_DPS;
 
         protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
         {
