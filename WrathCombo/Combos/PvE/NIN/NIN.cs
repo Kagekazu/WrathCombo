@@ -1,5 +1,4 @@
 ﻿using Dalamud.Game.ClientState.Statuses;
-using WrathCombo.Combos.PvE.ALL;
 using WrathCombo.Combos.PvE.Content;
 using WrathCombo.Core;
 using WrathCombo.CustomComboNS;
@@ -16,16 +15,15 @@ internal partial class NIN
 
         protected internal MudraCasting MudraState = new();
 
-        protected internal static NINOpenerLogic NINOpener = new();
+        protected internal static NINOpenerMaxLevel4thGCDKunai NINOpener = new();
 
         protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
         {
             if (actionID == SpinningEdge)
             {
-                bool canWeave = CanWeave(SpinningEdge);
+                bool canWeave = CanWeave();
                 bool canDelayedWeave = CanDelayedWeave();
-                bool inTrickBurstSaveWindow = IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode_TrickAttack_Cooldowns) &&
-                    IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode_TrickAttack) && GetCooldownRemainingTime(TrickAttack) <= GetOptionValue(Config.Advanced_Trick_Cooldown);
+                bool inTrickBurstSaveWindow = IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode_TrickAttack_Cooldowns) && IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode_TrickAttack) && GetCooldownRemainingTime(TrickAttack) <= GetOptionValue(Config.Advanced_Trick_Cooldown);
                 bool useBhakaBeforeTrickWindow = GetCooldownRemainingTime(TrickAttack) >= 3;
                 bool setupSuitonWindow = GetCooldownRemainingTime(OriginalHook(TrickAttack)) <= GetOptionValue(Config.Trick_CooldownRemaining) && !HasEffect(Buffs.ShadowWalker);
                 bool setupKassatsuWindow = GetCooldownRemainingTime(TrickAttack) <= 10 && HasEffect(Buffs.ShadowWalker);
@@ -33,20 +31,20 @@ internal partial class NIN
                 bool poolCharges = !GetOptionBool(Config.Advanced_ChargePool) || (GetRemainingCharges(Ten) == 1 && GetCooldownChargeRemainingTime(Ten) < 2) || TrickDebuff || InMudra;
                 bool raitonUptime = IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode_Raiton_Uptime);
                 bool suitonUptime = IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode_Suiton_Uptime);
-                int bhavaPool = GetOptionValue(Config.Ninki_BhavaPooling);
-                int bunshinPool = GetOptionValue(Config.Ninki_BunshinPoolingST);
-                int burnKazematoi = GetOptionValue(Config.BurnKazematoi);
-                int secondWindThreshold = PluginConfiguration.GetCustomIntValue(Config.SecondWindThresholdST);
-                int shadeShiftThreshold = PluginConfiguration.GetCustomIntValue(Config.ShadeShiftThresholdST);
-                int bloodbathThreshold = PluginConfiguration.GetCustomIntValue(Config.BloodbathThresholdST);
+                int bhavaPool = Config.Ninki_BhavaPooling;
+                int bunshinPool = Config.Ninki_BunshinPoolingST;
+                int burnKazematoi = Config.BurnKazematoi;
+                int secondWindThreshold = Config.SecondWindThresholdST;
+                int shadeShiftThreshold = Config.ShadeShiftThresholdST;
+                int bloodbathThreshold = Config.BloodbathThresholdST;
                 double playerHP = PlayerHealthPercentageHp();
                 bool phantomUptime = IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode_Phantom_Uptime);
-                _ = GetCooldown(GustSlash).CooldownTotal * 3;
+                float comboLength = GetCooldown(GustSlash).CooldownTotal * 3;
                 bool trueNorthArmor = IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode_TrueNorth) && TargetNeedsPositionals() && !OnTargetsFlank() && GetRemainingCharges(All.TrueNorth) > 0 && All.TrueNorth.LevelChecked() && !HasEffect(All.Buffs.TrueNorth) && canDelayedWeave;
                 bool trueNorthEdge = IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode_TrueNorth) && TargetNeedsPositionals() && IsNotEnabled(CustomComboPreset.NIN_ST_AdvancedMode_TrueNorth_ArmorCrush) && !OnTargetsRear() && GetRemainingCharges(All.TrueNorth) > 0 && All.TrueNorth.LevelChecked() && !HasEffect(All.Buffs.TrueNorth) && canDelayedWeave;
                 bool dynamic = IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode_Dynamic);
 
-                if (IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode_BalanceOpener) && NINOpenerLogic.LevelChecked && NINOpener.DoFullOpener(ref actionID, MudraState))
+                if (IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode_BalanceOpener) && Opener().FullOpener(ref actionID))
                     return actionID;
 
                 if (IsNotEnabled(CustomComboPreset.NIN_ST_AdvancedMode_Ninjitsus) || (ActionWatching.TimeSinceLastAction.TotalSeconds >= 5 && !InCombat()))
@@ -355,7 +353,7 @@ internal partial class NIN
             if (actionID == DeathBlossom)
             {
                 Status? dotonBuff = FindEffect(Buffs.Doton);
-                bool canWeave = CanWeave(GustSlash);
+                bool canWeave = CanWeave();
                 bool chargeCheck = IsNotEnabled(CustomComboPreset.NIN_AoE_AdvancedMode_Ninjitsus_ChargeHold) || (IsEnabled(CustomComboPreset.NIN_AoE_AdvancedMode_Ninjitsus_ChargeHold) && GetRemainingCharges(Ten) == 2);
                 bool inMudraState = InMudra;
                 int hellfrogPool = GetOptionValue(Config.Ninki_HellfrogPooling);
@@ -363,9 +361,9 @@ internal partial class NIN
                 int dotonThreshold = GetOptionValue(Config.Advanced_DotonHP);
                 int tcjPath = GetOptionValue(Config.Advanced_TCJEnderAoE);
                 int bunshingPool = GetOptionValue(Config.Ninki_BunshinPoolingAoE);
-                int secondWindThreshold = PluginConfiguration.GetCustomIntValue(Config.SecondWindThresholdAoE);
-                int shadeShiftThreshold = PluginConfiguration.GetCustomIntValue(Config.ShadeShiftThresholdAoE);
-                int bloodbathThreshold = PluginConfiguration.GetCustomIntValue(Config.BloodbathThresholdAoE);
+                int secondWindThreshold = Config.SecondWindThresholdAoE;
+                int shadeShiftThreshold = Config.ShadeShiftThresholdAoE;
+                int bloodbathThreshold = Config.BloodbathThresholdAoE;
                 double playerHP = PlayerHealthPercentageHp();
 
                 if (IsNotEnabled(CustomComboPreset.NIN_AoE_AdvancedMode_Ninjitsus) || (ActionWatching.TimeSinceLastAction.TotalSeconds >= 5 && !InCombat()))
@@ -522,13 +520,13 @@ internal partial class NIN
 
         protected internal MudraCasting mudraState = new();
 
-        protected internal static NINOpenerLogic NINOpener = new();
+        protected internal static NINOpenerMaxLevel4thGCDKunai NINOpener = new();
 
         protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
         {
             if (actionID == SpinningEdge)
             {
-                bool canWeave = CanWeave(SpinningEdge, 0.6) && !ActionWatching.HasDoubleWeaved();
+                bool canWeave = CanWeave(0.6) && !ActionWatching.HasDoubleWeaved();
                 bool inTrickBurstSaveWindow = GetCooldownRemainingTime(TrickAttack) <= 15 && Suiton.LevelChecked();
                 bool useBhakaBeforeTrickWindow = GetCooldownRemainingTime(TrickAttack) >= 3;
                 bool canDelayedWeave = CanDelayedWeave();
@@ -544,7 +542,7 @@ internal partial class NIN
                         return actionID;
                 }
 
-                if (IsEnabled(CustomComboPreset.NIN_ST_SimpleMode_BalanceOpener) && NINOpenerLogic.LevelChecked && NINOpener.DoFullOpener(ref actionID, mudraState))
+                if (IsEnabled(CustomComboPreset.NIN_ST_SimpleMode_BalanceOpener) && Opener().FullOpener(ref actionID))
                     return actionID;
 
                 if (HasEffect(Buffs.TenChiJin))
@@ -591,10 +589,10 @@ internal partial class NIN
                     if (HasEffect(Buffs.ShadowWalker) && IsOffCooldown(TrickAttack))
                         return OriginalHook(TrickAttack);
 
-                    if (Bhavacakra.LevelChecked() && ((TrickDebuff && Gauge.Ninki >= 50) || useBhakaBeforeTrickWindow && Gauge.Ninki == 100))
+                    if (Bhavacakra.LevelChecked() && ((TrickDebuff && Gauge.Ninki >= 50) || (useBhakaBeforeTrickWindow && Gauge.Ninki == 100)))
                         return OriginalHook(Bhavacakra);
 
-                    if ((TrickDebuff && Gauge.Ninki >= 50) || (useBhakaBeforeTrickWindow && Gauge.Ninki == 100) && !Bhavacakra.LevelChecked() && Hellfrog.LevelChecked())
+                    if ((TrickDebuff && Gauge.Ninki >= 50) || (useBhakaBeforeTrickWindow && Gauge.Ninki == 100 && !Bhavacakra.LevelChecked() && Hellfrog.LevelChecked()))
                         return OriginalHook(Hellfrog);
 
                     if (!inTrickBurstSaveWindow)
@@ -694,7 +692,7 @@ internal partial class NIN
             if (actionID == DeathBlossom)
             {
                 Status? dotonBuff = FindEffect(Buffs.Doton);
-                bool canWeave = CanWeave(GustSlash);
+                bool canWeave = CanWeave();
 
                 if (ActionWatching.TimeSinceLastAction.TotalSeconds >= 5 && !InCombat())
                     mudraState.CurrentMudra = MudraCasting.MudraState.None;
@@ -1070,6 +1068,7 @@ internal partial class NIN
         TenriJendo = 36961,
         KunaisBane = 36958,
         ZeshoMeppo = 36960,
+        Dokumori = 36957,
 
         //Mudras
         Ninjutsu = 2260,

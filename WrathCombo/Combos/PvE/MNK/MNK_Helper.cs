@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Dalamud.Game.ClientState.JobGauge.Enums;
+﻿using Dalamud.Game.ClientState.JobGauge.Enums;
 using Dalamud.Game.ClientState.JobGauge.Types;
+using System.Collections.Generic;
+using System.Linq;
 using WrathCombo.CustomComboNS;
 using static WrathCombo.CustomComboNS.Functions.CustomComboFunctions;
 
@@ -113,7 +113,7 @@ internal static partial class MNK
 
         public override int MaxOpenerLevel => 109;
 
-        public override List<uint> OpenerActions { get; protected set; } =
+        public override List<uint> OpenerActions { get; set; } =
         [
             PerfectBalance,
             TwinSnakes,
@@ -169,7 +169,7 @@ internal static partial class MNK
 
         public override int MaxOpenerLevel => 109;
 
-        public override List<uint> OpenerActions { get; protected set; } =
+        public override List<uint> OpenerActions { get; set; } =
         [
             DragonKick,
             PerfectBalance,

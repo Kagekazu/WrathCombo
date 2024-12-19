@@ -6,6 +6,8 @@ using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Plugin.Services;
 using ECommons.DalamudServices;
 using ECommons.GameFunctions;
+using System.Collections.Generic;
+using System.Linq;
 using WrathCombo.CustomComboNS;
 using WrathCombo.CustomComboNS.Functions;
 using WrathCombo.Extensions;
@@ -35,15 +37,15 @@ internal static partial class AST
         if (Svc.ClientState.LocalPlayer is null || Svc.ClientState.LocalPlayer.ClassJob.RowId != 33)
             return;
 
-        if (Svc.Condition[Dalamud.Game.ClientState.Conditions.ConditionFlag.BetweenAreas] || Svc.Condition[Dalamud.Game.ClientState.Conditions.ConditionFlag.Unconscious])
+        if (Svc.Condition [Dalamud.Game.ClientState.Conditions.ConditionFlag.BetweenAreas] || Svc.Condition [Dalamud.Game.ClientState.Conditions.ConditionFlag.Unconscious])
         {
             QuickTargetCards.SelectedRandomMember = null;
             return;
         }
 
-        if (DrawnCard != Gauge.DrawnCards[0])
+        if (DrawnCard != Gauge.DrawnCards [0])
         {
-            DrawnCard = Gauge.DrawnCards[0];
+            DrawnCard = Gauge.DrawnCards [0];
         }
 
         if (CustomComboFunctions.IsEnabled(CustomComboPreset.AST_Cards_QuickTargetCards) &&
@@ -142,9 +144,9 @@ internal static partial class AST
 
         private static bool SetTarget()
         {
-            if (Gauge.DrawnCards[0].Equals(CardType.NONE))
+            if (Gauge.DrawnCards [0].Equals(CardType.NONE))
                 return false;
-            CardType cardDrawn = Gauge.DrawnCards[0];
+            CardType cardDrawn = Gauge.DrawnCards [0];
             PartyTargets.Clear();
             for (int i = 1; i <= 8; i++) //Checking all 8 available slots and skipping nulls & DCs
             {
@@ -207,24 +209,24 @@ internal static partial class AST
                 //Give card to DPS first
                 for (int i = 0; i <= PartyTargets.Count - 1; i++)
                 {
-                    byte job = PartyTargets[i] is IBattleChara ? (byte)(PartyTargets[i] as IBattleChara).ClassJob.RowId : (byte)0;
+                    byte job = PartyTargets [i] is IBattleChara ? (byte) (PartyTargets [i] as IBattleChara).ClassJob.RowId : (byte) 0;
                     if (((cardDrawn is CardType.BALANCE) && JobIDs.Melee.Contains(job)) ||
                         ((cardDrawn is CardType.SPEAR) && JobIDs.Ranged.Contains(job)))
                     {
                         //TargetObject(PartyTargets[i]);
-                        SelectedRandomMember = PartyTargets[i];
+                        SelectedRandomMember = PartyTargets [i];
                         return true;
                     }
                 }
                 //Give card to unsuitable DPS next
                 for (int i = 0; i <= PartyTargets.Count - 1; i++)
                 {
-                    byte job = PartyTargets[i] is IBattleChara ? (byte)(PartyTargets[i] as IBattleChara).ClassJob.RowId : (byte)0;
+                    byte job = PartyTargets [i] is IBattleChara ? (byte) (PartyTargets [i] as IBattleChara).ClassJob.RowId : (byte) 0;
                     if (((cardDrawn is CardType.BALANCE) && JobIDs.Ranged.Contains(job)) ||
                         ((cardDrawn is CardType.SPEAR) && JobIDs.Melee.Contains(job)))
                     {
                         //TargetObject(PartyTargets[i]);
-                        SelectedRandomMember = PartyTargets[i];
+                        SelectedRandomMember = PartyTargets [i];
                         return true;
                     }
                 }
@@ -234,12 +236,12 @@ internal static partial class AST
                 {
                     for (int i = 0; i <= PartyTargets.Count - 1; i++)
                     {
-                        byte job = PartyTargets[i] is IBattleChara ? (byte)(PartyTargets[i] as IBattleChara).ClassJob.RowId : (byte)0;
+                        byte job = PartyTargets [i] is IBattleChara ? (byte) (PartyTargets [i] as IBattleChara).ClassJob.RowId : (byte) 0;
                         if ((cardDrawn is CardType.BALANCE && JobIDs.Tank.Contains(job)) ||
                             (cardDrawn is CardType.SPEAR && JobIDs.Healer.Contains(job)))
                         {
                             //TargetObject(PartyTargets[i]);
-                            SelectedRandomMember = PartyTargets[i];
+                            SelectedRandomMember = PartyTargets [i];
                             return true;
                         }
                     }
@@ -251,31 +253,31 @@ internal static partial class AST
 
     internal class ASTOpenerMaxLevel1 : WrathOpener
     {
-        public override List<uint> OpenerActions { get; protected set; } =
+        public override List<uint> OpenerActions { get; set; } =
         [
             EarthlyStar,
-            FallMalefic,
-            Combust3,
-            Lightspeed,
-            FallMalefic,
-            FallMalefic,
-            Divination,
-            Balance,
-            FallMalefic,
-            LordOfCrowns,
-            UmbralDraw,
-            FallMalefic,
-            Spear,
-            Oracle,
-            FallMalefic,
-            FallMalefic,
-            FallMalefic,
-            FallMalefic,
-            FallMalefic,
-            Combust3,
-            FallMalefic
+                FallMalefic,
+                Combust3,
+                Lightspeed,
+                FallMalefic,
+                FallMalefic,
+                Divination,
+                Balance,
+                FallMalefic,
+                LordOfCrowns,
+                UmbralDraw,
+                FallMalefic,
+                Spear,
+                Oracle,
+                FallMalefic,
+                FallMalefic,
+                FallMalefic,
+                FallMalefic,
+                FallMalefic,
+                Combust3,
+                FallMalefic
 
-        ];
+    ];
         public override int MinOpenerLevel => 92;
         public override int MaxOpenerLevel => 109;
 

@@ -1,5 +1,4 @@
 ﻿using Dalamud.Game.ClientState.JobGauge.Types;
-using WrathCombo.Combos.PvE.ALL;
 using WrathCombo.Combos.PvE.Content;
 using WrathCombo.CustomComboNS;
 using WrathCombo.Services;
@@ -16,15 +15,15 @@ internal partial class DNC
         {
             if (GetJobGauge<DNCGauge>().IsDancing)
             {
-                uint[]? actionIDs = Service.Configuration.DancerDanceCompatActionIDs;
+                uint []? actionIDs = Service.Configuration.DancerDanceCompatActionIDs;
 
-                if (actionID == actionIDs[0] || (actionIDs[0] == 0 && actionID == Cascade))     // Cascade replacement
+                if (actionID == actionIDs [0] || (actionIDs [0] == 0 && actionID == Cascade))     // Cascade replacement
                     return OriginalHook(Cascade);
-                if (actionID == actionIDs[1] || (actionIDs[1] == 0 && actionID == Flourish))    // Fountain replacement
+                if (actionID == actionIDs [1] || (actionIDs [1] == 0 && actionID == Flourish))    // Fountain replacement
                     return OriginalHook(Fountain);
-                if (actionID == actionIDs[2] || (actionIDs[2] == 0 && actionID == FanDance1))   // Reverse Cascade replacement
+                if (actionID == actionIDs [2] || (actionIDs [2] == 0 && actionID == FanDance1))   // Reverse Cascade replacement
                     return OriginalHook(ReverseCascade);
-                if (actionID == actionIDs[3] || (actionIDs[3] == 0 && actionID == FanDance2))   // Fountainfall replacement
+                if (actionID == actionIDs [3] || (actionIDs [3] == 0 && actionID == FanDance2))   // Fountainfall replacement
                     return OriginalHook(Fountainfall);
             }
 
@@ -95,7 +94,7 @@ internal partial class DNC
         protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
         {
             // Fan Dance 3 & 4 on Flourish
-            if (actionID is Flourish && CanWeave(actionID))
+            if (actionID is Flourish && CanWeave())
             {
                 if (HasEffect(Buffs.ThreeFoldFanDance))
                     return FanDance3;
@@ -213,7 +212,7 @@ internal partial class DNC
                     ActionReady(ClosedPosition) &&
                     !HasEffect(Buffs.ClosedPosition) &&
                     (GetPartyMembers().Count > 1 || HasCompanionPresent()) &&
-                    !(Service.Configuration.AutoActions[CustomComboPreset.DNC_ST_AdvancedMode] &&
+                    !(Service.Configuration.AutoActions [CustomComboPreset.DNC_ST_AdvancedMode] &&
                       Service.Configuration.RotationConfig.Enabled)) // Disabled in Auto-Rotation
                     // todo: do not disable for auto-rotation, provide targeting
                     return ClosedPosition;
@@ -263,7 +262,7 @@ internal partial class DNC
             #region Weaves
             // ST Devilment
             if (IsEnabled(CustomComboPreset.DNC_ST_Adv_Devilment) &&
-                CanWeave(actionID) &&
+                CanWeave() &&
                 LevelChecked(Devilment) &&
                 GetCooldownRemainingTime(Devilment) < 0.05 &&
                 (HasEffect(Buffs.TechnicalFinish) ||
@@ -273,7 +272,7 @@ internal partial class DNC
 
             // ST Flourish
             if (IsEnabled(CustomComboPreset.DNC_ST_Adv_Flourish) &&
-                CanWeave(actionID) &&
+                CanWeave() &&
                 ActionReady(Flourish) &&
                 !WasLastWeaponskill(TechnicalFinish4) &&
                 IsOnCooldown(Devilment) &&
@@ -320,10 +319,10 @@ internal partial class DNC
             if (IsEnabled(CustomComboPreset.DNC_Variant_Rampart) &&
                 IsEnabled(Variant.VariantRampart) &&
                 IsOffCooldown(Variant.VariantRampart) &&
-                CanWeave(actionID))
+                CanWeave())
                 return Variant.VariantRampart;
 
-            if (CanWeave(actionID) && !WasLastWeaponskill(TechnicalFinish4))
+            if (CanWeave() && !WasLastWeaponskill(TechnicalFinish4))
             {
                 if (HasEffect(Buffs.ThreeFoldFanDance))
                     return FanDance3;
@@ -442,12 +441,12 @@ internal partial class DNC
                 return Tillana;
 
             // ST Saber Dance
-            if (IsEnabled(CustomComboPreset.DNC_ST_Adv_SaberDance) &&
+            if ((IsEnabled(CustomComboPreset.DNC_ST_Adv_SaberDance) &&
                 LevelChecked(SaberDance) &&
-                gauge.Esprit >= Config.DNC_ST_Adv_SaberThreshold || // Above esprit threshold use
-                (HasEffect(Buffs.TechnicalFinish) && gauge.Esprit >= 50) && // Burst
+                gauge.Esprit >= Config.DNC_ST_Adv_SaberThreshold) || // Above esprit threshold use
+                (HasEffect(Buffs.TechnicalFinish) && gauge.Esprit >= 50 && // Burst
                 (GetCooldownRemainingTime(TechnicalStep) > 5 ||
-                 IsOffCooldown(TechnicalStep))) // Tech is up
+                 IsOffCooldown(TechnicalStep)))) // Tech is up
                 return SaberDance;
 
             // ST combos and burst attacks
@@ -493,7 +492,7 @@ internal partial class DNC
                     gauge.Esprit >= Config.DNCEspritThreshold_ST)
                     return SaberDance;
 
-                if (CanWeave(actionID))
+                if (CanWeave())
                 {
                     // ST Fan Dance overcap protection
                     if (IsEnabled(CustomComboPreset.DNC_ST_FanDanceOvercap) &&
@@ -577,7 +576,7 @@ internal partial class DNC
                 ActionReady(ClosedPosition) &&
                 !HasEffect(Buffs.ClosedPosition) &&
                 (GetPartyMembers().Count > 1 || HasCompanionPresent()) &&
-                !(Service.Configuration.AutoActions[CustomComboPreset.DNC_AoE_AdvancedMode] &&
+                !(Service.Configuration.AutoActions [CustomComboPreset.DNC_AoE_AdvancedMode] &&
                   Service.Configuration.RotationConfig.Enabled)) // Disabled in Auto-Rotation
                 // todo: do not disable for auto-rotation, provide targeting
                 return ClosedPosition;
@@ -605,7 +604,7 @@ internal partial class DNC
             #region Weaves
             // AoE Devilment
             if (IsEnabled(CustomComboPreset.DNC_AoE_Adv_Devilment) &&
-                CanWeave(actionID) &&
+                CanWeave() &&
                 LevelChecked(Devilment) &&
                 GetCooldownRemainingTime(Devilment) < 0.05 &&
                 (HasEffect(Buffs.TechnicalFinish) ||
@@ -615,7 +614,7 @@ internal partial class DNC
 
             // AoE Flourish
             if (IsEnabled(CustomComboPreset.DNC_AoE_Adv_Flourish) &&
-                CanWeave(actionID) &&
+                CanWeave() &&
                 ActionReady(Flourish) &&
                 !WasLastWeaponskill(TechnicalFinish4) &&
                 IsOnCooldown(Devilment) &&
@@ -643,10 +642,10 @@ internal partial class DNC
             if (IsEnabled(CustomComboPreset.DNC_Variant_Rampart) &&
                 IsEnabled(Variant.VariantRampart) &&
                 IsOffCooldown(Variant.VariantRampart) &&
-                CanWeave(actionID))
+                CanWeave())
                 return Variant.VariantRampart;
 
-            if (CanWeave(actionID) && !WasLastWeaponskill(TechnicalFinish4))
+            if (CanWeave() && !WasLastWeaponskill(TechnicalFinish4))
             {
                 // AoE Feathers & Fans
                 if (IsEnabled(CustomComboPreset.DNC_AoE_Adv_Feathers) &&
@@ -764,12 +763,12 @@ internal partial class DNC
                 return Tillana;
 
             // AoE Saber Dance
-            if (IsEnabled(CustomComboPreset.DNC_AoE_Adv_SaberDance) &&
+            if ((IsEnabled(CustomComboPreset.DNC_AoE_Adv_SaberDance) &&
                 LevelChecked(SaberDance) &&
-                gauge.Esprit >= Config.DNC_ST_Adv_SaberThreshold || // Above esprit threshold use
-                (HasEffect(Buffs.TechnicalFinish) && gauge.Esprit >= 50) && // Burst
+                gauge.Esprit >= Config.DNC_ST_Adv_SaberThreshold) || // Above esprit threshold use
+                (HasEffect(Buffs.TechnicalFinish) && gauge.Esprit >= 50 && // Burst
                 (GetCooldownRemainingTime(TechnicalStep) > 5 ||
-                 IsOffCooldown(TechnicalStep))) // Tech is up
+                 IsOffCooldown(TechnicalStep)))) // Tech is up
                 return SaberDance;
 
             // AoE combos and burst attacks
@@ -815,7 +814,7 @@ internal partial class DNC
                     gauge.Esprit >= Config.DNCEspritThreshold_AoE)
                     return SaberDance;
 
-                if (CanWeave(actionID))
+                if (CanWeave())
                 {
                     // AoE Fan Dance overcap protection
                     if (IsEnabled(CustomComboPreset.DNC_AoE_FanDanceOvercap) &&

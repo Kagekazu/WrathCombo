@@ -284,7 +284,7 @@ internal partial class BRD
             if (actionID is Ladonsbite or QuickNock)
             {
                 BRDGauge? gauge = GetJobGauge<BRDGauge>();
-                bool canWeave = CanWeave(actionID) && !ActionWatching.HasDoubleWeaved();
+                bool canWeave = CanWeave() && !ActionWatching.HasDoubleWeaved();
                 bool canWeaveDelayed = CanDelayedWeave(0.9) && !ActionWatching.HasDoubleWeaved();
                 int songTimerInSeconds = gauge.SongTimer / 1000;
                 bool songNone = gauge.Song == Song.NONE;
@@ -536,7 +536,7 @@ internal partial class BRD
             if (actionID is HeavyShot or BurstShot)
             {
                 BRDGauge? gauge = GetJobGauge<BRDGauge>();
-                bool canWeave = CanWeave(actionID) && !ActionWatching.HasDoubleWeaved();
+                bool canWeave = CanWeave() && !ActionWatching.HasDoubleWeaved();
                 bool canWeaveDelayed = CanDelayedWeave(0.9) && !ActionWatching.HasDoubleWeaved();
                 bool songNone = gauge.Song == Song.NONE;
                 bool songWanderer = gauge.Song == Song.WANDERER;
@@ -562,7 +562,19 @@ internal partial class BRD
 
                 if (IsEnabled(CustomComboPreset.BRD_ST_Adv_Balance_Standard) &&
                     Opener().FullOpener(ref actionID))
+                {
+                    if (ActionWatching.GetAttackType(Opener().CurrentOpenerAction) != ActionWatching.ActionAttackType.Ability && canWeave)
+                    {
+                        if (gauge.Repertoire == 3 || (gauge.Repertoire == 2 && GetCooldownRemainingTime(EmpyrealArrow) < 2))
+                            return OriginalHook(PitchPerfect);
+
+                        if (ActionReady(HeartbreakShot))
+                            return HeartbreakShot;
+                    }
+
                     return actionID;
+
+                }
 
                 #region Songs
 
@@ -833,7 +845,7 @@ internal partial class BRD
             if (actionID is Ladonsbite or QuickNock)
             {
                 BRDGauge? gauge = GetJobGauge<BRDGauge>();
-                bool canWeave = CanWeave(actionID) && !ActionWatching.HasDoubleWeaved();
+                bool canWeave = CanWeave() && !ActionWatching.HasDoubleWeaved();
                 bool canWeaveDelayed = CanDelayedWeave(0.9) && !ActionWatching.HasDoubleWeaved();
                 int songTimerInSeconds = gauge.SongTimer / 1000;
                 bool songNone = gauge.Song == Song.NONE;
@@ -1054,7 +1066,7 @@ internal partial class BRD
             if (actionID is HeavyShot or BurstShot)
             {
                 BRDGauge? gauge = GetJobGauge<BRDGauge>();
-                bool canWeave = CanWeave(actionID) && !ActionWatching.HasDoubleWeaved();
+                bool canWeave = CanWeave() && !ActionWatching.HasDoubleWeaved();
                 bool canWeaveDelayed = CanDelayedWeave(0.9) && !ActionWatching.HasDoubleWeaved();
                 bool songNone = gauge.Song == Song.NONE;
                 bool songWanderer = gauge.Song == Song.WANDERER;

@@ -1,6 +1,5 @@
 ﻿using WrathCombo.Combos.PvE.Content;
 using WrathCombo.CustomComboNS;
-using WrathCombo.Data;
 
 namespace WrathCombo.Combos.PvE;
 
@@ -29,7 +28,7 @@ internal static partial class MNK
             if (Opener().FullOpener(ref actionID))
             {
                 if (IsOnCooldown(RiddleOfWind) &&
-                    CanWeave(ActionWatching.LastWeaponskill) &&
+                    CanWeave() &&
                     Gauge.Chakra >= 5)
                     return TheForbiddenChakra;
 
@@ -47,7 +46,7 @@ internal static partial class MNK
                 return RiddleOfFire;
 
             // OGCDs
-            if (CanWeave(ActionWatching.LastWeaponskill))
+            if (CanWeave())
             {
                 //Variant Rampart
                 if (IsEnabled(CustomComboPreset.MNK_Variant_Rampart) &&
@@ -180,8 +179,8 @@ internal static partial class MNK
                 if (Opener().FullOpener(ref actionID))
                 {
                     if (IsOnCooldown(RiddleOfWind) &&
-                    CanWeave(ActionWatching.LastWeaponskill) &&
-                    Gauge.Chakra >= 5)
+                        CanWeave() &&
+                        Gauge.Chakra >= 5)
                         return TheForbiddenChakra;
 
                     return actionID;
@@ -201,7 +200,7 @@ internal static partial class MNK
                 return RiddleOfFire;
 
             // OGCDs
-            if (CanWeave(ActionWatching.LastWeaponskill))
+            if (CanWeave())
             {
                 //Variant Rampart
                 if (IsEnabled(CustomComboPreset.MNK_Variant_Rampart) &&
@@ -346,6 +345,11 @@ internal static partial class MNK
                 !HasEffect(Buffs.PerfectBalance))
                 return FormShift;
 
+            if (!InCombat() && LevelChecked(FormShift) &&
+                !HasEffect(Buffs.FormlessFist) &&
+                !HasEffect(Buffs.PerfectBalance))
+                return FormShift;
+
             //Variant Cure
             if (IsEnabled(CustomComboPreset.MNK_Variant_Cure) &&
                 IsEnabled(Variant.VariantCure) &&
@@ -357,7 +361,7 @@ internal static partial class MNK
                 return RiddleOfFire;
 
             // Buffs
-            if (CanWeave(ActionWatching.LastWeaponskill))
+            if (CanWeave())
             {
                 //Variant Rampart
                 if (IsEnabled(CustomComboPreset.MNK_Variant_Rampart) &&
@@ -477,11 +481,6 @@ internal static partial class MNK
                 LevelChecked(InspiritedMeditation))
                 return OriginalHook(InspiritedMeditation);
 
-            if (IsEnabled(CustomComboPreset.MNK_AoEUseFormShift) &&
-                !InCombat() && LevelChecked(FormShift) &&
-                !HasEffect(Buffs.FormlessFist) && !HasEffect(Buffs.PerfectBalance))
-                return FormShift;
-
             //Variant Cure
             if (IsEnabled(CustomComboPreset.MNK_Variant_Cure) &&
                 IsEnabled(Variant.VariantCure) &&
@@ -496,7 +495,7 @@ internal static partial class MNK
                 return RiddleOfFire;
 
             // Buffs
-            if (CanWeave(ActionWatching.LastWeaponskill))
+            if (CanWeave())
             {
                 //Variant Rampart
                 if (IsEnabled(CustomComboPreset.MNK_Variant_Rampart) &&

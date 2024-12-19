@@ -1,6 +1,5 @@
 ﻿using ImGuiNET;
 using WrathCombo.CustomComboNS.Functions;
-using WrathCombo.Window.Functions;
 using static WrathCombo.CustomComboNS.Functions.CustomComboFunctions;
 using static WrathCombo.Extensions.UIntExtensions;
 using static WrathCombo.Window.Functions.SliderIncrements;
@@ -198,13 +197,13 @@ internal static partial class AST
 
                 //PVP
                 case CustomComboPreset.ASTPvP_Burst_PlayCard:
-                    UserConfig.DrawHorizontalRadioButton(ASTPvP_Burst_PlayCardOption, "Lord and Lady card play",
+                    DrawHorizontalRadioButton(ASTPvP_Burst_PlayCardOption, "Lord and Lady card play",
                         "Uses Lord and Lady of Crowns when available.", 1);
 
-                    UserConfig.DrawHorizontalRadioButton(ASTPvP_Burst_PlayCardOption, "Lord of Crowns card play",
+                    DrawHorizontalRadioButton(ASTPvP_Burst_PlayCardOption, "Lord of Crowns card play",
                         "Only uses Lord of Crowns when available.", 2);
 
-                    UserConfig.DrawHorizontalRadioButton(ASTPvP_Burst_PlayCardOption, "Lady of Crowns card play",
+                    DrawHorizontalRadioButton(ASTPvP_Burst_PlayCardOption, "Lady of Crowns card play",
                         "Only uses Lady of Crowns when available.", 3);
 
                     break;

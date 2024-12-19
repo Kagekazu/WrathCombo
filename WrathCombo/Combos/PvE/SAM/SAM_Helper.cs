@@ -1,8 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Dalamud.Game.ClientState.JobGauge.Types;
+﻿using Dalamud.Game.ClientState.JobGauge.Types;
 using FFXIVClientStructs.FFXIV.Client.Game;
-using WrathCombo.Combos.PvE.ALL;
+using System.Collections.Generic;
+using System.Linq;
 using WrathCombo.CustomComboNS;
 using WrathCombo.Data;
 using static WrathCombo.CustomComboNS.Functions.CustomComboFunctions;
@@ -22,6 +21,10 @@ internal static partial class SAM
 
     internal static float GCD => GetCooldown(Hakaze).CooldownTotal;
 
+    internal static int SenCount => GetSenCount();
+
+    internal static bool ComboStarted => GetComboStarted();
+
     internal static WrathOpener Opener()
     {
         if (Opener1.LevelChecked)
@@ -29,10 +32,6 @@ internal static partial class SAM
 
         return WrathOpener.Dummy;
     }
-
-    internal static int SenCount => GetSenCount();
-
-    internal static bool ComboStarted => GetComboStarted();
 
     private static int GetSenCount()
     {
@@ -105,7 +104,7 @@ internal static partial class SAM
 
         public override int MaxOpenerLevel => 109;
 
-        public override List<uint> OpenerActions { get; protected set; } =
+        public override List<uint> OpenerActions { get; set; } =
         [
             MeikyoShisui,
             All.TrueNorth,

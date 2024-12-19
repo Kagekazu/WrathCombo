@@ -1,8 +1,7 @@
-﻿using Dalamud.Game.ClientState.Conditions;
-using Dalamud.Game.ClientState.JobGauge.Types;
+﻿using Dalamud.Game.ClientState.JobGauge.Types;
 using Dalamud.Game.ClientState.Statuses;
-using ECommons.DalamudServices;
-using WrathCombo.Combos.JobHelpers.Enums;
+using System.Collections.Generic;
+using WrathCombo.CustomComboNS;
 using WrathCombo.Data;
 using WrathCombo.Extensions;
 using static WrathCombo.CustomComboNS.Functions.CustomComboFunctions;
@@ -12,14 +11,12 @@ namespace WrathCombo.Combos.PvE;
 internal partial class NIN
 {
     internal static NINGauge Gauge = GetJobGauge<NINGauge>();
-
     internal static bool InMudra = false;
+    internal static NINOpenerMaxLevel4thGCDKunai Opener1 = new();
+    internal static NINOpenerMaxLevel3rdGCDDokumori Opener2 = new();
+    internal static NINOpenerMaxLevel3rdGCDKunai Opener3 = new();
 
     internal static bool OriginalJutsu => IsOriginal(Ninjutsu);
-
-    internal static bool TrickDebuff => TargetHasTrickDebuff();
-
-    internal static bool MugDebuff => TargetHasMugDebuff();
 
     private static bool TargetHasTrickDebuff() => TargetHasEffect(Debuffs.TrickAttack) ||
                TargetHasEffect(Debuffs.KunaisBane);
@@ -30,6 +27,27 @@ internal partial class NIN
     public static Status? MudraBuff => FindEffect(Buffs.Mudra);
 
     public static uint CurrentNinjutsu => OriginalHook(Ninjutsu);
+
+    internal static bool TrickDebuff => TargetHasTrickDebuff();
+
+    internal static bool MugDebuff => TargetHasMugDebuff();
+
+    internal static WrathOpener Opener()
+    {
+        if (IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode))
+        {
+            if (Config.NIN_Adv_Opener_Selection == 0 && Opener1.LevelChecked)
+                return Opener1;
+            if (Config.NIN_Adv_Opener_Selection == 1 && Opener2.LevelChecked)
+                return Opener2;
+            if (Config.NIN_Adv_Opener_Selection == 2 && Opener3.LevelChecked)
+                return Opener3;
+        }
+
+        if (Opener1.LevelChecked)
+            return Opener1;
+        return WrathOpener.Dummy;
+    }
 
     internal class MudraCasting
     {
@@ -474,52 +492,55 @@ internal partial class NIN
         }
     }
 
-    internal class NINOpenerLogic
+    internal class NINOpenerMaxLevel4thGCDKunai : WrathOpener
     {
-        private bool OpenerEventsSetup;
-        public uint PrePullStep = 1;
+        //4th GCD Kunai
+        public override List<uint> OpenerActions { get; set; } =
+        [
+            Ten,
+            ChiCombo,
+            JinCombo,
+            Suiton,
+            Kassatsu,
+            SpinningEdge,
+            GustSlash,
+            Dokumori,
+            Bunshin,
+            PhantomKamaitachi,
+            ArmorCrush,
+            KunaisBane,
+            ChiCombo,
+            JinCombo,
+            HyoshoRanryu,
+            DreamWithinADream,
+            Ten,
+            ChiCombo,
+            Raiton,
+            TenChiJin,
+            TCJFumaShurikenTen,
+            TCJRaiton,
+            TCJSuiton,
+            Meisui,
+            FleetingRaiju,
+            ZeshoMeppo,
+            TenriJendo,
+            FleetingRaiju,
+            Bhavacakra,
+            Ten,
+            ChiCombo,
+            Raiton,
+            FleetingRaiju,
+        ];
 
-        private static uint OpenerLevel => 100;
+        public override List<int> DelayedWeaveSteps { get; set; } =
+        [
+            12
+        ];
 
-        public static bool LevelChecked => LocalPlayer?.Level >= OpenerLevel;
+        public override int MinOpenerLevel => 100;
+        public override int MaxOpenerLevel => 109;
 
-        private static bool CanOpener => HasCooldowns() && LevelChecked;
-
-        public OpenerState CurrentState
-        {
-            get;
-            set
-            {
-                if (value != field)
-                {
-                    if (value == OpenerState.OpenerReady)
-                        PrePullStep = 1;
-                    if (value == OpenerState.InOpener)
-                        OpenerStep = 1;
-
-                    if (value == OpenerState.OpenerFinished || value == OpenerState.FailedOpener)
-                    {
-                        PrePullStep = 0;
-                        OpenerStep = 0;
-                    }
-
-                    field = value;
-                }
-            }
-        } = OpenerState.OpenerFinished;
-
-        public uint OpenerStep
-        {
-            get;
-            set
-            {
-                if (value != field)
-                    Svc.Log.Debug($"{value}");
-                field = value;
-            }
-        } = 1;
-
-        private static bool HasCooldowns()
+        public override bool HasCooldowns()
         {
             if (GetRemainingCharges(Ten) < 1)
                 return false;
@@ -540,205 +561,149 @@ internal partial class NIN
 
             return true;
         }
+    }
 
-        private bool DoPrePullSteps(ref uint actionID, MudraCasting mudraState)
+    internal class NINOpenerMaxLevel3rdGCDDokumori : WrathOpener
+    {
+        //3rd GCD Dokumori
+        public override List<uint> OpenerActions { get; set; } =
+        [
+            Ten,
+            ChiCombo,
+            JinCombo,
+            Suiton,
+            Kassatsu,
+            SpinningEdge,
+            GustSlash,
+            ArmorCrush,
+            Dokumori,
+            Bunshin,
+            PhantomKamaitachi,
+            KunaisBane,
+            ChiCombo,
+            JinCombo,
+            HyoshoRanryu,
+            DreamWithinADream,
+            Ten,
+            ChiCombo,
+            Raiton,
+            TenChiJin,
+            TCJFumaShurikenTen,
+            TCJRaiton,
+            TCJSuiton,
+            Meisui,
+            FleetingRaiju,
+            ZeshoMeppo,
+            TenriJendo,
+            FleetingRaiju,
+            Ten,
+            ChiCombo,
+            Raiton,
+            FleetingRaiju,
+            Bhavacakra,
+            SpinningEdge
+        ];
+
+        public override List<int> DelayedWeaveSteps { get; set; } =
+        [
+            12
+        ];
+
+        public override int MinOpenerLevel => 100;
+        public override int MaxOpenerLevel => 109;
+
+        public override bool HasCooldowns()
         {
-            if (!LevelChecked)
+            if (GetRemainingCharges(Ten) < 1)
+                return false;
+            if (IsOnCooldown(Mug))
+                return false;
+            if (IsOnCooldown(TenChiJin))
+                return false;
+            if (IsOnCooldown(PhantomKamaitachi))
+                return false;
+            if (IsOnCooldown(Bunshin))
+                return false;
+            if (IsOnCooldown(DreamWithinADream))
+                return false;
+            if (IsOnCooldown(Kassatsu))
+                return false;
+            if (IsOnCooldown(TrickAttack))
                 return false;
 
-            if (CanOpener && PrePullStep == 0 && !InCombat())
-                CurrentState = OpenerState.OpenerReady;
-
-            if (CurrentState == OpenerState.OpenerReady)
-            {
-                if (WasLastAction(Suiton) && PrePullStep == 1)
-                    CurrentState = OpenerState.InOpener;
-                else if (PrePullStep == 1)
-                    _ = mudraState.CastSuiton(ref actionID);
-
-                ////Failure states
-                //if (PrePullStep is (1 or 2) && .InCombat()) { mudraState.CurrentMudra = MudraCasting.MudraState.None; ResetOpener(); }
-
-                return true;
-            }
-
-            PrePullStep = 0;
-
-            return false;
+            return true;
         }
+    }
 
-        private bool DoOpener(ref uint actionID, MudraCasting mudraState)
+    internal class NINOpenerMaxLevel3rdGCDKunai : WrathOpener
+    {
+        //3rd GCD Kunai
+        public override List<uint> OpenerActions { get; set; } =
+        [
+            Ten,
+            ChiCombo,
+            JinCombo,
+            Suiton,
+            Kassatsu,
+            SpinningEdge,
+            GustSlash,
+            Dokumori,
+            Bunshin,
+            PhantomKamaitachi,
+            KunaisBane,
+            ChiCombo,
+            JinCombo,
+            HyoshoRanryu,
+            DreamWithinADream,
+            Ten,
+            ChiCombo,
+            Raiton,
+            TenChiJin,
+            TCJFumaShurikenTen,
+            TCJRaiton,
+            TCJSuiton,
+            Meisui,
+            FleetingRaiju,
+            ZeshoMeppo,
+            TenriJendo,
+            FleetingRaiju,
+            ArmorCrush,
+            Bhavacakra,
+            Ten,
+            ChiCombo,
+            Raiton,
+            FleetingRaiju,
+        ];
+
+        public override List<int> DelayedWeaveSteps { get; set; } =
+        [
+            11
+        ];
+
+        public override int MinOpenerLevel => 100;
+        public override int MaxOpenerLevel => 109;
+
+        public override bool HasCooldowns()
         {
-            if (!LevelChecked)
+            if (GetRemainingCharges(Ten) < 1)
+                return false;
+            if (IsOnCooldown(Mug))
+                return false;
+            if (IsOnCooldown(TenChiJin))
+                return false;
+            if (IsOnCooldown(PhantomKamaitachi))
+                return false;
+            if (IsOnCooldown(Bunshin))
+                return false;
+            if (IsOnCooldown(DreamWithinADream))
+                return false;
+            if (IsOnCooldown(Kassatsu))
+                return false;
+            if (IsOnCooldown(TrickAttack))
                 return false;
 
-            if (CurrentState == OpenerState.InOpener)
-            {
-                bool inLateWeaveWindow = CanDelayedWeave(1, 0);
-
-                if (WasLastAction(Kassatsu) && OpenerStep == 1)
-                    OpenerStep++;
-                else if (OpenerStep == 1)
-                    actionID = OriginalHook(Kassatsu);
-
-                if (WasLastAction(SpinningEdge) && OpenerStep == 2)
-                    OpenerStep++;
-                else if (OpenerStep == 2)
-                    actionID = OriginalHook(SpinningEdge);
-
-                if (WasLastAction(GustSlash) && OpenerStep == 3)
-                    OpenerStep++;
-                else if (OpenerStep == 3)
-                    actionID = OriginalHook(GustSlash);
-
-                if (WasLastAction(OriginalHook(Mug)) && OpenerStep == 4)
-                    OpenerStep++;
-                else if (OpenerStep == 4)
-                    actionID = OriginalHook(Mug);
-
-                if (WasLastAction(Bunshin) && OpenerStep == 5)
-                    OpenerStep++;
-                else if (OpenerStep == 5)
-                    actionID = OriginalHook(Bunshin);
-
-                if (WasLastAction(PhantomKamaitachi) && OpenerStep == 6)
-                    OpenerStep++;
-                else if (OpenerStep == 6)
-                    actionID = OriginalHook(PhantomKamaitachi);
-
-                if (WasLastAction(ArmorCrush) && OpenerStep == 7)
-                    OpenerStep++;
-                else if (OpenerStep == 7)
-                    actionID = OriginalHook(ArmorCrush);
-
-                if (WasLastAction(OriginalHook(TrickAttack)) &&
-                    OpenerStep == 8)
-                    OpenerStep++;
-                else if (OpenerStep == 8 && inLateWeaveWindow)
-                    actionID = OriginalHook(TrickAttack);
-
-                if (WasLastAction(HyoshoRanryu) && OpenerStep == 9)
-                    OpenerStep++;
-                else if (OpenerStep == 9)
-                    _ = mudraState.CastHyoshoRanryu(ref actionID);
-
-                if (WasLastAction(DreamWithinADream) && OpenerStep == 10)
-                    OpenerStep++;
-                else if (OpenerStep == 10)
-                    actionID = OriginalHook(DreamWithinADream);
-
-                if (WasLastAction(Raiton) && OpenerStep == 11)
-                    OpenerStep++;
-                else if (OpenerStep == 11)
-                    _ = mudraState.CastRaiton(ref actionID);
-
-                if (WasLastAction(TenChiJin) && OpenerStep == 12)
-                    OpenerStep++;
-                else if (OpenerStep == 12)
-                    actionID = OriginalHook(TenChiJin);
-
-                if (WasLastAction(TCJFumaShurikenTen) && OpenerStep == 13)
-                    OpenerStep++;
-                else if (OpenerStep == 13)
-                    actionID = OriginalHook(Ten);
-
-                if (WasLastAction(TCJRaiton) && OpenerStep == 14)
-                    OpenerStep++;
-                else if (OpenerStep == 14)
-                    actionID = OriginalHook(Chi);
-
-                if (WasLastAction(TCJSuiton) && OpenerStep == 15)
-                    OpenerStep++;
-                else if (OpenerStep == 15)
-                    actionID = OriginalHook(Jin);
-
-                if (WasLastAction(Meisui) && OpenerStep == 16)
-                    OpenerStep++;
-                else if (OpenerStep == 16)
-                    actionID = OriginalHook(Meisui);
-
-                if (WasLastAction(FleetingRaiju) && OpenerStep == 17)
-                    OpenerStep++;
-                else if (OpenerStep == 17)
-                    actionID = OriginalHook(FleetingRaiju);
-
-                if (WasLastAction(ZeshoMeppo) && OpenerStep == 18)
-                    OpenerStep++;
-                else if (OpenerStep == 18)
-                    actionID = OriginalHook(Bhavacakra);
-
-                if (WasLastAction(TenriJendo) && OpenerStep == 19)
-                    OpenerStep++;
-                else if (OpenerStep == 19)
-                    actionID = OriginalHook(TenriJendo);
-
-                if (WasLastAction(FleetingRaiju) && OpenerStep == 20)
-                    OpenerStep++;
-                else if (OpenerStep == 20)
-                    actionID = OriginalHook(FleetingRaiju);
-
-                if (WasLastAction(OriginalHook(Bhavacakra)) &&
-                    OpenerStep == 21)
-                    OpenerStep++;
-                else if (OpenerStep == 21)
-                    actionID = OriginalHook(Bhavacakra);
-
-                if (WasLastAction(Raiton) && OpenerStep == 22)
-                    OpenerStep++;
-                else if (OpenerStep == 22)
-                    _ = mudraState.CastRaiton(ref actionID);
-
-                if (WasLastAction(FleetingRaiju) && OpenerStep == 23)
-                    CurrentState = OpenerState.OpenerFinished;
-                else if (OpenerStep == 23)
-                    actionID = OriginalHook(FleetingRaiju);
-
-                //Failure states
-                if ((OpenerStep is 8 && !HasEffect(Buffs.ShadowWalker)) ||
-                    (OpenerStep is 18 or 21 && GetJobGauge<NINGauge>().Ninki < 40) ||
-                    (OpenerStep is 17 or 20 && !HasEffect(Buffs.RaijuReady)) ||
-                    (OpenerStep is 9 && !HasEffect(Buffs.Kassatsu)))
-                    ResetOpener();
-
-                return true;
-            }
-
-            return false;
-        }
-
-        private void ResetOpener() => CurrentState = OpenerState.FailedOpener;
-
-        public bool DoFullOpener(ref uint actionID, MudraCasting mudraState)
-        {
-            if (!LevelChecked)
-                return false;
-
-            if (!OpenerEventsSetup)
-            {
-                Svc.Condition.ConditionChange += CheckCombatStatus;
-                OpenerEventsSetup = true;
-            }
-
-            if (CurrentState == OpenerState.OpenerReady || CurrentState == OpenerState.FailedOpener)
-                if (DoPrePullSteps(ref actionID, mudraState))
-                    return true;
-
-            if (CurrentState == OpenerState.InOpener)
-                if (DoOpener(ref actionID, mudraState))
-                    return true;
-
-            if (CurrentState == OpenerState.OpenerFinished && !InCombat())
-                ResetOpener();
-
-            return false;
-        }
-
-        internal void Dispose() => Svc.Condition.ConditionChange -= CheckCombatStatus;
-
-        private void CheckCombatStatus(ConditionFlag flag, bool value)
-        {
-            if (flag == ConditionFlag.InCombat && value == false)
-                ResetOpener();
+            return true;
         }
     }
 }
+

@@ -1,5 +1,4 @@
-﻿using WrathCombo.Combos.PvE.ALL;
-using WrathCombo.Combos.PvE.Content;
+﻿using WrathCombo.Combos.PvE.Content;
 using WrathCombo.CustomComboNS;
 using WrathCombo.Data;
 using WrathCombo.Extensions;
@@ -26,7 +25,7 @@ internal static partial class MCH
             if (IsEnabled(CustomComboPreset.MCH_Variant_Rampart) &&
                 IsEnabled(Variant.VariantRampart) &&
                 IsOffCooldown(Variant.VariantRampart) &&
-                CanWeave(actionID))
+                CanWeave())
                 return Variant.VariantRampart;
 
             // Opener
@@ -44,7 +43,7 @@ internal static partial class MCH
                 return All.HeadGraze;
 
             // All weaves
-            if (CanWeave(ActionWatching.LastWeaponskill))
+            if (CanWeave())
             {
                 if (!ActionWatching.HasDoubleWeaved())
                 {
@@ -171,7 +170,7 @@ internal static partial class MCH
             if (IsEnabled(CustomComboPreset.MCH_Variant_Rampart) &&
                 IsEnabled(Variant.VariantRampart) &&
                 IsOffCooldown(Variant.VariantRampart) &&
-                CanWeave(actionID))
+                CanWeave())
                 return Variant.VariantRampart;
 
             // Opener
@@ -191,7 +190,7 @@ internal static partial class MCH
                 return All.HeadGraze;
 
             // All weaves
-            if (CanWeave(ActionWatching.LastWeaponskill))
+            if (CanWeave())
             {
                 if (!ActionWatching.HasDoubleWeaved())
                 {
@@ -309,7 +308,7 @@ internal static partial class MCH
                 if (lastComboMove is SplitShot && LevelChecked(OriginalHook(SlugShot)))
                     return OriginalHook(SlugShot);
 
-                if (IsEnabled(CustomComboPreset.MCH_ST_Adv_Reassemble) && Config.MCH_ST_Reassembled[4] &&
+                if (IsEnabled(CustomComboPreset.MCH_ST_Adv_Reassemble) && Config.MCH_ST_Reassembled [4] &&
                     lastComboMove == OriginalHook(SlugShot) &&
                     !LevelChecked(Drill) && !HasEffect(Buffs.Reassembled) && ActionReady(Reassemble))
                     return Reassemble;
@@ -341,7 +340,7 @@ internal static partial class MCH
                 if (IsEnabled(CustomComboPreset.MCH_Variant_Rampart) &&
                     IsEnabled(Variant.VariantRampart) &&
                     IsOffCooldown(Variant.VariantRampart) &&
-                    CanWeave(actionID))
+                    CanWeave())
                     return Variant.VariantRampart;
 
                 // Interrupt
@@ -349,7 +348,7 @@ internal static partial class MCH
                     return All.HeadGraze;
 
                 // All weaves
-                if (CanWeave(ActionWatching.LastWeaponskill))
+                if (CanWeave())
                 {
                     if (!ActionWatching.HasDoubleWeaved() && !Gauge.IsOverheated)
                     {
@@ -434,20 +433,20 @@ internal static partial class MCH
         protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
         {
             bool reassembledScattergunAoE = IsEnabled(CustomComboPreset.MCH_AoE_Adv_Reassemble) &&
-                                            Config.MCH_AoE_Reassembled[0] && HasEffect(Buffs.Reassembled);
+                                            Config.MCH_AoE_Reassembled [0] && HasEffect(Buffs.Reassembled);
 
             bool reassembledChainsawAoE =
-                (IsEnabled(CustomComboPreset.MCH_AoE_Adv_Reassemble) && Config.MCH_AoE_Reassembled[2] &&
+                (IsEnabled(CustomComboPreset.MCH_AoE_Adv_Reassemble) && Config.MCH_AoE_Reassembled [2] &&
                  HasEffect(Buffs.Reassembled)) ||
-                (IsEnabled(CustomComboPreset.MCH_AoE_Adv_Reassemble) && !Config.MCH_AoE_Reassembled[2] &&
+                (IsEnabled(CustomComboPreset.MCH_AoE_Adv_Reassemble) && !Config.MCH_AoE_Reassembled [2] &&
                  !HasEffect(Buffs.Reassembled)) ||
                 (!HasEffect(Buffs.Reassembled) && GetRemainingCharges(Reassemble) <= Config.MCH_AoE_ReassemblePool) ||
                 !IsEnabled(CustomComboPreset.MCH_AoE_Adv_Reassemble);
 
             bool reassembledExcavatorAoE =
-                (IsEnabled(CustomComboPreset.MCH_AoE_Adv_Reassemble) && Config.MCH_AoE_Reassembled[3] &&
+                (IsEnabled(CustomComboPreset.MCH_AoE_Adv_Reassemble) && Config.MCH_AoE_Reassembled [3] &&
                  HasEffect(Buffs.Reassembled)) ||
-                (IsEnabled(CustomComboPreset.MCH_AoE_Adv_Reassemble) && !Config.MCH_AoE_Reassembled[3] &&
+                (IsEnabled(CustomComboPreset.MCH_AoE_Adv_Reassemble) && !Config.MCH_AoE_Reassembled [3] &&
                  !HasEffect(Buffs.Reassembled)) ||
                 (!HasEffect(Buffs.Reassembled) && GetRemainingCharges(Reassemble) <= Config.MCH_AoE_ReassemblePool) ||
                 !IsEnabled(CustomComboPreset.MCH_AoE_Adv_Reassemble);
@@ -465,7 +464,7 @@ internal static partial class MCH
                 if (IsEnabled(CustomComboPreset.MCH_Variant_Rampart) &&
                     IsEnabled(Variant.VariantRampart) &&
                     IsOffCooldown(Variant.VariantRampart) &&
-                    CanWeave(actionID))
+                    CanWeave())
                     return Variant.VariantRampart;
 
                 // Interrupt
@@ -473,7 +472,7 @@ internal static partial class MCH
                     return All.HeadGraze;
 
                 // All weaves
-                if (CanWeave(ActionWatching.LastWeaponskill))
+                if (CanWeave())
                 {
                     if (!ActionWatching.HasDoubleWeaved() && !Gauge.IsOverheated)
                     {
@@ -499,11 +498,11 @@ internal static partial class MCH
                         if (IsEnabled(CustomComboPreset.MCH_AoE_Adv_Reassemble) && !HasEffect(Buffs.Wildfire) &&
                             !HasEffect(Buffs.Reassembled) && HasCharges(Reassemble) && !JustUsed(Flamethrower, 10f) &&
                             GetRemainingCharges(Reassemble) > Config.MCH_AoE_ReassemblePool &&
-                            ((Config.MCH_AoE_Reassembled[0] && Scattergun.LevelChecked()) ||
-                             (Gauge.IsOverheated && Config.MCH_AoE_Reassembled[1] && AutoCrossbow.LevelChecked()) ||
-                             (GetCooldownRemainingTime(Chainsaw) < 1 && Config.MCH_AoE_Reassembled[2] &&
+                            ((Config.MCH_AoE_Reassembled [0] && Scattergun.LevelChecked()) ||
+                             (Gauge.IsOverheated && Config.MCH_AoE_Reassembled [1] && AutoCrossbow.LevelChecked()) ||
+                             (GetCooldownRemainingTime(Chainsaw) < 1 && Config.MCH_AoE_Reassembled [2] &&
                               Chainsaw.LevelChecked()) ||
-                             (GetCooldownRemainingTime(OriginalHook(Chainsaw)) < 1 && Config.MCH_AoE_Reassembled[3] &&
+                             (GetCooldownRemainingTime(OriginalHook(Chainsaw)) < 1 && Config.MCH_AoE_Reassembled [3] &&
                               Excavator.LevelChecked())))
                             return Reassemble;
 
@@ -605,7 +604,7 @@ internal static partial class MCH
                     return Hypercharge;
 
                 if (IsEnabled(CustomComboPreset.MCH_Heatblast_GaussRound) &&
-                    CanWeave(ActionWatching.LastWeaponskill) &&
+                    CanWeave() &&
                     JustUsed(OriginalHook(Heatblast), 1f) &&
                     HasNotWeaved)
                 {
@@ -645,7 +644,7 @@ internal static partial class MCH
                     return Hypercharge;
 
                 if (IsEnabled(CustomComboPreset.MCH_AutoCrossbow_GaussRound) &&
-                    CanWeave(ActionWatching.LastWeaponskill) &&
+                    CanWeave() &&
                     JustUsed(OriginalHook(AutoCrossbow), 1f) &&
                     HasNotWeaved)
                 {

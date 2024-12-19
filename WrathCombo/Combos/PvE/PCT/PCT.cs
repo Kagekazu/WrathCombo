@@ -1,8 +1,5 @@
-﻿using WrathCombo.Combos.PvE.ALL;
-using WrathCombo.Combos.PvE.Content;
-using WrathCombo.Core;
+﻿using WrathCombo.Combos.PvE.Content;
 using WrathCombo.CustomComboNS;
-using WrathCombo.Data;
 using WrathCombo.Extensions;
 
 namespace WrathCombo.Combos.PvE;
@@ -17,7 +14,7 @@ internal partial class PCT
         {
             if (actionID is FireInRed)
             {
-                bool canWeave = CanSpellWeave(ActionWatching.LastSpell) || CanSpellWeave(actionID);
+                bool canWeave = CanSpellWeave() || CanSpellWeave();
 
                 // Lvl 100 Opener
                 if (StarPrism.LevelChecked())
@@ -149,7 +146,7 @@ internal partial class PCT
                     if (CometinBlack.LevelChecked() && Gauge.Paint >= 1 && HasEffect(Buffs.MonochromeTones))
                         return OriginalHook(CometinBlack);
 
-                    if (HasEffect(Buffs.RainbowBright) || HasEffect(Buffs.RainbowBright) && GetBuffRemainingTime(Buffs.StarryMuse) <= 3f)
+                    if (HasEffect(Buffs.RainbowBright) || (HasEffect(Buffs.RainbowBright) && GetBuffRemainingTime(Buffs.StarryMuse) <= 3f))
                         return RainbowDrip;
 
                     if (HolyInWhite.LevelChecked() && Gauge.Paint >= 1)
@@ -179,10 +176,10 @@ internal partial class PCT
                     if (HammerStamp.LevelChecked() && HasEffect(Buffs.HammerTime) && !HasEffect(Buffs.Starstruck))
                         return OriginalHook(HammerStamp);
 
-                    if (HasEffect(Buffs.Starstruck) || HasEffect(Buffs.Starstruck) && GetBuffRemainingTime(Buffs.Starstruck) <= 3f)
+                    if (HasEffect(Buffs.Starstruck) || (HasEffect(Buffs.Starstruck) && GetBuffRemainingTime(Buffs.Starstruck) <= 3f))
                         return StarPrism;
 
-                    if (HasEffect(Buffs.RainbowBright) || HasEffect(Buffs.RainbowBright) && GetBuffRemainingTime(Buffs.StarryMuse) <= 3f)
+                    if (HasEffect(Buffs.RainbowBright) || (HasEffect(Buffs.RainbowBright) && GetBuffRemainingTime(Buffs.StarryMuse) <= 3f))
                         return RainbowDrip;
 
                 }
@@ -227,7 +224,7 @@ internal partial class PCT
                     }
                 }
 
-                if (All.LucidDreaming.LevelChecked() && ActionReady(All.LucidDreaming) && CanSpellWeave(actionID) && LocalPlayer?.CurrentMp <= 6500)
+                if (All.LucidDreaming.LevelChecked() && ActionReady(All.LucidDreaming) && CanSpellWeave() && LocalPlayer.CurrentMp <= 6500)
                     return All.LucidDreaming;
 
                 if (BlizzardIIinCyan.LevelChecked() && HasEffect(Buffs.SubtractivePalette))
@@ -246,15 +243,15 @@ internal partial class PCT
         {
             if (actionID is FireInRed)
             {
-                bool canWeave = CanSpellWeave(ActionWatching.LastSpell) || CanSpellWeave(actionID);
-                int creatureStop = PluginConfiguration.GetCustomIntValue(Config.PCT_ST_CreatureStop);
-                int landscapeStop = PluginConfiguration.GetCustomIntValue(Config.PCT_ST_LandscapeStop);
-                int weaponStop = PluginConfiguration.GetCustomIntValue(Config.PCT_ST_WeaponStop);
+                bool canWeave = CanSpellWeave() || CanSpellWeave();
+                int creatureStop = Config.PCT_ST_CreatureStop;
+                int landscapeStop = Config.PCT_ST_LandscapeStop;
+                int weaponStop = Config.PCT_ST_WeaponStop;
 
                 // Variant Cure
                 if (IsEnabled(CustomComboPreset.PCT_Variant_Cure) &&
                     IsEnabled(Variant.VariantCure) &&
-                    PlayerHealthPercentageHp() <= GetOptionValue(Config.PCT_VariantCure))
+                    PlayerHealthPercentageHp() <= Config.PCT_VariantCure)
                     return Variant.VariantCure;
 
                 // Variant Rampart
@@ -414,7 +411,7 @@ internal partial class PCT
 
                     if (IsEnabled(CustomComboPreset.PCT_ST_AdvancedMode_Burst_RainbowDrip))
                     {
-                        if (HasEffect(Buffs.RainbowBright) || HasEffect(Buffs.RainbowBright) && GetBuffRemainingTime(Buffs.StarryMuse) <= 3f)
+                        if (HasEffect(Buffs.RainbowBright) || (HasEffect(Buffs.RainbowBright) && GetBuffRemainingTime(Buffs.StarryMuse) <= 3f))
                             return RainbowDrip;
                     }
 
@@ -453,13 +450,13 @@ internal partial class PCT
 
                     if (IsEnabled(CustomComboPreset.PCT_ST_AdvancedMode_Burst_StarPrism))
                     {
-                        if (HasEffect(Buffs.Starstruck) || HasEffect(Buffs.Starstruck) && GetBuffRemainingTime(Buffs.Starstruck) <= 3f)
+                        if (HasEffect(Buffs.Starstruck) || (HasEffect(Buffs.Starstruck) && GetBuffRemainingTime(Buffs.Starstruck) <= 3f))
                             return StarPrism;
                     }
 
                     if (IsEnabled(CustomComboPreset.PCT_ST_AdvancedMode_Burst_RainbowDrip))
                     {
-                        if (HasEffect(Buffs.RainbowBright) || HasEffect(Buffs.RainbowBright) && GetBuffRemainingTime(Buffs.StarryMuse) <= 3f)
+                        if (HasEffect(Buffs.RainbowBright) || (HasEffect(Buffs.RainbowBright) && GetBuffRemainingTime(Buffs.StarryMuse) <= 3f))
                             return RainbowDrip;
                     }
                 }
@@ -510,7 +507,7 @@ internal partial class PCT
                     }
                 }
 
-                if (IsEnabled(CustomComboPreset.PCT_ST_AdvancedMode_LucidDreaming) && All.LucidDreaming.LevelChecked() && ActionReady(All.LucidDreaming) && CanSpellWeave(actionID) && LocalPlayer?.CurrentMp <= Config.PCT_ST_AdvancedMode_LucidOption)
+                if (IsEnabled(CustomComboPreset.PCT_ST_AdvancedMode_LucidDreaming) && All.LucidDreaming.LevelChecked() && ActionReady(All.LucidDreaming) && CanSpellWeave() && LocalPlayer.CurrentMp <= Config.PCT_ST_AdvancedMode_LucidOption)
                     return All.LucidDreaming;
 
                 if (IsEnabled(CustomComboPreset.PCT_ST_AdvancedMode_BlizzardInCyan) && BlizzardIIinCyan.LevelChecked() && HasEffect(Buffs.SubtractivePalette))
@@ -529,12 +526,12 @@ internal partial class PCT
         {
             if (actionID is FireIIinRed)
             {
-                bool canWeave = CanSpellWeave(ActionWatching.LastSpell);
+                bool canWeave = CanSpellWeave();
 
                 // Variant Cure
                 if (IsEnabled(CustomComboPreset.PCT_Variant_Cure) &&
                     IsEnabled(Variant.VariantCure) &&
-                    PlayerHealthPercentageHp() <= GetOptionValue(Config.PCT_VariantCure))
+                    PlayerHealthPercentageHp() <= Config.PCT_VariantCure)
                     return Variant.VariantCure;
 
                 // Variant Rampart
@@ -546,7 +543,7 @@ internal partial class PCT
 
                 // Prepull logic
 
-                if (!InCombat() || InCombat() && CurrentTarget == null)
+                if (!InCombat() || (InCombat() && CurrentTarget == null))
                 {
                     if (CreatureMotif.LevelChecked() && !Gauge.CreatureMotifDrawn)
                         return OriginalHook(CreatureMotif);
@@ -711,7 +708,7 @@ internal partial class PCT
                 if (HolyInWhite.LevelChecked() && Gauge.Paint >= 2)
                     return OriginalHook(HolyInWhite);
 
-                if (All.LucidDreaming.LevelChecked() && ActionReady(All.LucidDreaming) && CanSpellWeave(actionID) && LocalPlayer?.CurrentMp <= 6500)
+                if (All.LucidDreaming.LevelChecked() && ActionReady(All.LucidDreaming) && CanSpellWeave() && LocalPlayer.CurrentMp <= 6500)
                     return All.LucidDreaming;
 
                 if (BlizzardIIinCyan.LevelChecked() && HasEffect(Buffs.SubtractivePalette))
@@ -729,15 +726,15 @@ internal partial class PCT
         {
             if (actionID is FireIIinRed)
             {
-                bool canWeave = CanSpellWeave(ActionWatching.LastSpell);
-                int creatureStop = PluginConfiguration.GetCustomIntValue(Config.PCT_AoE_CreatureStop);
-                int landscapeStop = PluginConfiguration.GetCustomIntValue(Config.PCT_AoE_LandscapeStop);
-                int weaponStop = PluginConfiguration.GetCustomIntValue(Config.PCT_AoE_WeaponStop);
+                bool canWeave = CanSpellWeave();
+                int creatureStop = Config.PCT_AoE_CreatureStop;
+                int landscapeStop = Config.PCT_AoE_LandscapeStop;
+                int weaponStop = Config.PCT_AoE_WeaponStop;
 
                 // Variant Cure
                 if (IsEnabled(CustomComboPreset.PCT_Variant_Cure) &&
                     IsEnabled(Variant.VariantCure) &&
-                    PlayerHealthPercentageHp() <= GetOptionValue(Config.PCT_VariantCure))
+                    PlayerHealthPercentageHp() <= Config.PCT_VariantCure)
                     return Variant.VariantCure;
 
                 // Variant Rampart
@@ -943,7 +940,7 @@ internal partial class PCT
                     }
                 }
 
-                if (IsEnabled(CustomComboPreset.PCT_AoE_AdvancedMode_LucidDreaming) && All.LucidDreaming.LevelChecked() && ActionReady(All.LucidDreaming) && CanSpellWeave(actionID) && LocalPlayer?.CurrentMp <= Config.PCT_ST_AdvancedMode_LucidOption)
+                if (IsEnabled(CustomComboPreset.PCT_AoE_AdvancedMode_LucidDreaming) && All.LucidDreaming.LevelChecked() && ActionReady(All.LucidDreaming) && CanSpellWeave() && LocalPlayer.CurrentMp <= Config.PCT_ST_AdvancedMode_LucidOption)
                     return All.LucidDreaming;
 
                 if (IsEnabled(CustomComboPreset.PCT_AoE_AdvancedMode_BlizzardInCyan) && BlizzardIIinCyan.LevelChecked() && HasEffect(Buffs.SubtractivePalette))
@@ -986,7 +983,7 @@ internal partial class PCT
         {
             if (actionID == CreatureMotif)
             {
-                if ((Config.CombinedMotifsMog && Gauge.MooglePortraitReady) || (Config.CombinedMotifsMadeen && Gauge.MadeenPortraitReady) && IsOffCooldown(OriginalHook(MogoftheAges)))
+                if ((Config.CombinedMotifsMog && Gauge.MooglePortraitReady) || (Config.CombinedMotifsMadeen && Gauge.MadeenPortraitReady && IsOffCooldown(OriginalHook(MogoftheAges))))
                     return OriginalHook(MogoftheAges);
 
                 if (Gauge.CreatureMotifDrawn)

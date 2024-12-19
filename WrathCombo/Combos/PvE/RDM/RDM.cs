@@ -12,7 +12,7 @@ internal partial class RDM
 
         protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level) =>
             actionID is Vercure && IsEnabled(CustomComboPreset.RDM_Variant_Cure2) && IsEnabled(Variant.VariantCure)
-                ? Variant.VariantCure
+            ? Variant.VariantCure
             : actionID;
     }
 
@@ -27,13 +27,13 @@ internal partial class RDM
                 //VARIANTS
                 if (IsEnabled(CustomComboPreset.RDM_Variant_Cure) &&
                     IsEnabled(Variant.VariantCure) &&
-                    PlayerHealthPercentageHp() <= GetOptionValue(Config.RDM_VariantCure))
+                    PlayerHealthPercentageHp() <= Config.RDM_VariantCure)
                     return Variant.VariantCure;
 
                 if (IsEnabled(CustomComboPreset.RDM_Variant_Rampart) &&
                     IsEnabled(Variant.VariantRampart) &&
                     IsOffCooldown(Variant.VariantRampart) &&
-                    CanSpellWeave(actionID))
+                    CanSpellWeave())
                     return Variant.VariantRampart;
 
                 // Opener for RDM
@@ -82,13 +82,13 @@ internal partial class RDM
                 //VARIANTS
                 if (IsEnabled(CustomComboPreset.RDM_Variant_Cure) &&
                     IsEnabled(Variant.VariantCure) &&
-                    PlayerHealthPercentageHp() <= GetOptionValue(Config.RDM_VariantCure))
+                    PlayerHealthPercentageHp() <= Config.RDM_VariantCure)
                     return Variant.VariantCure;
 
                 if (IsEnabled(CustomComboPreset.RDM_Variant_Rampart) &&
                     IsEnabled(Variant.VariantRampart) &&
                     IsOffCooldown(Variant.VariantRampart) &&
-                    CanSpellWeave(actionID))
+                    CanSpellWeave())
                     return Variant.VariantRampart;
 
                 // Opener for RDM
@@ -105,10 +105,10 @@ internal partial class RDM
                 bool actionFound =
                     (!Config.RDM_ST_oGCD_OnAction_Adv && actionID is Jolt or Jolt2 or Jolt3) ||
                       (Config.RDM_ST_oGCD_OnAction_Adv &&
-                        ((Config.RDM_ST_oGCD_OnAction[0] && actionID is Jolt or Jolt2 or Jolt3) ||
-                         (Config.RDM_ST_oGCD_OnAction[1] && actionID is Fleche) ||
-                         (Config.RDM_ST_oGCD_OnAction[2] && actionID is Riposte) ||
-                         (Config.RDM_ST_oGCD_OnAction[3] && actionID is Reprise)
+                        ((Config.RDM_ST_oGCD_OnAction [0] && actionID is Jolt or Jolt2 or Jolt3) ||
+                         (Config.RDM_ST_oGCD_OnAction [1] && actionID is Fleche) ||
+                         (Config.RDM_ST_oGCD_OnAction [2] && actionID is Riposte) ||
+                         (Config.RDM_ST_oGCD_OnAction [3] && actionID is Reprise)
                         )
                       );
 
@@ -132,9 +132,9 @@ internal partial class RDM
                 bool actionFound =
                     (!Config.RDM_ST_MeleeFinisher_Adv && actionID is Jolt or Jolt2 or Jolt3) ||
                     (Config.RDM_ST_MeleeFinisher_Adv &&
-                        ((Config.RDM_ST_MeleeFinisher_OnAction[0] && actionID is Jolt or Jolt2 or Jolt3) ||
-                         (Config.RDM_ST_MeleeFinisher_OnAction[1] && actionID is Riposte or EnchantedRiposte) ||
-                         (Config.RDM_ST_MeleeFinisher_OnAction[2] && actionID is Veraero or Veraero3 or Verthunder or Verthunder3)));
+                        ((Config.RDM_ST_MeleeFinisher_OnAction [0] && actionID is Jolt or Jolt2 or Jolt3) ||
+                         (Config.RDM_ST_MeleeFinisher_OnAction [1] && actionID is Riposte or EnchantedRiposte) ||
+                         (Config.RDM_ST_MeleeFinisher_OnAction [2] && actionID is Veraero or Veraero3 or Verthunder or Verthunder3)));
 
                 if (actionFound && MeleeCombo.TryMeleeFinisher(lastComboMove, out uint finisherAction))
                     return finisherAction;
@@ -148,8 +148,8 @@ internal partial class RDM
                 bool actionFound =
                     (!Config.RDM_ST_MeleeCombo_Adv && (actionID is Jolt or Jolt2 or Jolt3)) ||
                     (Config.RDM_ST_MeleeCombo_Adv &&
-                        ((Config.RDM_ST_MeleeCombo_OnAction[0] && actionID is Jolt or Jolt2 or Jolt3) ||
-                         (Config.RDM_ST_MeleeCombo_OnAction[1] && actionID is Riposte or EnchantedRiposte)));
+                        ((Config.RDM_ST_MeleeCombo_OnAction [0] && actionID is Jolt or Jolt2 or Jolt3) ||
+                         (Config.RDM_ST_MeleeCombo_OnAction [1] && actionID is Riposte or EnchantedRiposte)));
 
                 if (actionFound)
                 {
@@ -202,13 +202,13 @@ internal partial class RDM
                 //VARIANTS
                 if (IsEnabled(CustomComboPreset.RDM_Variant_Cure) &&
                     IsEnabled(Variant.VariantCure) &&
-                    PlayerHealthPercentageHp() <= GetOptionValue(Config.RDM_VariantCure))
+                    PlayerHealthPercentageHp() <= Config.RDM_VariantCure)
                     return Variant.VariantCure;
 
                 if (IsEnabled(CustomComboPreset.RDM_Variant_Rampart) &&
                     IsEnabled(Variant.VariantRampart) &&
                     IsOffCooldown(Variant.VariantRampart) &&
-                    CanSpellWeave(actionID))
+                    CanSpellWeave())
                     return Variant.VariantRampart;
 
                 //RDM_OGCD
@@ -249,13 +249,13 @@ internal partial class RDM
                 //VARIANTS
                 if (IsEnabled(CustomComboPreset.RDM_Variant_Cure) &&
                     IsEnabled(Variant.VariantCure) &&
-                    PlayerHealthPercentageHp() <= GetOptionValue(Config.RDM_VariantCure))
+                    PlayerHealthPercentageHp() <= Config.RDM_VariantCure)
                     return Variant.VariantCure;
 
                 if (IsEnabled(CustomComboPreset.RDM_Variant_Rampart) &&
                     IsEnabled(Variant.VariantRampart) &&
                     IsOffCooldown(Variant.VariantRampart) &&
-                    CanSpellWeave(actionID))
+                    CanSpellWeave())
                     return Variant.VariantRampart;
 
                 //RDM_OGCD
@@ -276,9 +276,9 @@ internal partial class RDM
                 bool actionFound =
                     (!Config.RDM_AoE_MeleeFinisher_Adv && actionID is Scatter or Impact) ||
                     (Config.RDM_AoE_MeleeFinisher_Adv &&
-                        ((Config.RDM_AoE_MeleeFinisher_OnAction[0] && actionID is Scatter or Impact) ||
-                         (Config.RDM_AoE_MeleeFinisher_OnAction[1] && actionID is Moulinet) ||
-                         (Config.RDM_AoE_MeleeFinisher_OnAction[2] && actionID is Veraero2 or Verthunder2)));
+                        ((Config.RDM_AoE_MeleeFinisher_OnAction [0] && actionID is Scatter or Impact) ||
+                         (Config.RDM_AoE_MeleeFinisher_OnAction [1] && actionID is Moulinet) ||
+                         (Config.RDM_AoE_MeleeFinisher_OnAction [2] && actionID is Veraero2 or Verthunder2)));
 
                 if (actionFound && MeleeCombo.TryMeleeFinisher(lastComboMove, out uint finisherAction))
                     return finisherAction;
@@ -291,8 +291,8 @@ internal partial class RDM
                 bool actionFound =
                     (!Config.RDM_AoE_MeleeCombo_Adv && actionID is Scatter or Impact) ||
                     (Config.RDM_AoE_MeleeCombo_Adv &&
-                        ((Config.RDM_AoE_MeleeCombo_OnAction[0] && actionID is Scatter or Impact) ||
-                            (Config.RDM_AoE_MeleeCombo_OnAction[1] && actionID is Moulinet)));
+                        ((Config.RDM_AoE_MeleeCombo_OnAction [0] && actionID is Scatter or Impact) ||
+                            (Config.RDM_AoE_MeleeCombo_OnAction [1] && actionID is Moulinet)));
 
                 if (actionFound)
                 {

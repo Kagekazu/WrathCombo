@@ -1,8 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Dalamud.Game.ClientState.JobGauge.Types;
+﻿using Dalamud.Game.ClientState.JobGauge.Types;
 using Dalamud.Game.ClientState.Statuses;
-using WrathCombo.Combos.PvE.ALL;
+using System.Collections.Generic;
+using System.Linq;
 using WrathCombo.Combos.PvE.Content;
 using WrathCombo.CustomComboNS;
 using static WrathCombo.CustomComboNS.Functions.CustomComboFunctions;
@@ -24,14 +23,6 @@ internal static partial class DRG
     internal static bool TrueNorthReady =>
         TargetNeedsPositionals() && ActionReady(All.TrueNorth) &&
         !HasEffect(All.Buffs.TrueNorth);
-
-    internal static WrathOpener Opener()
-    {
-        if (Opener1.LevelChecked)
-            return Opener1;
-
-        return WrathOpener.Dummy;
-    }
 
     internal static readonly List<uint> FastLocks =
     [
@@ -56,6 +47,14 @@ internal static partial class DRG
     ];
 
     internal static uint SlowLock => Stardiver;
+
+    internal static WrathOpener Opener()
+    {
+        if (Opener1.LevelChecked)
+            return Opener1;
+
+        return WrathOpener.Dummy;
+    }
 
     internal static bool CanDRGWeave(uint oGCD)
     {
@@ -82,7 +81,7 @@ internal static partial class DRG
 
         public override int MaxOpenerLevel => 109;
 
-        public override List<uint> OpenerActions { get; protected set; } =
+        public override List<uint> OpenerActions { get; set; } =
         [
             TrueThrust,
             SpiralBlow,

@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
-using Dalamud.Game.ClientState.JobGauge.Types;
+﻿using Dalamud.Game.ClientState.JobGauge.Types;
 using Dalamud.Game.ClientState.Objects.Types;
+using System.Collections.Generic;
 using WrathCombo.CustomComboNS;
 using static WrathCombo.CustomComboNS.Functions.CustomComboFunctions;
 
@@ -20,12 +20,13 @@ internal partial class WHM
         return WrathOpener.Dummy;
     }
 
-    internal static int GetMatchingConfigST(int i, IGameObject? optionalTarget, out uint action, out bool enabled)
+    public static int GetMatchingConfigST(int i, IGameObject? optionalTarget, out uint action,
+        out bool enabled)
     {
         //var healTarget = optionalTarget ?? GetHealTarget(Config.WHM_STHeals_UIMouseOver);
         //leaving incase Regen gets a slider and is added
 
-        bool canWeave = CanWeave(OriginalHook(Stone1), 0.3);
+        bool canWeave = CanWeave(0.3);
 
         switch (i)
         {
@@ -70,13 +71,14 @@ internal partial class WHM
 
         return 0;
     }
+
     internal class WHMOpenerMaxLevel1 : WrathOpener
     {
         public override int MinOpenerLevel => 100;
 
         public override int MaxOpenerLevel => 109;
 
-        public override List<uint> OpenerActions { get; protected set; } =
+        public override List<uint> OpenerActions { get; set; } =
         [
             Glare3,
             Dia,

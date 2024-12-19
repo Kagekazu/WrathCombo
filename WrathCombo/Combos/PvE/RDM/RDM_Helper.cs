@@ -2,8 +2,8 @@
 using Dalamud.Game.ClientState.Conditions;
 using Dalamud.Game.ClientState.JobGauge.Types;
 using ECommons.DalamudServices;
-using WrathCombo.Combos.JobHelpers.Enums;
-using WrathCombo.Combos.PvE.ALL;
+using System;
+using WrathCombo.Combos.PvE.Enums;
 using WrathCombo.Data;
 using static WrathCombo.CustomComboNS.Functions.CustomComboFunctions;
 

@@ -11,9 +11,6 @@ namespace WrathCombo.Combos.PvE;
 
 internal partial class PLD
 {
-
-    internal static PLDGauge Gauge => CustomComboFunctions.GetJobGauge<PLDGauge>();
-
     internal class PLD_ST_SimpleMode : CustomCombo
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.PLD_ST_SimpleMode;
@@ -25,9 +22,9 @@ internal partial class PLD
             float durationFightOrFlight = GetBuffRemainingTime(Buffs.FightOrFlight);
             float cooldownFightOrFlight = GetCooldownRemainingTime(FightOrFlight);
             float cooldownRequiescat = GetCooldownRemainingTime(Requiescat);
-            uint? playerMP = LocalPlayer?.CurrentMp;
-            bool canWeave = CanWeave(actionID);
-            bool canEarlyWeave = CanWeave(actionID, 1.5f);
+            uint playerMP = LocalPlayer.CurrentMp;
+            bool canWeave = CanWeave();
+            bool canEarlyWeave = CanWeave(1.5f);
             bool hasRequiescat = HasEffect(Buffs.Requiescat);
             bool hasDivineMight = HasEffect(Buffs.DivineMight);
             bool hasFightOrFlight = HasEffect(Buffs.FightOrFlight);
@@ -50,6 +47,9 @@ internal partial class PLD
                 if (IsEnabled(CustomComboPreset.PLD_Variant_Cure) && IsEnabled(Variant.VariantCure) &&
                     PlayerHealthPercentageHp() <= Config.PLD_VariantCure)
                     return Variant.VariantCure;
+
+                if (Opener().FullOpener(ref actionID))
+                    return actionID;
 
                 if (HasBattleTarget())
                 {
@@ -178,9 +178,9 @@ internal partial class PLD
             #region Variables
             float cooldownFightOrFlight = GetCooldownRemainingTime(FightOrFlight);
             float cooldownRequiescat = GetCooldownRemainingTime(Requiescat);
-            uint? playerMP = LocalPlayer?.CurrentMp;
-            bool canWeave = CanWeave(actionID);
-            bool canEarlyWeave = CanWeave(actionID, 1.5f);
+            uint playerMP = LocalPlayer.CurrentMp;
+            bool canWeave = CanWeave();
+            bool canEarlyWeave = CanWeave(1.5f);
             bool hasRequiescat = HasEffect(Buffs.Requiescat);
             bool hasDivineMight = HasEffect(Buffs.DivineMight);
             bool hasDivineMagicMP = playerMP >= GetResourceCost(HolySpirit);
@@ -267,9 +267,9 @@ internal partial class PLD
             float durationFightOrFlight = GetBuffRemainingTime(Buffs.FightOrFlight);
             float cooldownFightOrFlight = GetCooldownRemainingTime(FightOrFlight);
             float cooldownRequiescat = GetCooldownRemainingTime(Requiescat);
-            uint? playerMP = LocalPlayer?.CurrentMp;
-            bool canWeave = CanWeave(actionID);
-            bool canEarlyWeave = CanWeave(actionID, 1.5f);
+            uint playerMP = LocalPlayer.CurrentMp;
+            bool canWeave = CanWeave();
+            bool canEarlyWeave = CanWeave(1.5f);
             bool hasRequiescat = HasEffect(Buffs.Requiescat);
             bool hasDivineMight = HasEffect(Buffs.DivineMight);
             bool hasFightOrFlight = HasEffect(Buffs.FightOrFlight);
@@ -297,6 +297,10 @@ internal partial class PLD
                 if (IsEnabled(CustomComboPreset.PLD_Variant_Cure) && IsEnabled(Variant.VariantCure) &&
                     PlayerHealthPercentageHp() <= Config.PLD_VariantCure)
                     return Variant.VariantCure;
+
+                if (IsEnabled(CustomComboPreset.PLD_ST_AdvancedMode_BalanceOpener) &&
+                    Opener().FullOpener(ref actionID))
+                    return actionID;
 
                 if (HasBattleTarget())
                 {
@@ -470,9 +474,9 @@ internal partial class PLD
             #region Variables
             float cooldownFightOrFlight = GetCooldownRemainingTime(FightOrFlight);
             float cooldownRequiescat = GetCooldownRemainingTime(Requiescat);
-            uint? playerMP = LocalPlayer?.CurrentMp;
-            bool canWeave = CanWeave(actionID);
-            bool canEarlyWeave = CanWeave(actionID, 1.5f);
+            uint playerMP = LocalPlayer.CurrentMp;
+            bool canWeave = CanWeave();
+            bool canEarlyWeave = CanWeave(1.5f);
             bool hasRequiescat = HasEffect(Buffs.Requiescat);
             bool hasDivineMight = HasEffect(Buffs.DivineMight);
             bool hasDivineMagicMP = playerMP >= GetResourceCost(HolySpirit);
@@ -659,10 +663,7 @@ internal partial class PLD
 
     #region ID's
 
-    public const byte ClassID = 1;
-    public const byte JobID = 19;
-
-    public const float CooldownThreshold = 0.5f;
+    internal static PLDGauge Gauge => CustomComboFunctions.GetJobGauge<PLDGauge>();
 
     public const uint
         FastBlade = 9,
@@ -693,8 +694,8 @@ internal partial class PLD
         BladeOfValor = 25750,
         FightOrFlight = 20,
         Atonement = 16460,
-        //Supplication = 36918, // Second Atonement
-        //Sepulchre = 36919, // Third Atonement
+        Supplication = 36918, // Second Atonement
+        Sepulchre = 36919, // Third Atonement
         Intervene = 16461,
         BladeOfHonor = 36922,
         Sheltron = 3542;

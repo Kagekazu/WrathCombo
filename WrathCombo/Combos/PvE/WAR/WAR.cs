@@ -34,13 +34,13 @@ internal partial class WAR
 
                 if (IsEnabled(CustomComboPreset.WAR_Variant_Ultimatum) &&
                     IsEnabled(Variant.VariantUltimatum) &&
-                    CanWeave(actionID) &&
+                    CanWeave() &&
                     ActionReady(Variant.VariantUltimatum))
                     return Variant.VariantUltimatum;
 
                 if (IsEnabled(CustomComboPreset.WAR_Variant_Cure) &&
                     IsEnabled(Variant.VariantCure) &&
-                    CanWeave(actionID) &&
+                    CanWeave() &&
                     PlayerHealthPercentageHp() <= GetOptionValue(Config.WAR_VariantCure))
                     return Variant.VariantCure;
                 #endregion
@@ -89,7 +89,7 @@ internal partial class WAR
                     HasBattleTarget()) //has a target
                     return Tomahawk;
 
-                if (CanWeave(actionID)) //in weave window
+                if (CanWeave()) //in weave window
                 {
                     if (InCombat() && //in combat
                         ActionReady(Infuriate) && //Infuriate is ready
@@ -108,7 +108,7 @@ internal partial class WAR
                 if (HasEffect(Buffs.SurgingTempest) && //has Surging Tempest
                     InCombat()) //in combat
                 {
-                    if (CanWeave(actionID)) //in weave window
+                    if (CanWeave()) //in weave window
                     {
                         if (ActionReady(OriginalHook(Berserk))) //Berserk is ready
                             return OriginalHook(Berserk);
@@ -206,13 +206,13 @@ internal partial class WAR
 
                 if (IsEnabled(CustomComboPreset.WAR_Variant_Ultimatum) &&
                     IsEnabled(Variant.VariantUltimatum) &&
-                    CanWeave(actionID) &&
+                    CanWeave() &&
                     ActionReady(Variant.VariantUltimatum))
                     return Variant.VariantUltimatum;
 
                 if (IsEnabled(CustomComboPreset.WAR_Variant_Cure) &&
                     IsEnabled(Variant.VariantCure) &&
-                    CanWeave(actionID) &&
+                    CanWeave() &&
                     PlayerHealthPercentageHp() <= GetOptionValue(Config.WAR_VariantCure))
                     return Variant.VariantCure;
                 #endregion
@@ -281,7 +281,7 @@ internal partial class WAR
                     HasBattleTarget()) //has a target
                     return Tomahawk;
 
-                if (CanWeave(actionID)) //in weave window
+                if (CanWeave()) //in weave window
                 {
                     if (IsEnabled(CustomComboPreset.WAR_ST_Advanced_Infuriate) && //Infuriate option is enabled
                         InCombat() && //in combat
@@ -302,7 +302,7 @@ internal partial class WAR
                 if (InCombat() && //in combat
                     HasEffect(Buffs.SurgingTempest)) //has Surging Tempest
                 {
-                    if (CanWeave(actionID)) //in weave window
+                    if (CanWeave()) //in weave window
                     {
                         if (IsEnabled(CustomComboPreset.WAR_ST_Advanced_InnerRelease) && //Inner Release option is enabled
                             ActionReady(OriginalHook(Berserk))) //Berserk is ready
@@ -422,13 +422,13 @@ internal partial class WAR
 
                 if (IsEnabled(CustomComboPreset.WAR_Variant_Ultimatum) &&
                     IsEnabled(Variant.VariantUltimatum) &&
-                    CanWeave(actionID) &&
+                    CanWeave() &&
                     ActionReady(Variant.VariantUltimatum))
                     return Variant.VariantUltimatum;
 
                 if (IsEnabled(CustomComboPreset.WAR_Variant_Cure) &&
                     IsEnabled(Variant.VariantCure) &&
-                    CanWeave(actionID) &&
+                    CanWeave() &&
                     PlayerHealthPercentageHp() <= GetOptionValue(Config.WAR_VariantCure))
                     return Variant.VariantCure;
                 #endregion
@@ -472,7 +472,7 @@ internal partial class WAR
                 }
                 #endregion
 
-                if (CanWeave(actionID)) //in weave window
+                if (CanWeave()) //in weave window
                 {
                     if (InCombat() && //in combat
                        ActionReady(Infuriate) && //Infuriate is ready
@@ -490,7 +490,7 @@ internal partial class WAR
                 if (InCombat() && //in combat
                     HasEffect(Buffs.SurgingTempest)) //has Surging Tempest
                 {
-                    if (CanWeave(actionID)) //in weave window
+                    if (CanWeave()) //in weave window
                     {
                         if (ActionReady(OriginalHook(Berserk))) //Berserk is ready
                             return OriginalHook(Berserk);
@@ -556,13 +556,13 @@ internal partial class WAR
 
                 if (IsEnabled(CustomComboPreset.WAR_Variant_Ultimatum) &&
                     IsEnabled(Variant.VariantUltimatum) &&
-                    CanWeave(actionID) &&
+                    CanWeave() &&
                     ActionReady(Variant.VariantUltimatum))
                     return Variant.VariantUltimatum;
 
                 if (IsEnabled(CustomComboPreset.WAR_Variant_Cure) &&
                     IsEnabled(Variant.VariantCure) &&
-                    CanWeave(actionID) &&
+                    CanWeave() &&
                     PlayerHealthPercentageHp() <= GetOptionValue(Config.WAR_VariantCure))
                     return Variant.VariantCure;
                 #endregion
@@ -624,7 +624,7 @@ internal partial class WAR
                 }
                 #endregion
 
-                if (CanWeave(actionID)) //in weave window
+                if (CanWeave()) //in weave window
                 {
                     if (IsEnabled(CustomComboPreset.WAR_AoE_Advanced_Infuriate) && //Infuriate option is enabled
                         InCombat() && //in combat
@@ -644,7 +644,7 @@ internal partial class WAR
                 if (InCombat() && //in combat
                     HasEffect(Buffs.SurgingTempest)) //has Surging Tempest
                 {
-                    if (CanWeave(actionID)) //in weave window
+                    if (CanWeave()) //in weave window
                     {
                         if (IsEnabled(CustomComboPreset.WAR_AoE_Advanced_InnerRelease) && //Inner Release option is enabled
                             ActionReady(OriginalHook(Berserk))) //Berserk is ready

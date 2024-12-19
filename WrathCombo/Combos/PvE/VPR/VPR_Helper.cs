@@ -1,8 +1,7 @@
-﻿using System.Collections.Generic;
-using Dalamud.Game.ClientState.JobGauge.Enums;
+﻿using Dalamud.Game.ClientState.JobGauge.Enums;
 using Dalamud.Game.ClientState.JobGauge.Types;
 using FFXIVClientStructs.FFXIV.Client.Game;
-using WrathCombo.Combos.PvE.ALL;
+using System.Collections.Generic;
 using WrathCombo.CustomComboNS;
 using static WrathCombo.CustomComboNS.Functions.CustomComboFunctions;
 
@@ -12,7 +11,6 @@ internal static partial class VPR
 {
     // VPR Gauge & Extensions
     internal static VPROpenerMaxLevel1 Opener1 = new();
-
     internal static VPRGauge Gauge = GetJobGauge<VPRGauge>();
 
     internal static float GCD => GetCooldown(OriginalHook(ReavingFangs)).CooldownTotal;
@@ -106,7 +104,7 @@ internal static partial class VPR
 
         public override int MaxOpenerLevel => 109;
 
-        public override List<uint> OpenerActions { get; protected set; } =
+        public override List<uint> OpenerActions { get; set; } =
         [
             ReavingFangs,
             SerpentsIre,

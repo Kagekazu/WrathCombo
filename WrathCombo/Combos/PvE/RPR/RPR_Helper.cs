@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
+﻿#region
+
 using Dalamud.Game.ClientState.JobGauge.Types;
 using FFXIVClientStructs.FFXIV.Client.Game;
-using WrathCombo.Combos.PvE.ALL;
+using System.Collections.Generic;
 using WrathCombo.CustomComboNS;
 using static WrathCombo.CustomComboNS.Functions.CustomComboFunctions;
 
@@ -57,7 +58,7 @@ internal static partial class RPR
 
             // Prep for double Enshroud
             if (LevelChecked(PlentifulHarvest) &&
-                GetCooldownRemainingTime(ArcaneCircle) <= GCD * 2 + 1.5)
+                GetCooldownRemainingTime(ArcaneCircle) <= (GCD * 2) + 1.5)
                 return true;
 
             //2nd part of Double Enshroud
@@ -88,7 +89,7 @@ internal static partial class RPR
         {
             //1st part double enshroud
             if (LevelChecked(PlentifulHarvest) && HasEffect(Buffs.Enshrouded) &&
-                GetCooldownRemainingTime(ArcaneCircle) <= GCD * 2 + 1.5 && JustUsed(Enshroud))
+                GetCooldownRemainingTime(ArcaneCircle) <= (GCD * 2) + 1.5 && JustUsed(Enshroud))
                 return true;
 
             //2nd part double enshroud
@@ -124,7 +125,7 @@ internal static partial class RPR
 
         public override int MaxOpenerLevel => 109;
 
-        public override List<uint> OpenerActions { get; protected set; } =
+        public override List<uint> OpenerActions { get; set; } =
         [
             ShadowOfDeath,
             SoulSlice,

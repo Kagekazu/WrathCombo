@@ -97,7 +97,7 @@ internal partial class DRK
             return false;
 
         float hpRemaining = PlayerHealthPercentageHp();
-        float hpThreshold = !aoe ? (float)Config.DRK_ST_TBNThreshold : 90f;
+        float hpThreshold = !aoe ? (float) Config.DRK_ST_TBNThreshold : 90f;
 
         // Bail if we're above the threshold
         if (hpRemaining > hpThreshold)
@@ -106,11 +106,11 @@ internal partial class DRK
         bool targetIsBoss = TargetIsBoss();
         int bossRestriction =
             !aoe
-                ? (int)Config.DRK_ST_TBNBossRestriction
-                : (int)Config.BossAvoidance.Off; // Don't avoid bosses in AoE
+                ? (int) Config.DRK_ST_TBNBossRestriction
+                : (int) Config.BossAvoidance.Off; // Don't avoid bosses in AoE
 
         // Bail if we're trying to avoid bosses and the target is one
-        if (bossRestriction is (int)Config.BossAvoidance.On
+        if (bossRestriction is (int) Config.BossAvoidance.On
             && targetIsBoss)
             return false;
 

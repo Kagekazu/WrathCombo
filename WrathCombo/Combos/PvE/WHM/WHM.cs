@@ -1,8 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Dalamud.Game.ClientState.Objects.Types;
+﻿using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Game.ClientState.Statuses;
-using WrathCombo.Combos.PvE.ALL;
+using System.Collections.Generic;
+using System.Linq;
 using WrathCombo.Combos.PvE.Content;
 using WrathCombo.CustomComboNS;
 using WrathCombo.Data;
@@ -72,9 +71,9 @@ internal partial class WHM
 
             if (Config.WHM_ST_MainCombo_Adv && Config.WHM_ST_MainCombo_Adv_Actions.Count > 0)
             {
-                bool onStones = Config.WHM_ST_MainCombo_Adv_Actions[0] && StoneGlareList.Contains(actionID);
-                bool onAeros = Config.WHM_ST_MainCombo_Adv_Actions[1] && AeroList.ContainsKey(actionID);
-                bool onStone2 = Config.WHM_ST_MainCombo_Adv_Actions[2] && actionID is Stone2;
+                bool onStones = Config.WHM_ST_MainCombo_Adv_Actions [0] && StoneGlareList.Contains(actionID);
+                bool onAeros = Config.WHM_ST_MainCombo_Adv_Actions [1] && AeroList.ContainsKey(actionID);
+                bool onStone2 = Config.WHM_ST_MainCombo_Adv_Actions [2] && actionID is Stone2;
                 actionFound = onStones || onAeros || onStone2;
             }
             else
@@ -91,7 +90,7 @@ internal partial class WHM
                 bool liliesFull = Gauge.Lily == 3;
                 bool liliesNearlyFull = Gauge.Lily == 2 && Gauge.LilyTimer >= 17000;
 
-                if (CanSpellWeave(actionID))
+                if (CanSpellWeave())
                 {
                     bool lucidReady = ActionReady(All.LucidDreaming) && LevelChecked(All.LucidDreaming) &&
                                       LocalPlayer?.CurrentMp <= Config.WHM_STDPS_Lucid;
@@ -104,7 +103,7 @@ internal partial class WHM
                     if (IsEnabled(CustomComboPreset.WHM_DPS_Variant_Rampart) &&
                         IsEnabled(Variant.VariantRampart) &&
                         IsOffCooldown(Variant.VariantRampart) &&
-                        CanSpellWeave(actionID))
+                        CanSpellWeave())
                         return Variant.VariantRampart;
 
                     if (pomEnabled && pomReady)
@@ -126,7 +125,7 @@ internal partial class WHM
                         if (IsEnabled(CustomComboPreset.WHM_DPS_Variant_SpiritDart) &&
                             IsEnabled(Variant.VariantSpiritDart) &&
                             GetDebuffRemainingTime(Variant.Debuffs.SustainedDamage) <= 3 &&
-                            CanSpellWeave(actionID))
+                            CanSpellWeave())
                             return Variant.VariantSpiritDart;
 
                         // DoT Uptime & HP% threshold
@@ -171,8 +170,8 @@ internal partial class WHM
             {
                 bool thinAirReady = LevelChecked(ThinAir) && !HasEffect(Buffs.ThinAir) &&
                                     GetRemainingCharges(ThinAir) > Config.WHM_AoEHeals_ThinAir;
-                bool canWeave = CanSpellWeave(actionID, 0.3);
-                bool lucidReady = ActionReady(All.LucidDreaming) && LocalPlayer?.CurrentMp <= Config.WHM_AoEHeals_Lucid;
+                bool canWeave = CanSpellWeave(0.3);
+                bool lucidReady = ActionReady(All.LucidDreaming) && LocalPlayer.CurrentMp <= Config.WHM_AoEHeals_Lucid;
 
                 bool plenaryReady = ActionReady(PlenaryIndulgence) &&
                                     (!Config.WHM_AoEHeals_PlenaryWeave ||
@@ -337,7 +336,7 @@ internal partial class WHM
                     HasBattleTarget())
                     return Variant.VariantSpiritDart;
 
-                if (CanSpellWeave(ActionWatching.LastSpell) || IsMoving())
+                if (CanSpellWeave() || IsMoving())
                 {
                     if (IsEnabled(CustomComboPreset.WHM_AoE_DPS_PresenceOfMind) && ActionReady(PresenceOfMind))
                         return PresenceOfMind;

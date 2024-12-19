@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
-using Dalamud.Game.ClientState.JobGauge.Types;
+﻿using Dalamud.Game.ClientState.JobGauge.Types;
 using Dalamud.Game.ClientState.Objects.Types;
+using System.Collections.Generic;
 using WrathCombo.CustomComboNS;
 using static WrathCombo.CustomComboNS.Functions.CustomComboFunctions;
 
@@ -140,13 +140,14 @@ internal static partial class SGE
 
         return 0;
     }
+
     internal class SGEOpenerMaxLevel1 : WrathOpener
     {
         public override int MinOpenerLevel => 92;
 
         public override int MaxOpenerLevel => 109;
 
-        public override List<uint> OpenerActions { get; protected set; } =
+        public override List<uint> OpenerActions { get; set; } =
         [
             Eukrasia,
             Toxikon2,

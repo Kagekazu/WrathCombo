@@ -41,7 +41,7 @@ internal partial class DRK
             CustomComboNS.Functions.UserInt hpRemainingLivingDeadTarget =
                 Config.DRK_ST_LivingDeadTargetThreshold;
             int bossRestrictionLivingDead =
-                (int)Config.DRK_ST_LivingDeadBossRestriction;
+                (int) Config.DRK_ST_LivingDeadBossRestriction;
 
             // Variant Cure - Heal: Priority to save your life
             if (IsEnabled(CustomComboPreset.DRK_Variant_Cure)
@@ -73,7 +73,7 @@ internal partial class DRK
                 return OriginalHook(Disesteem);
 
             // oGCDs
-            if (CanWeave(actionID))
+            if (CanWeave())
             {
                 // Mitigation first
                 if (IsEnabled(CustomComboPreset.DRK_ST_Mitigation))
@@ -113,11 +113,11 @@ internal partial class DRK
                         && inLivingDeadContent
                         // Checking if the target matches the boss avoidance option
                         && ((bossRestrictionLivingDead is
-                                 (int)Config.BossAvoidance.On
+                                 (int) Config.BossAvoidance.On
                              && LocalPlayer.TargetObject is not null
                              && TargetIsBoss())
                             || bossRestrictionLivingDead is
-                                (int)Config.BossAvoidance.Off))
+                                (int) Config.BossAvoidance.Off))
                         return LivingDead;
                 }
 
@@ -138,7 +138,7 @@ internal partial class DRK
 
                 // Mana Spenders
                 if (IsEnabled(CustomComboPreset.DRK_ST_ManaOvercap)
-                    && (CanWeave(actionID) || CanDelayedWeave())
+                    && (CanWeave() || CanDelayedWeave())
                     && ((CombatEngageDuration().TotalSeconds < 10
                          && gauge.DarksideTimeRemaining == 0) // Initial Darkside
                         || CombatEngageDuration().TotalSeconds >= 10)) // Post Opener
@@ -342,7 +342,7 @@ internal partial class DRK
                 return OriginalHook(Disesteem);
 
             // oGCDs
-            if (CanWeave(actionID) || CanDelayedWeave())
+            if (CanWeave() || CanDelayedWeave())
             {
                 // Mitigation first
                 if (IsEnabled(CustomComboPreset.DRK_AoE_Mitigation))

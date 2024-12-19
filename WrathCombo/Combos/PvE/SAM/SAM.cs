@@ -3,7 +3,6 @@ using Dalamud.Game.ClientState.JobGauge.Types;
 using WrathCombo.Combos.PvE.ALL;
 using WrathCombo.Combos.PvE.Content;
 using WrathCombo.CustomComboNS;
-using WrathCombo.Data;
 using WrathCombo.Extensions;
 
 namespace WrathCombo.Combos.PvE;
@@ -18,7 +17,7 @@ internal static partial class SAM
         {
             if (actionID is Yukikaze)
             {
-                if (Config.SAM_Yukaze_KenkiOvercap && CanWeave(actionID) &&
+                if (Config.SAM_Yukaze_KenkiOvercap && CanWeave() &&
                     Gauge.Kenki >= Config.SAM_Yukaze_KenkiOvercapAmount && LevelChecked(Shinten))
                     return OriginalHook(Shinten);
 
@@ -44,7 +43,7 @@ internal static partial class SAM
         {
             if (actionID is Kasha)
             {
-                if (Config.SAM_Kasha_KenkiOvercap && CanWeave(actionID) &&
+                if (Config.SAM_Kasha_KenkiOvercap && CanWeave() &&
                     Gauge.Kenki >= Config.SAM_Kasha_KenkiOvercapAmount && LevelChecked(Shinten))
                     return OriginalHook(Shinten);
 
@@ -75,7 +74,7 @@ internal static partial class SAM
         {
             if (actionID is Gekko)
             {
-                if (Config.SAM_Gekko_KenkiOvercap && CanWeave(actionID) &&
+                if (Config.SAM_Gekko_KenkiOvercap && CanWeave() &&
                     Gauge.Kenki >= Config.SAM_Gekko_KenkiOvercapAmount && LevelChecked(Shinten))
                     return OriginalHook(Shinten);
 
@@ -116,7 +115,7 @@ internal static partial class SAM
             if (IsEnabled(CustomComboPreset.SAM_Variant_Rampart) &&
                 IsEnabled(Variant.VariantRampart) &&
                 IsOffCooldown(Variant.VariantRampart) &&
-                CanSpellWeave(actionID))
+                CanSpellWeave())
                 return Variant.VariantRampart;
 
             // Opener for SAM
@@ -129,7 +128,7 @@ internal static partial class SAM
                 return MeikyoShisui;
 
             //oGCDs
-            if (CanWeave(ActionWatching.LastWeaponskill))
+            if (CanWeave())
             {
                 //Meikyo Features
                 if (UseMeikyo())
@@ -163,7 +162,7 @@ internal static partial class SAM
 
                 //Zanshin Usage
                 if (LevelChecked(Zanshin) && Gauge.Kenki >= 50 &&
-                    CanWeave(actionID) && HasEffect(Buffs.ZanshinReady) &&
+                    CanWeave() && HasEffect(Buffs.ZanshinReady) &&
                     (JustUsed(Higanbana, 7f) || (SenCount is 1 && HasEffect(Buffs.OgiNamikiriReady)) ||
                      GetBuffRemainingTime(Buffs.ZanshinReady) <= 6)) //Protection for scuffed runs
                     return Zanshin;
@@ -295,7 +294,7 @@ internal static partial class SAM
             if (IsEnabled(CustomComboPreset.SAM_Variant_Rampart) &&
                 IsEnabled(Variant.VariantRampart) &&
                 IsOffCooldown(Variant.VariantRampart) &&
-                CanSpellWeave(actionID))
+                CanSpellWeave())
                 return Variant.VariantRampart;
 
             // Opener for SAM
@@ -311,7 +310,7 @@ internal static partial class SAM
                 return MeikyoShisui;
 
             //oGCDs
-            if (CanWeave(ActionWatching.LastWeaponskill))
+            if (CanWeave())
             {
                 if (IsEnabled(CustomComboPreset.SAM_ST_CDs))
                 {
@@ -355,7 +354,7 @@ internal static partial class SAM
                     //Zanshin Usage
                     if (IsEnabled(CustomComboPreset.SAM_ST_CDs_Zanshin) &&
                         LevelChecked(Zanshin) && Gauge.Kenki >= 50 &&
-                        CanWeave(actionID) && HasEffect(Buffs.ZanshinReady) &&
+                        CanWeave() && HasEffect(Buffs.ZanshinReady) &&
                         (JustUsed(Higanbana, 7f) || (SenCount is 1 && HasEffect(Buffs.OgiNamikiriReady)) ||
                          GetBuffRemainingTime(Buffs.ZanshinReady) <= 6))
                         return Zanshin;
@@ -498,7 +497,7 @@ internal static partial class SAM
             if (actionID is Oka)
             {
                 if (Config.SAM_Oka_KenkiOvercap && Gauge.Kenki >= Config.SAM_Oka_KenkiOvercapAmount &&
-                    LevelChecked(Kyuten) && CanWeave(actionID))
+                    LevelChecked(Kyuten) && CanWeave())
                     return Kyuten;
 
                 if (HasEffect(Buffs.MeikyoShisui))
@@ -524,7 +523,7 @@ internal static partial class SAM
             if (actionID is Mangetsu)
             {
                 if (Config.SAM_Mangetsu_KenkiOvercap && Gauge.Kenki >= Config.SAM_Mangetsu_KenkiOvercapAmount &&
-                    LevelChecked(Kyuten) && CanWeave(actionID))
+                    LevelChecked(Kyuten) && CanWeave())
                     return Kyuten;
 
                 if (HasEffect(Buffs.MeikyoShisui))
@@ -559,11 +558,11 @@ internal static partial class SAM
             if (IsEnabled(CustomComboPreset.SAM_Variant_Rampart) &&
                 IsEnabled(Variant.VariantRampart) &&
                 IsOffCooldown(Variant.VariantRampart) &&
-                CanWeave(actionID))
+                CanWeave())
                 return Variant.VariantRampart;
 
             //oGCD Features
-            if (CanWeave(ActionWatching.LastWeaponskill))
+            if (CanWeave())
             {
                 if (OriginalHook(Iaijutsu) is MidareSetsugekka && LevelChecked(Hagakure))
                     return Hagakure;
@@ -667,11 +666,11 @@ internal static partial class SAM
             if (IsEnabled(CustomComboPreset.SAM_Variant_Rampart) &&
                 IsEnabled(Variant.VariantRampart) &&
                 IsOffCooldown(Variant.VariantRampart) &&
-                CanWeave(actionID))
+                CanWeave())
                 return Variant.VariantRampart;
 
             //oGCD Features
-            if (CanWeave(ActionWatching.LastWeaponskill))
+            if (CanWeave())
             {
                 if (IsEnabled(CustomComboPreset.SAM_AoE_Hagakure) &&
                     OriginalHook(Iaijutsu) is MidareSetsugekka && LevelChecked(Hagakure))
@@ -805,7 +804,7 @@ internal static partial class SAM
 
             if (actionID is Iaijutsu)
             {
-                if (canAddShoha && CanWeave(actionID))
+                if (canAddShoha && CanWeave())
                     return Shoha;
 
                 if (IsEnabled(CustomComboPreset.SAM_Iaijutsu_OgiNamikiri) && (
