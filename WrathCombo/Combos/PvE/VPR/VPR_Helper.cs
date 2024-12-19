@@ -104,7 +104,7 @@ internal static partial class VPR
 
         public override int MaxOpenerLevel => 109;
 
-        public override List<uint> OpenerActions { get; protected set; } =
+        public override List<uint> OpenerActions { get; set; } =
         [
             ReavingFangs,
             SerpentsIre,

@@ -15,7 +15,7 @@ internal partial class BLM
     internal static BLMGauge Gauge = GetJobGauge<BLMGauge>();
     internal static BLMOpenerMaxLevel1 Opener1 = new();
 
-    internal static bool CanWeave => CanSpellWeave(ActionWatching.LastSpell);
+    internal static bool canWeave => CanSpellWeave();
 
     internal static uint? CurMp => LocalPlayer?.CurrentMp;
 
@@ -114,7 +114,7 @@ internal partial class BLM
 
         public override int MaxOpenerLevel => 109;
 
-        public override List<uint> OpenerActions { get; protected set; } =
+        public override List<uint> OpenerActions { get; set; } =
         [
             Fire3,
             HighThunder,

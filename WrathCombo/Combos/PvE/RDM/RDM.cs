@@ -29,11 +29,11 @@ internal partial class RDM
                     PlayerHealthPercentageHp() <= GetOptionValue(Config.RDM_VariantCure))
                     return Variant.VariantCure;
 
-                if (IsEnabled(CustomComboPreset.RDM_Variant_Rampart) &&
-                    IsEnabled(Variant.VariantRampart) &&
-                    IsOffCooldown(Variant.VariantRampart) &&
-                    CanSpellWeave(actionID))
-                    return Variant.VariantRampart;
+                    if (IsEnabled(CustomComboPreset.RDM_Variant_Rampart) &&
+                        IsEnabled(Variant.VariantRampart) &&
+                        IsOffCooldown(Variant.VariantRampart) &&
+                        CanSpellWeave())
+                        return Variant.VariantRampart;
 
                 // Opener for RDM
                 if (RDMOpenerLogic.DoFullOpener(ref actionID))
@@ -84,11 +84,11 @@ internal partial class RDM
                     PlayerHealthPercentageHp() <= GetOptionValue(Config.RDM_VariantCure))
                     return Variant.VariantCure;
 
-                if (IsEnabled(CustomComboPreset.RDM_Variant_Rampart) &&
-                    IsEnabled(Variant.VariantRampart) &&
-                    IsOffCooldown(Variant.VariantRampart) &&
-                    CanSpellWeave(actionID))
-                    return Variant.VariantRampart;
+                    if (IsEnabled(CustomComboPreset.RDM_Variant_Rampart) &&
+                        IsEnabled(Variant.VariantRampart) &&
+                        IsOffCooldown(Variant.VariantRampart) &&
+                        CanSpellWeave())
+                        return Variant.VariantRampart;
 
                 // Opener for RDM
                 if (IsEnabled(CustomComboPreset.RDM_Balance_Opener))
@@ -204,11 +204,11 @@ internal partial class RDM
                     PlayerHealthPercentageHp() <= GetOptionValue(Config.RDM_VariantCure))
                     return Variant.VariantCure;
 
-                if (IsEnabled(CustomComboPreset.RDM_Variant_Rampart) &&
-                    IsEnabled(Variant.VariantRampart) &&
-                    IsOffCooldown(Variant.VariantRampart) &&
-                    CanSpellWeave(actionID))
-                    return Variant.VariantRampart;
+                    if (IsEnabled(CustomComboPreset.RDM_Variant_Rampart) &&
+                        IsEnabled(Variant.VariantRampart) &&
+                        IsOffCooldown(Variant.VariantRampart) &&
+                        CanSpellWeave())
+                        return Variant.VariantRampart;
 
                 //RDM_OGCD
                 if (TryOGCDs(actionID, true, out uint oGCDAction, true))
@@ -251,11 +251,11 @@ internal partial class RDM
                     PlayerHealthPercentageHp() <= GetOptionValue(Config.RDM_VariantCure))
                     return Variant.VariantCure;
 
-                if (IsEnabled(CustomComboPreset.RDM_Variant_Rampart) &&
-                    IsEnabled(Variant.VariantRampart) &&
-                    IsOffCooldown(Variant.VariantRampart) &&
-                    CanSpellWeave(actionID))
-                    return Variant.VariantRampart;
+                    if (IsEnabled(CustomComboPreset.RDM_Variant_Rampart) &&
+                        IsEnabled(Variant.VariantRampart) &&
+                        IsOffCooldown(Variant.VariantRampart) &&
+                        CanSpellWeave())
+                        return Variant.VariantRampart;
 
                 //RDM_OGCD
                 if (IsEnabled(CustomComboPreset.RDM_AoE_oGCD)

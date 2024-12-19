@@ -91,16 +91,16 @@ internal partial class DNC
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.DNC_FlourishingFanDances;
 
-        protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
-        {
-            // Fan Dance 3 & 4 on Flourish
-            if (actionID is Flourish && CanWeave(actionID))
+            protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
             {
-                if (HasEffect(Buffs.ThreeFoldFanDance))
-                    return FanDance3;
-                if (HasEffect(Buffs.FourFoldFanDance))
-                    return FanDance4;
-            }
+                // Fan Dance 3 & 4 on Flourish
+                if (actionID is Flourish && CanWeave())
+                {
+                    if (HasEffect(Buffs.ThreeFoldFanDance))
+                        return FanDance3;
+                    if (HasEffect(Buffs.FourFoldFanDance))
+                        return FanDance4;
+                }
 
             return actionID;
         }
@@ -259,35 +259,35 @@ internal partial class DNC
                     : TechnicalFinish4;
             #endregion
 
-            #region Weaves
-            // ST Devilment
-            if (IsEnabled(CustomComboPreset.DNC_ST_Adv_Devilment) &&
-                CanWeave(actionID) &&
-                LevelChecked(Devilment) &&
-                GetCooldownRemainingTime(Devilment) < 0.05 &&
-                (HasEffect(Buffs.TechnicalFinish) ||
-                 WasLastAction(TechnicalFinish4) ||
-                 !LevelChecked(TechnicalStep)))
-                return Devilment;
+                #region Weaves
+                // ST Devilment
+                if (IsEnabled(CustomComboPreset.DNC_ST_Adv_Devilment) &&
+                    CanWeave() &&
+                    LevelChecked(Devilment) &&
+                    GetCooldownRemainingTime(Devilment) < 0.05 &&
+                    (HasEffect(Buffs.TechnicalFinish) ||
+                     WasLastAction(TechnicalFinish4) ||
+                     !LevelChecked(TechnicalStep)))
+                    return Devilment;
 
-            // ST Flourish
-            if (IsEnabled(CustomComboPreset.DNC_ST_Adv_Flourish) &&
-                CanWeave(actionID) &&
-                ActionReady(Flourish) &&
-                !WasLastWeaponskill(TechnicalFinish4) &&
-                IsOnCooldown(Devilment) &&
-                (GetCooldownRemainingTime(Devilment) > 50 ||
-                 (HasEffect(Buffs.Devilment) &&
-                  GetBuffRemainingTime(Buffs.Devilment) < 19)) &&
-                !HasEffect(Buffs.ThreeFoldFanDance) &&
-                !HasEffect(Buffs.FourFoldFanDance) &&
-                !HasEffect(Buffs.FlourishingSymmetry) &&
-                !HasEffect(Buffs.FlourishingFlow) &&
-                !HasEffect(Buffs.FinishingMoveReady) &&
-                ((CombatEngageDuration().TotalSeconds < 20 &&
-                  HasEffect(Buffs.TechnicalFinish)) ||
-                 CombatEngageDuration().TotalSeconds > 20))
-                return Flourish;
+                // ST Flourish
+                if (IsEnabled(CustomComboPreset.DNC_ST_Adv_Flourish) &&
+                    CanWeave() &&
+                    ActionReady(Flourish) &&
+                    !WasLastWeaponskill(TechnicalFinish4) &&
+                    IsOnCooldown(Devilment) &&
+                    (GetCooldownRemainingTime(Devilment) > 50 ||
+                     (HasEffect(Buffs.Devilment) &&
+                      GetBuffRemainingTime(Buffs.Devilment) < 19)) &&
+                    !HasEffect(Buffs.ThreeFoldFanDance) &&
+                    !HasEffect(Buffs.FourFoldFanDance) &&
+                    !HasEffect(Buffs.FlourishingSymmetry) &&
+                    !HasEffect(Buffs.FlourishingFlow) &&
+                    !HasEffect(Buffs.FinishingMoveReady) &&
+                    ((CombatEngageDuration().TotalSeconds < 20 &&
+                      HasEffect(Buffs.TechnicalFinish)) ||
+                     CombatEngageDuration().TotalSeconds > 20))
+                    return Flourish;
 
             if (IsEnabled(CustomComboPreset.DNC_ST_Adv_Flourish_ForcedTripleWeave) &&
                 (HasEffect(Buffs.ThreeFoldFanDance) ||
@@ -315,17 +315,17 @@ internal partial class DNC
                 PlayerHealthPercentageHp() <= GetOptionValue(Config.DNCVariantCurePercent))
                 return Variant.VariantCure;
 
-            // Variant Rampart
-            if (IsEnabled(CustomComboPreset.DNC_Variant_Rampart) &&
-                IsEnabled(Variant.VariantRampart) &&
-                IsOffCooldown(Variant.VariantRampart) &&
-                CanWeave(actionID))
-                return Variant.VariantRampart;
+                // Variant Rampart
+                if (IsEnabled(CustomComboPreset.DNC_Variant_Rampart) &&
+                    IsEnabled(Variant.VariantRampart) &&
+                    IsOffCooldown(Variant.VariantRampart) &&
+                    CanWeave())
+                    return Variant.VariantRampart;
 
-            if (CanWeave(actionID) && !WasLastWeaponskill(TechnicalFinish4))
-            {
-                if (HasEffect(Buffs.ThreeFoldFanDance))
-                    return FanDance3;
+                if (CanWeave() && !WasLastWeaponskill(TechnicalFinish4))
+                {
+                    if (HasEffect(Buffs.ThreeFoldFanDance))
+                        return FanDance3;
 
                 if (HasEffect(Buffs.FourFoldFanDance))
                     return FanDance4;
@@ -492,13 +492,13 @@ internal partial class DNC
                     gauge.Esprit >= Config.DNCEspritThreshold_ST)
                     return SaberDance;
 
-                if (CanWeave(actionID))
-                {
-                    // ST Fan Dance overcap protection
-                    if (IsEnabled(CustomComboPreset.DNC_ST_FanDanceOvercap) &&
-                        LevelChecked(FanDance1) && gauge.Feathers is 4 && (HasEffect(Buffs.SilkenSymmetry) ||
-                        HasEffect(Buffs.SilkenFlow)))
-                        return FanDance1;
+                    if (CanWeave())
+                    {
+                        // ST Fan Dance overcap protection
+                        if (IsEnabled(CustomComboPreset.DNC_ST_FanDanceOvercap) &&
+                            LevelChecked(FanDance1) && gauge.Feathers is 4 && (HasEffect(Buffs.SilkenSymmetry) ||
+                            HasEffect(Buffs.SilkenFlow)))
+                            return FanDance1;
 
                     // ST Fan Dance 3/4 on combo
                     if (IsEnabled(CustomComboPreset.DNC_ST_FanDance34))
@@ -601,32 +601,32 @@ internal partial class DNC
                     : TechnicalFinish4;
             #endregion
 
-            #region Weaves
-            // AoE Devilment
-            if (IsEnabled(CustomComboPreset.DNC_AoE_Adv_Devilment) &&
-                CanWeave(actionID) &&
-                LevelChecked(Devilment) &&
-                GetCooldownRemainingTime(Devilment) < 0.05 &&
-                (HasEffect(Buffs.TechnicalFinish) ||
-                 WasLastAction(TechnicalFinish4) ||
-                 !LevelChecked(TechnicalStep)))
-                return Devilment;
+                #region Weaves
+                // AoE Devilment
+                if (IsEnabled(CustomComboPreset.DNC_AoE_Adv_Devilment) &&
+                    CanWeave() &&
+                    LevelChecked(Devilment) &&
+                    GetCooldownRemainingTime(Devilment) < 0.05 &&
+                    (HasEffect(Buffs.TechnicalFinish) ||
+                     WasLastAction(TechnicalFinish4) ||
+                     !LevelChecked(TechnicalStep)))
+                    return Devilment;
 
-            // AoE Flourish
-            if (IsEnabled(CustomComboPreset.DNC_AoE_Adv_Flourish) &&
-                CanWeave(actionID) &&
-                ActionReady(Flourish) &&
-                !WasLastWeaponskill(TechnicalFinish4) &&
-                IsOnCooldown(Devilment) &&
-                (GetCooldownRemainingTime(Devilment) > 50 ||
-                 (HasEffect(Buffs.Devilment) &&
-                  GetBuffRemainingTime(Buffs.Devilment) < 19)) &&
-                !HasEffect(Buffs.ThreeFoldFanDance) &&
-                !HasEffect(Buffs.FourFoldFanDance) &&
-                !HasEffect(Buffs.FlourishingSymmetry) &&
-                !HasEffect(Buffs.FlourishingFlow) &&
-                !HasEffect(Buffs.FinishingMoveReady))
-                return Flourish;
+                // AoE Flourish
+                if (IsEnabled(CustomComboPreset.DNC_AoE_Adv_Flourish) &&
+                    CanWeave() &&
+                    ActionReady(Flourish) &&
+                    !WasLastWeaponskill(TechnicalFinish4) &&
+                    IsOnCooldown(Devilment) &&
+                    (GetCooldownRemainingTime(Devilment) > 50 ||
+                     (HasEffect(Buffs.Devilment) &&
+                      GetBuffRemainingTime(Buffs.Devilment) < 19)) &&
+                    !HasEffect(Buffs.ThreeFoldFanDance) &&
+                    !HasEffect(Buffs.FourFoldFanDance) &&
+                    !HasEffect(Buffs.FlourishingSymmetry) &&
+                    !HasEffect(Buffs.FlourishingFlow) &&
+                    !HasEffect(Buffs.FinishingMoveReady))
+                    return Flourish;
 
             // AoE Interrupt
             if (IsEnabled(CustomComboPreset.DNC_AoE_Adv_Interrupt) &&
@@ -639,21 +639,21 @@ internal partial class DNC
                 PlayerHealthPercentageHp() <= GetOptionValue(Config.DNCVariantCurePercent))
                 return Variant.VariantCure;
 
-            if (IsEnabled(CustomComboPreset.DNC_Variant_Rampart) &&
-                IsEnabled(Variant.VariantRampart) &&
-                IsOffCooldown(Variant.VariantRampart) &&
-                CanWeave(actionID))
-                return Variant.VariantRampart;
+                if (IsEnabled(CustomComboPreset.DNC_Variant_Rampart) &&
+                    IsEnabled(Variant.VariantRampart) &&
+                    IsOffCooldown(Variant.VariantRampart) &&
+                    CanWeave())
+                    return Variant.VariantRampart;
 
-            if (CanWeave(actionID) && !WasLastWeaponskill(TechnicalFinish4))
-            {
-                // AoE Feathers & Fans
-                if (IsEnabled(CustomComboPreset.DNC_AoE_Adv_Feathers) &&
-                    LevelChecked(FanDance1))
+                if (CanWeave() && !WasLastWeaponskill(TechnicalFinish4))
                 {
-                    // FD3
-                    if (HasEffect(Buffs.ThreeFoldFanDance))
-                        return FanDance3;
+                    // AoE Feathers & Fans
+                    if (IsEnabled(CustomComboPreset.DNC_AoE_Adv_Feathers) &&
+                        LevelChecked(FanDance1))
+                    {
+                        // FD3
+                        if (HasEffect(Buffs.ThreeFoldFanDance))
+                            return FanDance3;
 
                     if (LevelChecked(FanDance2))
                     {
@@ -814,13 +814,13 @@ internal partial class DNC
                     gauge.Esprit >= Config.DNCEspritThreshold_AoE)
                     return SaberDance;
 
-                if (CanWeave(actionID))
-                {
-                    // AoE Fan Dance overcap protection
-                    if (IsEnabled(CustomComboPreset.DNC_AoE_FanDanceOvercap) &&
-                        LevelChecked(FanDance2) && gauge.Feathers is 4 &&
-                        (HasEffect(Buffs.SilkenSymmetry) || HasEffect(Buffs.SilkenFlow)))
-                        return FanDance2;
+                    if (CanWeave())
+                    {
+                        // AoE Fan Dance overcap protection
+                        if (IsEnabled(CustomComboPreset.DNC_AoE_FanDanceOvercap) &&
+                            LevelChecked(FanDance2) && gauge.Feathers is 4 && 
+                            (HasEffect(Buffs.SilkenSymmetry) || HasEffect(Buffs.SilkenFlow)))
+                            return FanDance2;
 
                     // AoE Fan Dance 3/4 on combo
                     if (IsEnabled(CustomComboPreset.DNC_AoE_FanDance34))

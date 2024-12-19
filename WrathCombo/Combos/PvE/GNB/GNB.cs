@@ -122,32 +122,32 @@ internal partial class GNB
                     && PlayerHealthPercentageHp() <= GetOptionValue(Config.GNB_VariantCure))
                     return Variant.VariantCure;
 
-                //Variant SpiritDart
-                Status? sustainedDamage = FindTargetEffect(Variant.Debuffs.SustainedDamage);
-                if (IsEnabled(CustomComboPreset.GNB_Variant_SpiritDart) &&
-                    IsEnabled(Variant.VariantSpiritDart) &&
-                    CanWeave(actionID) &&
-                    (sustainedDamage is null || sustainedDamage?.RemainingTime <= 3))
-                    return Variant.VariantSpiritDart;
+                    //Variant SpiritDart
+                    Status? sustainedDamage = FindTargetEffect(Variant.Debuffs.SustainedDamage);
+                    if (IsEnabled(CustomComboPreset.GNB_Variant_SpiritDart) &&
+                        IsEnabled(Variant.VariantSpiritDart) &&
+                        CanWeave() &&
+                        (sustainedDamage is null || sustainedDamage?.RemainingTime <= 3))
+                        return Variant.VariantSpiritDart;
 
-                //Variant Ultimatum
-                if (IsEnabled(CustomComboPreset.GNB_Variant_Ultimatum) &&
-                    IsEnabled(Variant.VariantUltimatum) &&
-                    CanWeave(actionID) &&
-                    ActionReady(Variant.VariantUltimatum))
-                    return Variant.VariantUltimatum;
-                #endregion
+                    //Variant Ultimatum
+                    if (IsEnabled(CustomComboPreset.GNB_Variant_Ultimatum) &&
+                        IsEnabled(Variant.VariantUltimatum) &&
+                        CanWeave() &&
+                        ActionReady(Variant.VariantUltimatum))
+                        return Variant.VariantUltimatum;
+                    #endregion
 
-                #region Bozja
-                if (Bozja.IsInBozja) //Checks if we're inside Bozja instances
-                {
-                    //oGCDs
-                    if (CanWeave(actionID))
+                    #region Bozja
+                    if (Bozja.IsInBozja) //Checks if we're inside Bozja instances
                     {
-                        if (IsEnabled(CustomComboPreset.GNB_Bozja_LostFocus) && //Lost Focus is enabled
-                            HasActionEquipped(Bozja.LostFocus) &&
-                            GetBuffStacks(Bozja.Buffs.Boost) < 16) //Boost stacks are below 16
-                            return Bozja.LostFocus;
+                        //oGCDs
+                        if (CanWeave())
+                        {
+                            if (IsEnabled(CustomComboPreset.GNB_Bozja_LostFocus) && //Lost Focus is enabled
+                                HasActionEquipped(Bozja.LostFocus) &&
+                                GetBuffStacks(Bozja.Buffs.Boost) < 16) //Boost stacks are below 16
+                                return Bozja.LostFocus;
 
                         if (IsEnabled(CustomComboPreset.GNB_Bozja_LostFontOfPower) && //Lost Font of Power is enabled
                             HasActionEquipped(Bozja.LostFontOfPower) &&
@@ -372,27 +372,27 @@ internal partial class GNB
                     HasBattleTarget()) //Has target
                     return LightningShot; //Execute Lightning Shot if conditions are met
 
-                //No Mercy
-                if (ActionReady(NoMercy) && //No Mercy is ready
-                    InCombat() && //In combat
-                    HasTarget() && //Has target
-                    CanWeave(actionID)) //Able to weave
-                {
-                    if (LevelChecked(DoubleDown)) //Lv90+
+                    //No Mercy
+                    if (ActionReady(NoMercy) && //No Mercy is ready
+                        InCombat() && //In combat
+                        HasTarget() && //Has target
+                        CanWeave()) //Able to weave
                     {
-                        if ((inOdd && //Odd Minute window
-                            (Ammo == 2 || (lastComboMove is BrutalShell && Ammo == 1))) || //2 Ammo or 1 Ammo with Solid Barrel next in combo
-                            (!inOdd && //Even Minute window
-                            Ammo != 3)) //Ammo is not full (3)
-                            return NoMercy; //Execute No Mercy if conditions are met
+                        if (LevelChecked(DoubleDown)) //Lv90+
+                        {
+                            if ((inOdd && //Odd Minute window
+                                (Ammo == 2 || (lastComboMove is BrutalShell && Ammo == 1))) || //2 Ammo or 1 Ammo with Solid Barrel next in combo
+                                (!inOdd && //Even Minute window
+                                Ammo != 3)) //Ammo is not full (3)
+                                return NoMercy; //Execute No Mercy if conditions are met
+                        }
+                        if (!LevelChecked(DoubleDown)) //Lv1-89
+                        {
+                            if (canLateWeave && //Late-weaveable
+                                Ammo == MaxCartridges(level)) //Ammo is full
+                                return NoMercy; //Execute No Mercy if conditions are met
+                        }
                     }
-                    if (!LevelChecked(DoubleDown)) //Lv1-89
-                    {
-                        if (canLateWeave && //Late-weaveable
-                            Ammo == MaxCartridges(level)) //Ammo is full
-                            return NoMercy; //Execute No Mercy if conditions are met
-                    }
-                }
 
                 //Hypervelocity - Forced to prevent loss
                 if (JustUsed(BurstStrike, 5f) && //Burst Strike was just used within 5 seconds
@@ -410,15 +410,15 @@ internal partial class GNB
                     HasEffect(Buffs.ReadyToRaze))) //after Fated Circle
                     return OriginalHook(Continuation); //Execute appopriate Continuation action if conditions are met
 
-                //oGCDs
-                if (CanWeave(actionID))
-                {
-                    //Bloodfest
-                    if (InCombat() && //In combat
-                        HasTarget() && //Has target
-                        canBF && //able to use Bloodfest
-                        Ammo == 0) //Only when ammo is empty
-                        return Bloodfest; //Execute Bloodfest if conditions are met
+                    //oGCDs
+                    if (CanWeave())
+                    {
+                        //Bloodfest
+                        if (InCombat() && //In combat
+                            HasTarget() && //Has target
+                            canBF && //able to use Bloodfest
+                            Ammo == 0) //Only when ammo is empty
+                            return Bloodfest; //Execute Bloodfest if conditions are met
 
                     //Zone
                     if (canZone && //able to use Zone
@@ -660,31 +660,31 @@ internal partial class GNB
                     && PlayerHealthPercentageHp() <= GetOptionValue(Config.GNB_VariantCure))
                     return Variant.VariantCure;
 
-                //Variant SpiritDart
-                Status? sustainedDamage = FindTargetEffect(Variant.Debuffs.SustainedDamage);
-                if (IsEnabled(CustomComboPreset.GNB_Variant_SpiritDart) &&
-                    IsEnabled(Variant.VariantSpiritDart) &&
-                    CanWeave(actionID) &&
-                    (sustainedDamage is null || sustainedDamage?.RemainingTime <= 3))
-                    return Variant.VariantSpiritDart;
+                    //Variant SpiritDart
+                    Status? sustainedDamage = FindTargetEffect(Variant.Debuffs.SustainedDamage);
+                    if (IsEnabled(CustomComboPreset.GNB_Variant_SpiritDart) &&
+                        IsEnabled(Variant.VariantSpiritDart) &&
+                        CanWeave() &&
+                        (sustainedDamage is null || sustainedDamage?.RemainingTime <= 3))
+                        return Variant.VariantSpiritDart;
 
-                //Variant Ultimatum
-                if (IsEnabled(CustomComboPreset.GNB_Variant_Ultimatum) &&
-                    IsEnabled(Variant.VariantUltimatum) &&
-                    CanWeave(actionID) &&
-                    ActionReady(Variant.VariantUltimatum))
-                    return Variant.VariantUltimatum;
-                #endregion 
+                    //Variant Ultimatum
+                    if (IsEnabled(CustomComboPreset.GNB_Variant_Ultimatum) &&
+                        IsEnabled(Variant.VariantUltimatum) &&
+                        CanWeave() &&
+                        ActionReady(Variant.VariantUltimatum))
+                        return Variant.VariantUltimatum;
+                    #endregion 
 
-                #region Bozja
-                if (Bozja.IsInBozja) //Checks if we're inside Bozja instances
-                {
-                    //oGCDs
-                    if (CanWeave(actionID))
+                    #region Bozja
+                    if (Bozja.IsInBozja) //Checks if we're inside Bozja instances
                     {
-                        if (IsEnabled(CustomComboPreset.GNB_Bozja_LostFocus) && //Lost Focus is enabled
-                            GetBuffStacks(Bozja.Buffs.Boost) < 16) //Boost stacks are below 16
-                            return Bozja.LostFocus;
+                        //oGCDs
+                        if (CanWeave())
+                        {
+                            if (IsEnabled(CustomComboPreset.GNB_Bozja_LostFocus) && //Lost Focus is enabled
+                                GetBuffStacks(Bozja.Buffs.Boost) < 16) //Boost stacks are below 16
+                                return Bozja.LostFocus;
 
                         if (IsEnabled(CustomComboPreset.GNB_Bozja_LostFontOfPower) && //Lost Font of Power is enabled
                             IsOffCooldown(Bozja.LostFontOfPower)) //Lost Focus was not just used within 30 seconds
@@ -873,29 +873,29 @@ internal partial class GNB
                     HasBattleTarget()) //Has target
                     return LightningShot; //Execute Lightning Shot if conditions are met
 
-                //No Mercy
-                if (IsEnabled(CustomComboPreset.GNB_ST_NoMercy) && //No Mercy option is enabled
-                    ActionReady(NoMercy) && //No Mercy is ready
-                    InCombat() && //In combat
-                    HasTarget() && //Has target
-                    CanWeave(actionID) && //Able to weave
-                    GetTargetHPPercent() >= nmStop) //target HP is above threshold
-                {
-                    if (LevelChecked(DoubleDown)) //Lv90+
+                    //No Mercy
+                    if (IsEnabled(CustomComboPreset.GNB_ST_NoMercy) && //No Mercy option is enabled
+                        ActionReady(NoMercy) && //No Mercy is ready
+                        InCombat() && //In combat
+                        HasTarget() && //Has target
+                        CanWeave() && //Able to weave
+                        GetTargetHPPercent() >= nmStop) //target HP is above threshold
                     {
-                        if ((inOdd && //Odd Minute window
-                            (Ammo == 2 || (lastComboMove is BrutalShell && Ammo == 1))) || //2 Ammo or 1 Ammo with Solid Barrel next in combo
-                            (!inOdd && //Even Minute window
-                            Ammo != 3)) //Ammo is not full (3)
-                            return NoMercy; //Execute No Mercy if conditions are met
+                        if (LevelChecked(DoubleDown)) //Lv90+
+                        {
+                            if ((inOdd && //Odd Minute window
+                                (Ammo == 2 || (lastComboMove is BrutalShell && Ammo == 1))) || //2 Ammo or 1 Ammo with Solid Barrel next in combo
+                                (!inOdd && //Even Minute window
+                                Ammo != 3)) //Ammo is not full (3)
+                                return NoMercy; //Execute No Mercy if conditions are met
+                        }
+                        if (!LevelChecked(DoubleDown)) //Lv1-89
+                        {
+                            if (canLateWeave && //Late-weaveable
+                                Ammo == MaxCartridges(level)) //Ammo is full
+                                return NoMercy; //Execute No Mercy if conditions are met
+                        }
                     }
-                    if (!LevelChecked(DoubleDown)) //Lv1-89
-                    {
-                        if (canLateWeave && //Late-weaveable
-                            Ammo == MaxCartridges(level)) //Ammo is full
-                            return NoMercy; //Execute No Mercy if conditions are met
-                    }
-                }
 
                 //Hypervelocity - Forced to prevent loss
                 if (IsEnabled(CustomComboPreset.GNB_ST_Advanced_Cooldowns) && //Cooldowns option is enabled
@@ -917,19 +917,19 @@ internal partial class GNB
                     HasEffect(Buffs.ReadyToRaze))) //after Fated Circle
                     return OriginalHook(Continuation); //Execute appopriate Continuation action if conditions are met
 
-                //oGCDs
-                if (CanWeave(actionID))
-                {
-                    //Cooldowns
-                    if (IsEnabled(CustomComboPreset.GNB_ST_Advanced_Cooldowns)) //Cooldowns option is enabled
+                    //oGCDs
+                    if (CanWeave())
                     {
-                        //Bloodfest
-                        if (IsEnabled(CustomComboPreset.GNB_ST_Bloodfest) && //Bloodfest option is enabled
-                            InCombat() && //In combat
-                            HasTarget() && //Has target
-                            canBF && //able to use Bloodfest
-                            Ammo == 0) //Only when ammo is empty
-                            return Bloodfest; //Execute Bloodfest if conditions are met
+                        //Cooldowns
+                        if (IsEnabled(CustomComboPreset.GNB_ST_Advanced_Cooldowns)) //Cooldowns option is enabled
+                        {
+                            //Bloodfest
+                            if (IsEnabled(CustomComboPreset.GNB_ST_Bloodfest) && //Bloodfest option is enabled
+                                InCombat() && //In combat
+                                HasTarget() && //Has target
+                                canBF && //able to use Bloodfest
+                                Ammo == 0) //Only when ammo is empty
+                                return Bloodfest; //Execute Bloodfest if conditions are met
 
                         //Zone
                         if (IsEnabled(CustomComboPreset.GNB_ST_Zone) && //Zone option is enabled
@@ -1158,31 +1158,31 @@ internal partial class GNB
                     && PlayerHealthPercentageHp() <= GetOptionValue(Config.GNB_VariantCure))
                     return Variant.VariantCure;
 
-                //Variant SpiritDart
-                Status? sustainedDamage = FindTargetEffect(Variant.Debuffs.SustainedDamage);
-                if (IsEnabled(CustomComboPreset.GNB_Variant_SpiritDart) &&
-                    IsEnabled(Variant.VariantSpiritDart) &&
-                    CanWeave(actionID) &&
-                    (sustainedDamage is null || sustainedDamage?.RemainingTime <= 3))
-                    return Variant.VariantSpiritDart;
+                    //Variant SpiritDart
+                    Status? sustainedDamage = FindTargetEffect(Variant.Debuffs.SustainedDamage);
+                    if (IsEnabled(CustomComboPreset.GNB_Variant_SpiritDart) &&
+                        IsEnabled(Variant.VariantSpiritDart) &&
+                        CanWeave() &&
+                        (sustainedDamage is null || sustainedDamage?.RemainingTime <= 3))
+                        return Variant.VariantSpiritDart;
 
-                //Variant Ultimatum
-                if (IsEnabled(CustomComboPreset.GNB_Variant_Ultimatum) &&
-                    IsEnabled(Variant.VariantUltimatum) &&
-                    CanWeave(actionID) &&
-                    ActionReady(Variant.VariantUltimatum))
-                    return Variant.VariantUltimatum;
-                #endregion
+                    //Variant Ultimatum
+                    if (IsEnabled(CustomComboPreset.GNB_Variant_Ultimatum) &&
+                        IsEnabled(Variant.VariantUltimatum) &&
+                        CanWeave() &&
+                        ActionReady(Variant.VariantUltimatum))
+                        return Variant.VariantUltimatum;
+                    #endregion
 
-                #region Bozja
-                if (Bozja.IsInBozja) //Checks if we're inside Bozja instances
-                {
-                    //oGCDs
-                    if (CanWeave(actionID))
+                    #region Bozja
+                    if (Bozja.IsInBozja) //Checks if we're inside Bozja instances
                     {
-                        if (IsEnabled(CustomComboPreset.GNB_Bozja_LostFocus) && //Lost Focus is enabled
-                            GetBuffStacks(Bozja.Buffs.Boost) < 16) //Boost stacks are below 16
-                            return Bozja.LostFocus;
+                        //oGCDs
+                        if (CanWeave())
+                        {
+                            if (IsEnabled(CustomComboPreset.GNB_Bozja_LostFocus) && //Lost Focus is enabled
+                                GetBuffStacks(Bozja.Buffs.Boost) < 16) //Boost stacks are below 16
+                                return Bozja.LostFocus;
 
                         if (IsEnabled(CustomComboPreset.GNB_Bozja_LostFontOfPower) && //Lost Font of Power is enabled
                             IsOffCooldown(Bozja.LostFontOfPower)) //Lost Focus was not just used within 30 seconds
@@ -1363,31 +1363,31 @@ internal partial class GNB
                 }
                 #endregion
 
-                #region Rotation
-                if (InCombat()) //if already in combat
-                {
-                    if (CanWeave(actionID)) //if we can weave
+                    #region Rotation
+                    if (InCombat()) //if already in combat
                     {
-                        //NoMercy
-                        if (ActionReady(NoMercy) && //if No Mercy is ready
-                            GetTargetHPPercent() > 5) //if target HP is above threshold
-                            return NoMercy; //execute No Mercy
-                        //BowShock
-                        if (canBow && //if Bow Shock is ready
-                            HasEffect(Buffs.NoMercy)) //if No Mercy is active
-                            return BowShock; //execute Bow Shock
-                        //Zone
-                        if (canZone &&
-                            nmCD is < 57.5f and > 17) //use on CD after first usage in NM
-                            return OriginalHook(DangerZone); //execute Zone
-                        //Bloodfest
-                        if (canBF) //if Bloodfest is ready & gauge is empty
-                            return Bloodfest; //execute Bloodfest
-                        //Continuation
-                        if (LevelChecked(FatedBrand) && //if Fated Brand is unlocked
-                            HasEffect(Buffs.ReadyToRaze)) //if Ready To Raze is active
-                            return FatedBrand; //execute Fated Brand
-                    }
+                        if (CanWeave()) //if we can weave
+                        {
+                            //NoMercy
+                            if (ActionReady(NoMercy) && //if No Mercy is ready
+                                GetTargetHPPercent() > 5) //if target HP is above threshold
+                                return NoMercy; //execute No Mercy
+                            //BowShock
+                            if (canBow && //if Bow Shock is ready
+                                HasEffect(Buffs.NoMercy)) //if No Mercy is active
+                                return BowShock; //execute Bow Shock
+                            //Zone
+                            if (canZone &&
+                                nmCD is < 57.5f and > 17) //use on CD after first usage in NM
+                                return OriginalHook(DangerZone); //execute Zone
+                            //Bloodfest
+                            if (canBF) //if Bloodfest is ready & gauge is empty
+                                return Bloodfest; //execute Bloodfest
+                            //Continuation
+                            if (LevelChecked(FatedBrand) && //if Fated Brand is unlocked
+                                HasEffect(Buffs.ReadyToRaze)) //if Ready To Raze is active
+                                return FatedBrand; //execute Fated Brand
+                        }
 
                     //SonicBreak
                     if (canBreak && //if Ready To Break is active & unlocked
@@ -1566,31 +1566,31 @@ internal partial class GNB
                     && PlayerHealthPercentageHp() <= GetOptionValue(Config.GNB_VariantCure))
                     return Variant.VariantCure;
 
-                //Variant SpiritDart
-                Status? sustainedDamage = FindTargetEffect(Variant.Debuffs.SustainedDamage);
-                if (IsEnabled(CustomComboPreset.GNB_Variant_SpiritDart) &&
-                    IsEnabled(Variant.VariantSpiritDart) &&
-                    CanWeave(actionID) &&
-                    (sustainedDamage is null || sustainedDamage?.RemainingTime <= 3))
-                    return Variant.VariantSpiritDart;
+                    //Variant SpiritDart
+                    Status? sustainedDamage = FindTargetEffect(Variant.Debuffs.SustainedDamage);
+                    if (IsEnabled(CustomComboPreset.GNB_Variant_SpiritDart) &&
+                        IsEnabled(Variant.VariantSpiritDart) &&
+                        CanWeave() &&
+                        (sustainedDamage is null || sustainedDamage?.RemainingTime <= 3))
+                        return Variant.VariantSpiritDart;
 
-                //Variant Ultimatum
-                if (IsEnabled(CustomComboPreset.GNB_Variant_Ultimatum) &&
-                    IsEnabled(Variant.VariantUltimatum) &&
-                    CanWeave(actionID) &&
-                    ActionReady(Variant.VariantUltimatum))
-                    return Variant.VariantUltimatum;
-                #endregion
+                    //Variant Ultimatum
+                    if (IsEnabled(CustomComboPreset.GNB_Variant_Ultimatum) &&
+                        IsEnabled(Variant.VariantUltimatum) &&
+                        CanWeave() &&
+                        ActionReady(Variant.VariantUltimatum))
+                        return Variant.VariantUltimatum;
+                    #endregion
 
-                #region Bozja
-                if (Bozja.IsInBozja) //Checks if we're inside Bozja instances
-                {
-                    //oGCDs
-                    if (CanWeave(actionID))
+                    #region Bozja
+                    if (Bozja.IsInBozja) //Checks if we're inside Bozja instances
                     {
-                        if (IsEnabled(CustomComboPreset.GNB_Bozja_LostFocus) && //Lost Focus is enabled
-                            GetBuffStacks(Bozja.Buffs.Boost) < 16) //Boost stacks are below 16
-                            return Bozja.LostFocus;
+                        //oGCDs
+                        if (CanWeave())
+                        {
+                            if (IsEnabled(CustomComboPreset.GNB_Bozja_LostFocus) && //Lost Focus is enabled
+                                GetBuffStacks(Bozja.Buffs.Boost) < 16) //Boost stacks are below 16
+                                return Bozja.LostFocus;
 
                         if (IsEnabled(CustomComboPreset.GNB_Bozja_LostFontOfPower) && //Lost Font of Power is enabled
                             IsOffCooldown(Bozja.LostFontOfPower)) //Lost Focus was not just used within 30 seconds
@@ -1771,35 +1771,35 @@ internal partial class GNB
                 }
                 #endregion
 
-                #region Rotation
-                if (InCombat()) //if already in combat
-                {
-                    if (CanWeave(actionID)) //if we can weave
+                    #region Rotation
+                    if (InCombat()) //if already in combat
                     {
-                        //NoMercy
-                        if (IsEnabled(CustomComboPreset.GNB_AoE_NoMercy) && //if No Mercy option is enabled
-                            ActionReady(NoMercy) && //if No Mercy is ready
-                            GetTargetHPPercent() > nmStop) //if target HP is above threshold
-                            return NoMercy; //execute No Mercy
-                        //BowShock
-                        if (IsEnabled(CustomComboPreset.GNB_AoE_BowShock) && //if Bow Shock option is enabled
-                            canBow && //if Bow Shock is ready
-                            HasEffect(Buffs.NoMercy)) //if No Mercy is active
-                            return BowShock; //execute Bow Shock
-                        //Zone
-                        if (IsEnabled(CustomComboPreset.GNB_AoE_Zone) &&
-                            canZone &&
-                            nmCD is < 57.5f and > 17) //use on CD after first usage in NM
-                            return OriginalHook(DangerZone); //execute Zone
-                        //Bloodfest
-                        if (IsEnabled(CustomComboPreset.GNB_AoE_Bloodfest) && //if Bloodfest option is enabled
-                            canBF) //if Bloodfest is ready & gauge is empty
-                            return Bloodfest; //execute Bloodfest
-                        //Continuation
-                        if (LevelChecked(FatedBrand) && //if Fated Brand is unlocked
-                            HasEffect(Buffs.ReadyToRaze)) //if Ready To Raze is active
-                            return FatedBrand; //execute Fated Brand
-                    }
+                        if (CanWeave()) //if we can weave
+                        {
+                            //NoMercy
+                            if (IsEnabled(CustomComboPreset.GNB_AoE_NoMercy) && //if No Mercy option is enabled
+                                ActionReady(NoMercy) && //if No Mercy is ready
+                                GetTargetHPPercent() > nmStop) //if target HP is above threshold
+                                return NoMercy; //execute No Mercy
+                            //BowShock
+                            if (IsEnabled(CustomComboPreset.GNB_AoE_BowShock) && //if Bow Shock option is enabled
+                                canBow && //if Bow Shock is ready
+                                HasEffect(Buffs.NoMercy)) //if No Mercy is active
+                                return BowShock; //execute Bow Shock
+                            //Zone
+                            if (IsEnabled(CustomComboPreset.GNB_AoE_Zone) &&
+                                canZone &&
+                                nmCD is < 57.5f and > 17) //use on CD after first usage in NM
+                                return OriginalHook(DangerZone); //execute Zone
+                            //Bloodfest
+                            if (IsEnabled(CustomComboPreset.GNB_AoE_Bloodfest) && //if Bloodfest option is enabled
+                                canBF) //if Bloodfest is ready & gauge is empty
+                                return Bloodfest; //execute Bloodfest
+                            //Continuation
+                            if (LevelChecked(FatedBrand) && //if Fated Brand is unlocked
+                                HasEffect(Buffs.ReadyToRaze)) //if Ready To Raze is active
+                                return FatedBrand; //execute Fated Brand
+                        }
 
                     //SonicBreak
                     if (IsEnabled(CustomComboPreset.GNB_AoE_SonicBreak) && //if Sonic Break option is enabled
@@ -1933,42 +1933,42 @@ internal partial class GNB
                 #endregion
                 #endregion
 
-                //oGCDs
-                if (CanWeave(KeenEdge))
-                {
-                    //Variant SpiritDart
-                    Status? sustainedDamage = FindTargetEffect(Variant.Debuffs.SustainedDamage);
-                    if (IsEnabled(CustomComboPreset.GNB_Variant_SpiritDart) &&
-                        IsEnabled(Variant.VariantSpiritDart) &&
-                        (sustainedDamage is null || sustainedDamage?.RemainingTime <= 3))
-                        return Variant.VariantSpiritDart;
+                    //oGCDs
+                    if (CanWeave())
+                    {
+                        //Variant SpiritDart
+                        Status? sustainedDamage = FindTargetEffect(Variant.Debuffs.SustainedDamage);
+                        if (IsEnabled(CustomComboPreset.GNB_Variant_SpiritDart) &&
+                            IsEnabled(Variant.VariantSpiritDart) &&
+                            (sustainedDamage is null || sustainedDamage?.RemainingTime <= 3))
+                            return Variant.VariantSpiritDart;
 
                     //Variant Ultimatum
                     if (IsEnabled(CustomComboPreset.GNB_Variant_Ultimatum) && IsEnabled(Variant.VariantUltimatum) && ActionReady(Variant.VariantUltimatum))
                         return Variant.VariantUltimatum;
 
-                    //No Mercy
-                    if (IsEnabled(CustomComboPreset.GNB_GF_NoMercy) && //No Mercy option is enabled
-                        ActionReady(NoMercy) && //No Mercy is ready
-                        InCombat() && //In combat
-                        HasTarget() && //Has target
-                        CanWeave(KeenEdge)) //Able to weave
-                    {
-                        if (LevelChecked(DoubleDown)) //Lv90+
+                        //No Mercy
+                        if (IsEnabled(CustomComboPreset.GNB_GF_NoMercy) && //No Mercy option is enabled
+                            ActionReady(NoMercy) && //No Mercy is ready
+                            InCombat() && //In combat
+                            HasTarget() && //Has target
+                            CanWeave()) //Able to weave
                         {
-                            if ((inOdd && //Odd Minute window
-                                (ammo == 2 || (lastComboMove is BrutalShell && ammo == 1))) || //2 Ammo or 1 Ammo with Solid Barrel next in combo
-                                (!inOdd && //Even Minute window
-                                ammo != 3)) //Ammo is not full (3)
-                                return NoMercy; //Execute No Mercy if conditions are met
+                            if (LevelChecked(DoubleDown)) //Lv90+
+                            {
+                                if ((inOdd && //Odd Minute window
+                                    (Ammo == 2 || (lastComboMove is BrutalShell && Ammo == 1))) || //2 Ammo or 1 Ammo with Solid Barrel next in combo
+                                    (!inOdd && //Even Minute window
+                                    Ammo != 3)) //Ammo is not full (3)
+                                    return NoMercy; //Execute No Mercy if conditions are met
+                            }
+                            if (!LevelChecked(DoubleDown)) //Lv1-89
+                            {
+                                if (canLateWeave && //Late-weaveable
+                                    Ammo == MaxCartridges(level)) //Ammo is full
+                                    return NoMercy; //Execute No Mercy if conditions are met
+                            }
                         }
-                        if (!LevelChecked(DoubleDown)) //Lv1-89
-                        {
-                            if (canLateWeave && //Late-weaveable
-                                ammo == MaxCartridges(level)) //Ammo is full
-                                return NoMercy; //Execute No Mercy if conditions are met
-                        }
-                    }
 
                     //Cooldowns
                     if (IsEnabled(CustomComboPreset.GNB_GF_Features)) //Features are enabled
@@ -2284,20 +2284,20 @@ internal partial class GNB
                 #endregion
                 #endregion
 
-                //oGCDs
-                if (Config.GNB_NM_Features_Weave == 1) //Weave option is enabled
-                {
-                    if (CanWeave(ActionWatching.LastWeaponskill))
+                    //oGCDs
+                    if (Config.GNB_NM_Features_Weave == 1) //Weave option is enabled
                     {
-                        //Continuation
-                        if (IsEnabled(CustomComboPreset.GNB_NM_Continuation) && //Continuation option is enabled
-                            canContinue && //able to use Continuation
-                            (HasEffect(Buffs.ReadyToRip) || //after Gnashing Fang
-                            HasEffect(Buffs.ReadyToTear) || //after Savage Claw
-                            HasEffect(Buffs.ReadyToGouge) || //after Wicked Talon
-                            HasEffect(Buffs.ReadyToBlast) || //after Burst Strike
-                            HasEffect(Buffs.ReadyToRaze))) //after Fated Circle
-                            return OriginalHook(Continuation); //Execute appopriate Continuation action if conditions are met
+                        if (CanWeave())
+                        {
+                            //Continuation
+                            if (IsEnabled(CustomComboPreset.GNB_NM_Continuation) && //Continuation option is enabled
+                                canContinue && //able to use Continuation
+                                (HasEffect(Buffs.ReadyToRip) || //after Gnashing Fang
+                                HasEffect(Buffs.ReadyToTear) || //after Savage Claw
+                                HasEffect(Buffs.ReadyToGouge) || //after Wicked Talon
+                                HasEffect(Buffs.ReadyToBlast) || //after Burst Strike
+                                HasEffect(Buffs.ReadyToRaze))) //after Fated Circle
+                                return OriginalHook(Continuation); //Execute appopriate Continuation action if conditions are met
 
                         //Bloodfest
                         if (IsEnabled(CustomComboPreset.GNB_NM_Bloodfest) && //Bloodfest option is enabled

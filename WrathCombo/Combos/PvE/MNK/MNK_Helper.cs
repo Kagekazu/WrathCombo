@@ -113,7 +113,7 @@ internal static partial class MNK
 
         public override int MaxOpenerLevel => 109;
 
-        public override List<uint> OpenerActions { get; protected set; } =
+        public override List<uint> OpenerActions { get; set; } =
         [
             PerfectBalance,
             TwinSnakes,
@@ -169,7 +169,7 @@ internal static partial class MNK
 
         public override int MaxOpenerLevel => 109;
 
-        public override List<uint> OpenerActions { get; protected set; } =
+        public override List<uint> OpenerActions { get; set; } =
         [
             DragonKick,
             PerfectBalance,

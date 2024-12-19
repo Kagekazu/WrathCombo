@@ -26,7 +26,7 @@ internal partial class GNB
     internal class GNBOpenerMaxLevel1 : WrathOpener
     {
         //2.47 GCD or lower
-        public override List<uint> OpenerActions { get; protected set; } =
+        public override List<uint> OpenerActions { get; set; } =
         [
             LightningShot,
             Bloodfest,
@@ -53,7 +53,7 @@ internal partial class GNB
         public override int MinOpenerLevel => 100;
         public override int MaxOpenerLevel => 109;
 
-        public override List<int> DelayedWeaveSteps { get; protected set; } =
+        public override List<int> DelayedWeaveSteps { get; set; } =
         [
             2,
             5,
@@ -86,7 +86,7 @@ internal partial class GNB
     internal class GNBOpenerMaxLevel2 : WrathOpener
     {
         //Above 2.47 GCD
-        public override List<uint> OpenerActions { get; protected set; } =
+        public override List<uint> OpenerActions { get; set; } =
         [
             LightningShot,
             Bloodfest,
@@ -112,7 +112,7 @@ internal partial class GNB
         public override int MinOpenerLevel => 100;
         public override int MaxOpenerLevel => 109;
 
-        public override List<int> DelayedWeaveSteps { get; protected set; } =
+        public override List<int> DelayedWeaveSteps { get; set; } =
         [
             2,
         ];

@@ -31,18 +31,18 @@ internal partial class WAR
                     (sustainedDamage is null || sustainedDamage?.RemainingTime <= 3))
                     return Variant.VariantSpiritDart;
 
-                if (IsEnabled(CustomComboPreset.WAR_Variant_Ultimatum) &&
-                    IsEnabled(Variant.VariantUltimatum) &&
-                    CanWeave(actionID) &&
-                    ActionReady(Variant.VariantUltimatum))
-                    return Variant.VariantUltimatum;
+                    if (IsEnabled(CustomComboPreset.WAR_Variant_Ultimatum) &&
+                        IsEnabled(Variant.VariantUltimatum) &&
+                        CanWeave() &&
+                        ActionReady(Variant.VariantUltimatum))
+                        return Variant.VariantUltimatum;
 
-                if (IsEnabled(CustomComboPreset.WAR_Variant_Cure) &&
-                    IsEnabled(Variant.VariantCure) &&
-                    CanWeave(actionID) &&
-                    PlayerHealthPercentageHp() <= GetOptionValue(Config.WAR_VariantCure))
-                    return Variant.VariantCure;
-                #endregion
+                    if (IsEnabled(CustomComboPreset.WAR_Variant_Cure) &&
+                        IsEnabled(Variant.VariantCure) &&
+                        CanWeave() &&
+                        PlayerHealthPercentageHp() <= GetOptionValue(Config.WAR_VariantCure))
+                        return Variant.VariantCure;
+                    #endregion
 
                 #region Mitigations
                 if (InCombat() && //Player is in combat
@@ -88,14 +88,14 @@ internal partial class WAR
                     HasBattleTarget()) //has a target
                     return Tomahawk;
 
-                if (CanWeave(actionID)) //in weave window
-                {
-                    if (InCombat() && //in combat
-                        ActionReady(Infuriate) && //Infuriate is ready
-                        !HasEffect(Buffs.NascentChaos) && //does not have Nascent Chaos
-                        !HasEffect(Buffs.InnerReleaseStacks) && //does not have Inner Release stacks
-                        gauge <= 40) //gauge is less than or equal to 40
-                        return Infuriate;
+                    if (CanWeave()) //in weave window
+                    {
+                        if (InCombat() && //in combat
+                            ActionReady(Infuriate) && //Infuriate is ready
+                            !HasEffect(Buffs.NascentChaos) && //does not have Nascent Chaos
+                            !HasEffect(Buffs.InnerReleaseStacks) && //does not have Inner Release stacks
+                            gauge <= 40) //gauge is less than or equal to 40
+                            return Infuriate;
 
                     //pre-Surging Tempest IR
                     if (InCombat() && //in combat
@@ -104,13 +104,13 @@ internal partial class WAR
                         return OriginalHook(Berserk);
                 }
 
-                if (HasEffect(Buffs.SurgingTempest) && //has Surging Tempest
-                    InCombat()) //in combat
-                {
-                    if (CanWeave(actionID)) //in weave window
+                    if (HasEffect(Buffs.SurgingTempest) && //has Surging Tempest
+                        InCombat()) //in combat
                     {
-                        if (ActionReady(OriginalHook(Berserk))) //Berserk is ready
-                            return OriginalHook(Berserk);
+                        if (CanWeave()) //in weave window
+                        {
+                            if (ActionReady(OriginalHook(Berserk))) //Berserk is ready
+                                return OriginalHook(Berserk);
 
                         if (ActionReady(Upheaval)) //Upheaval is ready
                             return Upheaval;
@@ -203,18 +203,18 @@ internal partial class WAR
                     (sustainedDamage is null || sustainedDamage?.RemainingTime <= 3))
                     return Variant.VariantSpiritDart;
 
-                if (IsEnabled(CustomComboPreset.WAR_Variant_Ultimatum) &&
-                    IsEnabled(Variant.VariantUltimatum) &&
-                    CanWeave(actionID) &&
-                    ActionReady(Variant.VariantUltimatum))
-                    return Variant.VariantUltimatum;
+                    if (IsEnabled(CustomComboPreset.WAR_Variant_Ultimatum) &&
+                        IsEnabled(Variant.VariantUltimatum) &&
+                        CanWeave() &&
+                        ActionReady(Variant.VariantUltimatum))
+                        return Variant.VariantUltimatum;
 
-                if (IsEnabled(CustomComboPreset.WAR_Variant_Cure) &&
-                    IsEnabled(Variant.VariantCure) &&
-                    CanWeave(actionID) &&
-                    PlayerHealthPercentageHp() <= GetOptionValue(Config.WAR_VariantCure))
-                    return Variant.VariantCure;
-                #endregion
+                    if (IsEnabled(CustomComboPreset.WAR_Variant_Cure) &&
+                        IsEnabled(Variant.VariantCure) &&
+                        CanWeave() &&
+                        PlayerHealthPercentageHp() <= GetOptionValue(Config.WAR_VariantCure))
+                        return Variant.VariantCure;
+                    #endregion
 
                 #region Mitigations
                 if (IsEnabled(CustomComboPreset.WAR_ST_Advanced_Mitigation) && //Mitigation option is enabled
@@ -280,16 +280,16 @@ internal partial class WAR
                     HasBattleTarget()) //has a target
                     return Tomahawk;
 
-                if (CanWeave(actionID)) //in weave window
-                {
-                    if (IsEnabled(CustomComboPreset.WAR_ST_Advanced_Infuriate) && //Infuriate option is enabled
-                        InCombat() && //in combat
-                        ActionReady(Infuriate) && //Infuriate is ready
-                        !HasEffect(Buffs.NascentChaos) && //does not have Nascent Chaos
-                        !HasEffect(Buffs.InnerReleaseStacks) && //does not have Inner Release stacks
-                        gauge <= Config.WAR_InfuriateSTGauge && //gauge is less than or equal to selected threshold
-                        GetRemainingCharges(Infuriate) > Config.WAR_KeepInfuriateCharges) //has more than selected charges
-                        return Infuriate;
+                    if (CanWeave()) //in weave window
+                    {
+                        if (IsEnabled(CustomComboPreset.WAR_ST_Advanced_Infuriate) && //Infuriate option is enabled
+                            InCombat() && //in combat
+                            ActionReady(Infuriate) && //Infuriate is ready
+                            !HasEffect(Buffs.NascentChaos) && //does not have Nascent Chaos
+                            !HasEffect(Buffs.InnerReleaseStacks) && //does not have Inner Release stacks
+                            gauge <= Config.WAR_InfuriateSTGauge && //gauge is less than or equal to selected threshold
+                            GetRemainingCharges(Infuriate) > Config.WAR_KeepInfuriateCharges) //has more than selected charges
+                            return Infuriate;
 
                     if (IsEnabled(CustomComboPreset.WAR_ST_Advanced_InnerRelease) && //Inner Release option is enabled 
                         InCombat() && //in combat
@@ -298,14 +298,14 @@ internal partial class WAR
                         return OriginalHook(Berserk);
                 }
 
-                if (InCombat() && //in combat
-                    HasEffect(Buffs.SurgingTempest)) //has Surging Tempest
-                {
-                    if (CanWeave(actionID)) //in weave window
+                    if (InCombat() && //in combat
+                        HasEffect(Buffs.SurgingTempest)) //has Surging Tempest
                     {
-                        if (IsEnabled(CustomComboPreset.WAR_ST_Advanced_InnerRelease) && //Inner Release option is enabled
-                            ActionReady(OriginalHook(Berserk))) //Berserk is ready
-                            return OriginalHook(Berserk);
+                        if (CanWeave()) //in weave window
+                        {
+                            if (IsEnabled(CustomComboPreset.WAR_ST_Advanced_InnerRelease) && //Inner Release option is enabled
+                                ActionReady(OriginalHook(Berserk))) //Berserk is ready
+                                return OriginalHook(Berserk);
 
                         if (IsEnabled(CustomComboPreset.WAR_ST_Advanced_Upheaval) && //Upheaval option is enabled
                             ActionReady(Upheaval)) //Upheaval is ready
@@ -419,18 +419,18 @@ internal partial class WAR
                     (sustainedDamage is null || sustainedDamage?.RemainingTime <= 3))
                     return Variant.VariantSpiritDart;
 
-                if (IsEnabled(CustomComboPreset.WAR_Variant_Ultimatum) &&
-                    IsEnabled(Variant.VariantUltimatum) &&
-                    CanWeave(actionID) &&
-                    ActionReady(Variant.VariantUltimatum))
-                    return Variant.VariantUltimatum;
+                    if (IsEnabled(CustomComboPreset.WAR_Variant_Ultimatum) &&
+                        IsEnabled(Variant.VariantUltimatum) &&
+                        CanWeave() &&
+                        ActionReady(Variant.VariantUltimatum))
+                        return Variant.VariantUltimatum;
 
-                if (IsEnabled(CustomComboPreset.WAR_Variant_Cure) &&
-                    IsEnabled(Variant.VariantCure) &&
-                    CanWeave(actionID) &&
-                    PlayerHealthPercentageHp() <= GetOptionValue(Config.WAR_VariantCure))
-                    return Variant.VariantCure;
-                #endregion
+                    if (IsEnabled(CustomComboPreset.WAR_Variant_Cure) &&
+                        IsEnabled(Variant.VariantCure) &&
+                        CanWeave() &&
+                        PlayerHealthPercentageHp() <= GetOptionValue(Config.WAR_VariantCure))
+                        return Variant.VariantCure;
+                    #endregion
 
                 #region Mitigations
                 if (InCombat() && //Player is in combat
@@ -471,14 +471,14 @@ internal partial class WAR
                 }
                 #endregion
 
-                if (CanWeave(actionID)) //in weave window
-                {
-                    if (InCombat() && //in combat
-                       ActionReady(Infuriate) && //Infuriate is ready
-                       !HasEffect(Buffs.NascentChaos) && //does not have Nascent Chaos
-                       !HasEffect(Buffs.InnerReleaseStacks) && //does not have Inner Release stacks 
-                       gauge <= 40) //gauge is less than or equal to 40
-                        return Infuriate;
+                    if (CanWeave()) //in weave window
+                    {
+                        if (InCombat() && //in combat
+                           ActionReady(Infuriate) && //Infuriate is ready
+                           !HasEffect(Buffs.NascentChaos) && //does not have Nascent Chaos
+                           !HasEffect(Buffs.InnerReleaseStacks) && //does not have Inner Release stacks 
+                           gauge <= 40) //gauge is less than or equal to 40
+                            return Infuriate;
 
                     if (InCombat() && //in combat
                         ActionReady(OriginalHook(Berserk)) && //Berserk is ready 
@@ -486,13 +486,13 @@ internal partial class WAR
                         return OriginalHook(Berserk);
                 }
 
-                if (InCombat() && //in combat
-                    HasEffect(Buffs.SurgingTempest)) //has Surging Tempest
-                {
-                    if (CanWeave(actionID)) //in weave window
+                    if (InCombat() && //in combat
+                        HasEffect(Buffs.SurgingTempest)) //has Surging Tempest
                     {
-                        if (ActionReady(OriginalHook(Berserk))) //Berserk is ready
-                            return OriginalHook(Berserk);
+                        if (CanWeave()) //in weave window
+                        {
+                            if (ActionReady(OriginalHook(Berserk))) //Berserk is ready
+                                return OriginalHook(Berserk);
 
                         if (ActionReady(Orogeny)) //Orogeny is ready
                             return Orogeny;
@@ -553,18 +553,18 @@ internal partial class WAR
                     (sustainedDamage is null || sustainedDamage?.RemainingTime <= 3))
                     return Variant.VariantSpiritDart;
 
-                if (IsEnabled(CustomComboPreset.WAR_Variant_Ultimatum) &&
-                    IsEnabled(Variant.VariantUltimatum) &&
-                    CanWeave(actionID) &&
-                    ActionReady(Variant.VariantUltimatum))
-                    return Variant.VariantUltimatum;
+                    if (IsEnabled(CustomComboPreset.WAR_Variant_Ultimatum) &&
+                        IsEnabled(Variant.VariantUltimatum) &&
+                        CanWeave() &&
+                        ActionReady(Variant.VariantUltimatum))
+                        return Variant.VariantUltimatum;
 
-                if (IsEnabled(CustomComboPreset.WAR_Variant_Cure) &&
-                    IsEnabled(Variant.VariantCure) &&
-                    CanWeave(actionID) &&
-                    PlayerHealthPercentageHp() <= GetOptionValue(Config.WAR_VariantCure))
-                    return Variant.VariantCure;
-                #endregion
+                    if (IsEnabled(CustomComboPreset.WAR_Variant_Cure) &&
+                        IsEnabled(Variant.VariantCure) &&
+                        CanWeave() &&
+                        PlayerHealthPercentageHp() <= GetOptionValue(Config.WAR_VariantCure))
+                        return Variant.VariantCure;
+                    #endregion
 
                 #region Mitigations
                 if (IsEnabled(CustomComboPreset.WAR_AoE_Advanced_Mitigation) && //Mitigation option is enabled
@@ -623,15 +623,15 @@ internal partial class WAR
                 }
                 #endregion
 
-                if (CanWeave(actionID)) //in weave window
-                {
-                    if (IsEnabled(CustomComboPreset.WAR_AoE_Advanced_Infuriate) && //Infuriate option is enabled
-                        InCombat() && //in combat
-                        ActionReady(Infuriate) && //Infuriate is ready
-                        !HasEffect(Buffs.NascentChaos) && //does not have Nascent Chaos
-                        !HasEffect(Buffs.InnerReleaseStacks) && //does not have Inner Release stacks
-                        gauge <= Config.WAR_InfuriateSTGauge) //gauge is less than or equal to selected threshold
-                        return Infuriate;
+                    if (CanWeave()) //in weave window
+                    {
+                        if (IsEnabled(CustomComboPreset.WAR_AoE_Advanced_Infuriate) && //Infuriate option is enabled
+                            InCombat() && //in combat
+                            ActionReady(Infuriate) && //Infuriate is ready
+                            !HasEffect(Buffs.NascentChaos) && //does not have Nascent Chaos
+                            !HasEffect(Buffs.InnerReleaseStacks) && //does not have Inner Release stacks
+                            gauge <= Config.WAR_InfuriateSTGauge) //gauge is less than or equal to selected threshold
+                            return Infuriate;
 
                     if (IsEnabled(CustomComboPreset.WAR_AoE_Advanced_InnerRelease) && //Inner Release option is enabled
                         InCombat() && //in combat
@@ -640,14 +640,14 @@ internal partial class WAR
                         return OriginalHook(Berserk);
                 }
 
-                if (InCombat() && //in combat
-                    HasEffect(Buffs.SurgingTempest)) //has Surging Tempest
-                {
-                    if (CanWeave(actionID)) //in weave window
+                    if (InCombat() && //in combat
+                        HasEffect(Buffs.SurgingTempest)) //has Surging Tempest
                     {
-                        if (IsEnabled(CustomComboPreset.WAR_AoE_Advanced_InnerRelease) && //Inner Release option is enabled
-                            ActionReady(OriginalHook(Berserk))) //Berserk is ready
-                            return OriginalHook(Berserk);
+                        if (CanWeave()) //in weave window
+                        {
+                            if (IsEnabled(CustomComboPreset.WAR_AoE_Advanced_InnerRelease) && //Inner Release option is enabled
+                                ActionReady(OriginalHook(Berserk))) //Berserk is ready
+                                return OriginalHook(Berserk);
 
                         if (IsEnabled(CustomComboPreset.WAR_AoE_Advanced_Orogeny) && //Orogeny option is enabled
                             ActionReady(Orogeny)) //Orogeny is ready
