@@ -3,23 +3,21 @@ using ImGuiNET;
 using WrathCombo.CustomComboNS.Functions;
 using static WrathCombo.Extensions.UIntExtensions;
 using static WrathCombo.Window.Functions.SliderIncrements;
-using WrathCombo.Window.Functions;
-using WrathCombo.Data;
+using static WrathCombo.Window.Functions.UserConfig;
 
-namespace WrathCombo.Combos.PvE
+namespace WrathCombo.Combos.PvE;
+internal partial class RDM
 {
-    internal partial class RDM
+    internal static class Config
     {
-        internal static class Config
-        {
-            public static UserInt
-                RDM_VariantCure = new("RDM_VariantCure"),
-                RDM_ST_Lucid_Threshold = new("RDM_LucidDreaming_Threshold", 6500),
-                RDM_AoE_Lucid_Threshold = new("RDM_AoE_Lucid_Threshold", 6500),
-                RDM_AoE_MoulinetRange = new("RDM_MoulinetRange"),
-                RDMPvP_Burst_CorpsACorps = new("RDMPvP_Burst_CorpsACorps"),
-                RDMPvP_Burst_Displacement = new("RDMPvP_Burst_Displacement"),
-                RDM_BalanceOpener_Content = new("RDM_BalanceOpener_Content", 1);
+        public static UserInt
+            RDM_VariantCure = new("RDM_VariantCure"),
+            RDM_ST_Lucid_Threshold = new("RDM_LucidDreaming_Threshold", 6500),
+            RDM_AoE_Lucid_Threshold = new("RDM_AoE_Lucid_Threshold", 6500),
+            RDM_AoE_MoulinetRange = new("RDM_MoulinetRange"),
+            RDMPvP_Burst_CorpsACorps = new("RDMPvP_Burst_CorpsACorps"),
+            RDMPvP_Burst_Displacement = new("RDMPvP_Burst_Displacement"),
+            RDM_BalanceOpener_Content = new("RDM_BalanceOpener_Content", 1);
 
         public static UserBool
             RDM_ST_oGCD_OnAction_Adv = new("RDM_ST_oGCD_OnAction_Adv"),
@@ -57,25 +55,26 @@ namespace WrathCombo.Combos.PvE
             RDM_AoE_MeleeCombo_OnAction = new("RDM_AoE_MeleeCombo_OnAction"),
             RDM_AoE_MeleeFinisher_OnAction = new("RDM_AoE_MeleeFinisher_OnAction");
 
-            internal static void Draw(CustomComboPreset preset)
+        internal static void Draw(CustomComboPreset preset)
+        {
+            switch (preset)
             {
-                switch (preset)
-                {
-                    case CustomComboPreset.RDM_Balance_Opener:
-                        DrawBossOnlyChoice(RDM_BalanceOpener_Content);
-                        break;
+                case CustomComboPreset.RDM_Balance_Opener:
+                    DrawBossOnlyChoice(RDM_BalanceOpener_Content);
+                    break;
 
-                    case CustomComboPreset.RDM_ST_oGCD:
-                        DrawAdditionalBoolChoice(RDM_ST_oGCD_OnAction_Adv, "Advanced Action Options.", "Changes which action this option will replace.", isConditionalChoice: true);
-                        if (RDM_ST_oGCD_OnAction_Adv)
-                        {
-                            ImGui.Indent(); ImGui.Spacing();
-                            DrawHorizontalMultiChoice(RDM_ST_oGCD_OnAction, $"{Jolt.ActionName()}s", "", 4, 0, descriptionColor: ImGuiColors.DalamudYellow);
-                            DrawHorizontalMultiChoice(RDM_ST_oGCD_OnAction, Fleche.ActionName(), "", 4, 1, descriptionColor: ImGuiColors.DalamudYellow);
-                            DrawHorizontalMultiChoice(RDM_ST_oGCD_OnAction, Riposte.ActionName(), "", 4, 2, descriptionColor: ImGuiColors.DalamudYellow);
-                            DrawHorizontalMultiChoice(RDM_ST_oGCD_OnAction, Reprise.ActionName(), "", 4, 3, descriptionColor: ImGuiColors.DalamudYellow);
-                            ImGui.Unindent();
-                        }
+                case CustomComboPreset.RDM_ST_oGCD:
+                    DrawAdditionalBoolChoice(RDM_ST_oGCD_OnAction_Adv, "Advanced Action Options.", "Changes which action this option will replace.", isConditionalChoice: true);
+                    if (RDM_ST_oGCD_OnAction_Adv)
+                    {
+                        ImGui.Indent();
+                        ImGui.Spacing();
+                        DrawHorizontalMultiChoice(RDM_ST_oGCD_OnAction, $"{Jolt.ActionName()}s", "", 4, 0, descriptionColor: ImGuiColors.DalamudYellow);
+                        DrawHorizontalMultiChoice(RDM_ST_oGCD_OnAction, Fleche.ActionName(), "", 4, 1, descriptionColor: ImGuiColors.DalamudYellow);
+                        DrawHorizontalMultiChoice(RDM_ST_oGCD_OnAction, Riposte.ActionName(), "", 4, 2, descriptionColor: ImGuiColors.DalamudYellow);
+                        DrawHorizontalMultiChoice(RDM_ST_oGCD_OnAction, Reprise.ActionName(), "", 4, 3, descriptionColor: ImGuiColors.DalamudYellow);
+                        ImGui.Unindent();
+                    }
 
                     DrawAdditionalBoolChoice(RDM_ST_oGCD_Fleche, Fleche.ActionName(), "");
                     DrawAdditionalBoolChoice(RDM_ST_oGCD_ContreSixte, ContreSixte.ActionName(), "");

@@ -1,52 +1,49 @@
 ﻿using System;
+using System.Collections.Generic;
 using Dalamud.Game.ClientState.Conditions;
 using Dalamud.Game.ClientState.JobGauge.Types;
-using ECommons.DalamudServices;
-using System;
-using System.Collections.Generic;
-using WrathCombo.Combos.JobHelpers.Enums;
 using WrathCombo.CustomComboNS;
-using WrathCombo.CustomComboNS.Functions;
-using WrathCombo.Data;
 using static WrathCombo.CustomComboNS.Functions.CustomComboFunctions;
 
-namespace WrathCombo.Combos.PvE
+namespace WrathCombo.Combos.PvE;
+
+internal partial class RDM
 {
-    internal partial class RDM
+    internal static RDMOpenerMaxLevel1 Opener1 = new();
+    internal static WrathOpener Opener()
     {
-        internal static RDMOpenerMaxLevel1 Opener1 = new();
-        internal static WrathOpener Opener()
-        {
-            if (Opener1.LevelChecked) return Opener1;
+        if (Opener1.LevelChecked)
+            return Opener1;
 
-            return WrathOpener.Dummy;
-        }
+        return WrathOpener.Dummy;
+    }
 
-        private class RDMMana
+    private class RDMMana
+    {
+        private static RDMGauge Gauge => GetJobGauge<RDMGauge>();
+        internal static int ManaStacks => Gauge.ManaStacks;
+        internal static int Black => AdjustMana(Gauge.BlackMana);
+        internal static int White => AdjustMana(Gauge.WhiteMana);
+        internal static int Min => AdjustMana(Math.Min(Gauge.BlackMana, Gauge.WhiteMana));
+        internal static int Max => AdjustMana(Math.Max(Gauge.BlackMana, Gauge.WhiteMana));
+        private static int AdjustMana(byte mana)
         {
-            private static RDMGauge Gauge => GetJobGauge<RDMGauge>();
-            internal static int ManaStacks => Gauge.ManaStacks;
-            internal static int Black => AdjustMana(Gauge.BlackMana);
-            internal static int White => AdjustMana(Gauge.WhiteMana);
-            internal static int Min => AdjustMana(Math.Min(Gauge.BlackMana, Gauge.WhiteMana));
-            internal static int Max => AdjustMana(Math.Max(Gauge.BlackMana, Gauge.WhiteMana));
-            private static int AdjustMana(byte mana)
+            if (LevelChecked(Manafication))
             {
-                if (LevelChecked(Manafication))
+                byte magickedSword = GetBuffStacks(Buffs.MagickedSwordPlay);
+                byte magickedSwordMana = magickedSword switch
                 {
-                    byte magickedSword = GetBuffStacks(Buffs.MagickedSwordPlay);
-                    byte magickedSwordMana = magickedSword switch
-                    {
-                        3 => 50,
-                        2 => 30,
-                        1 => 15,
-                        _ => 0
-                    };
-                    return mana + magickedSwordMana;
-                }
-                else return mana;
+                    3 => 50,
+                    2 => 30,
+                    1 => 15,
+                    _ => 0
+                };
+                return mana + magickedSwordMana;
             }
+            else
+                return mana;
         }
+    }
 
     private static bool TryOGCDs(uint actionID, in bool SingleTarget, out uint newActionID, bool AdvMode = false)
     {
@@ -733,60 +730,58 @@ namespace WrathCombo.Combos.PvE
         }
     }
 
-        internal class RDMOpenerMaxLevel1 : WrathOpener
+    internal class RDMOpenerMaxLevel1 : WrathOpener
+    {
+        public override List<uint> OpenerActions { get; set; } =
+        [
+            Veraero3,
+            Verthunder3,
+            All.Swiftcast,
+            Verthunder3,
+            Fleche,
+            Acceleration,
+            Verthunder3,
+            Embolden,
+            Manafication,
+            EnchantedRiposte,
+            ContreSixte,
+            EnchantedZwerchhau,
+            Engagement,
+            EnchantedRedoublement,
+            Corpsacorps,
+            Verholy,
+            ViceOfThorns,
+            Scorch,
+            Engagement,
+            Corpsacorps,
+            Resolution,
+            Prefulgence,
+            GrandImpact,
+            Acceleration,
+            Verfire,
+            GrandImpact,
+            Verthunder3,
+            Fleche,
+            Veraero3,
+            Verfire,
+            Verthunder3,
+            Verstone,
+            Veraero3,
+            All.Swiftcast,
+            Veraero3,
+            ContreSixte
+        ];
+        public override int MinOpenerLevel => 100;
+        public override int MaxOpenerLevel => 109;
+
+        public override bool HasCooldowns()
         {
-            public override List<uint> OpenerActions { get; set; } =
-            [
-                Veraero3,
-                Verthunder3,
-                All.Swiftcast,
-                Verthunder3,
-                Fleche,
-                Acceleration,
-                Verthunder3,
-                Embolden,
-                Manafication,
-                EnchantedRiposte,
-                ContreSixte,
-                EnchantedZwerchhau,
-                Engagement,
-                EnchantedRedoublement,
-                Corpsacorps,
-                Verholy,
-                ViceOfThorns,
-                Scorch,
-                Engagement,
-                Corpsacorps,
-                Resolution,
-                Prefulgence,
-                GrandImpact,
-                Acceleration,
-                Verfire,
-                GrandImpact,
-                Verthunder3,
-                Fleche,
-                Veraero3,
-                Verfire,
-                Verthunder3,
-                Verstone,
-                Veraero3,
-                All.Swiftcast,
-                Veraero3,
-                ContreSixte
-            ];
-            public override int MinOpenerLevel => 100;
-            public override int MaxOpenerLevel => 109;
+            if (!ActionsReady([All.Swiftcast, Fleche, Embolden, Manafication, ContreSixte]) || GetRemainingCharges(Acceleration) < 2 ||
+                GetRemainingCharges(Engagement) < 2 ||
+                GetRemainingCharges(Corpsacorps) < 2)
+                return false;
 
-            public override bool HasCooldowns()
-            {
-                if (!ActionsReady([All.Swiftcast, Fleche, Embolden, Manafication, ContreSixte]) || GetRemainingCharges(Acceleration) < 2 ||
-                    GetRemainingCharges(Engagement) < 2 ||
-                    GetRemainingCharges(Corpsacorps) < 2)
-                    return false;
-
-                return true;
-            }
+            return true;
         }
-
     }
 }
