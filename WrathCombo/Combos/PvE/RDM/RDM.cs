@@ -1,5 +1,6 @@
 ﻿using WrathCombo.Combos.PvE.Content;
 using WrathCombo.CustomComboNS;
+using WrathCombo.Data;
 
 namespace WrathCombo.Combos.PvE;
 
@@ -35,9 +36,9 @@ internal partial class RDM
                     CanSpellWeave())
                     return Variant.VariantRampart;
 
-                // Opener for RDM
-                if (RDMOpenerLogic.DoFullOpener(ref actionID))
-                    return actionID;
+                    // Opener for RDM
+                    if (Opener().FullOpener(ref actionID))
+                        return actionID;
 
                 //oGCDs
                 if (TryOGCDs(actionID, true, out uint oGCDAction))
@@ -90,13 +91,13 @@ internal partial class RDM
                     CanSpellWeave())
                     return Variant.VariantRampart;
 
-                // Opener for RDM
-                if (IsEnabled(CustomComboPreset.RDM_Balance_Opener))
-                {
-                    if (RDMOpenerLogic.DoFullOpener(ref actionID))
-                        return actionID;
+                    // Opener for RDM
+                    if (IsEnabled(CustomComboPreset.RDM_Balance_Opener) && (Config.RDM_BalanceOpener_Content == 0 || Config.RDM_BalanceOpener_Content == 1 && ContentCheck.IsInBossOnlyContent()))
+                    {
+                        if (Opener().FullOpener(ref actionID))
+                            return actionID;
+                    }
                 }
-            }
 
             //RDM_OGCD
             if (IsEnabled(CustomComboPreset.RDM_ST_oGCD))
