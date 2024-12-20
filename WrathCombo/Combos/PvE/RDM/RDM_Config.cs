@@ -50,7 +50,6 @@ internal partial class RDM
             RDM_ST_oGCD_OnAction = new("RDM_ST_oGCD_OnAction"),
             RDM_ST_MeleeCombo_OnAction = new("RDM_ST_MeleeCombo_OnAction"),
             RDM_ST_MeleeFinisher_OnAction = new("RDM_ST_MeleeFinisher_OnAction"),
-
             RDM_AoE_oGCD_OnAction = new("RDM_AoE_oGCD_OnAction"),
             RDM_AoE_MeleeCombo_OnAction = new("RDM_AoE_MeleeCombo_OnAction"),
             RDM_AoE_MeleeFinisher_OnAction = new("RDM_AoE_MeleeFinisher_OnAction");

@@ -1,5 +1,6 @@
 ﻿using WrathCombo.Combos.PvE.Content;
 using WrathCombo.CustomComboNS;
+using WrathCombo.Data;
 
 namespace WrathCombo.Combos.PvE;
 
@@ -175,7 +176,9 @@ internal static partial class MNK
                 !HasEffect(Buffs.FormlessFist) && !HasEffect(Buffs.PerfectBalance))
                 return FormShift;
 
-            if (IsEnabled(CustomComboPreset.MNK_STUseOpener))
+            if (IsEnabled(CustomComboPreset.MNK_STUseOpener) &&
+                (Config.MNK_BalanceOpener_Content == 0 ||
+                Config.MNK_BalanceOpener_Content == 1 && ContentCheck.IsInBossOnlyContent()))
                 if (Opener().FullOpener(ref actionID))
                 {
                     if (IsOnCooldown(RiddleOfWind) &&

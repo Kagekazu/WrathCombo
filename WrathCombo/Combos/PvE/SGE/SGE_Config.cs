@@ -17,6 +17,11 @@ internal static partial class SGE
         {
             switch (preset)
             {
+                case CustomComboPreset.SGE_ST_DPS_Opener:
+                    DrawBossOnlyChoice(SGE_BalanceOpener_Content);
+                    break;
+
+
                 case CustomComboPreset.SGE_ST_DPS:
                     DrawAdditionalBoolChoice(SGE_ST_DPS_Adv, $"Apply all selected options to {Dosis2.ActionName()}",
                         $"{Dosis.ActionName()} & {Dosis3.ActionName()} will behave normally.");
@@ -262,7 +267,8 @@ internal static partial class SGE
             SGE_ST_Heal_EDiagnosisHP = new("SGE_ST_Heal_EDiagnosisHP", 99),
             SGE_ST_Heal_Druochole = new("SGE_ST_Heal_Druochole", 99),
             SGE_ST_Heal_Taurochole = new("SGE_ST_Heal_Taurochole", 99),
-            SGE_ST_Heal_Esuna = new("SGE_ST_Heal_Esuna", 100);
+            SGE_ST_Heal_Esuna = new("SGE_ST_Heal_Esuna", 100),
+            SGE_BalanceOpener_Content = new("SGE_BalanceOpener_Content", 1);
 
         public static UserIntArray
             SGE_ST_Heals_Priority = new("SGE_ST_Heals_Priority"),

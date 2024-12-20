@@ -2,6 +2,7 @@
 using Dalamud.Game.ClientState.JobGauge.Types;
 using WrathCombo.Combos.PvE.Content;
 using WrathCombo.CustomComboNS;
+using WrathCombo.Data;
 using WrathCombo.Extensions;
 
 namespace WrathCombo.Combos.PvE;
@@ -297,15 +298,16 @@ internal static partial class SAM
                 return Variant.VariantRampart;
 
             // Opener for SAM
-            if (IsEnabled(CustomComboPreset.SAM_ST_Opener))
+            if (IsEnabled(CustomComboPreset.SAM_ST_Opener) &&
+                (Config.SAM_BalanceOpener_Content == 0 ||
+                Config.SAM_BalanceOpener_Content == 1 && ContentCheck.IsInBossOnlyContent()))
                 if (Opener().FullOpener(ref actionID))
                     return actionID;
 
             //Meikyo to start before combat
             if (IsEnabled(CustomComboPreset.SAM_ST_CDs) &&
                 IsEnabled(CustomComboPreset.SAM_ST_CDs_MeikyoShisui) &&
-                !HasEffect(Buffs.MeikyoShisui) && ActionReady(MeikyoShisui) &&
-                !InCombat() && TargetIsHostile())
+                !HasEffect(Buffs.MeikyoShisui) && ActionReady(MeikyoShisui) && !InCombat())
                 return MeikyoShisui;
 
             //oGCDs

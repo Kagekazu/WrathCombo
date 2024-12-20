@@ -1,6 +1,7 @@
 ﻿using WrathCombo.Combos.PvP;
 using WrathCombo.CustomComboNS.Functions;
 using WrathCombo.Window.Functions;
+using static WrathCombo.Window.Functions.UserConfig;
 
 namespace WrathCombo.Combos.PvE;
 
@@ -23,7 +24,8 @@ internal partial class SAM
             SAM_ST_Higanbana_Threshold = new("SAM_ST_Higanbana_Threshold", 1),
             SAM_ST_Higanbana_Suboption = new("SAM_ST_Higanbana_Suboption"),
             SAM_ST_ExecuteThreshold = new("SAM_ST_ExecuteThreshold", 1),
-            SAM_VariantCure = new("SAM_VariantCure");
+            SAM_VariantCure = new("SAM_VariantCure"),   
+            SAM_BalanceOpener_Content = new("SAM_BalanceOpener_Content", 1);
 
         public static UserBool
             SAM_Kasha_KenkiOvercap = new(nameof(SAM_Kasha_KenkiOvercap)),
@@ -36,63 +38,67 @@ internal partial class SAM
         {
             switch (preset)
             {
+                case CustomComboPreset.SAM_ST_Opener:
+                    DrawBossOnlyChoice(SAM_BalanceOpener_Content);
+                    break;
+
                 case CustomComboPreset.SAM_ST_CDs_Iaijutsu:
-                    UserConfig.DrawSliderInt(0, 100, SAM_ST_Higanbana_Threshold,
+                    DrawSliderInt(0, 100, SAM_ST_Higanbana_Threshold,
                         "Stop using Higanbana on targets below this HP % (0% = always use).");
 
-                    UserConfig.DrawHorizontalRadioButton(SAM_ST_Higanbana_Suboption,
+                    DrawHorizontalRadioButton(SAM_ST_Higanbana_Suboption,
                         "All Enemies",
                         "Uses Higanbana regardless of targeted enemy type.", 0);
 
-                    UserConfig.DrawHorizontalRadioButton(SAM_ST_Higanbana_Suboption,
+                    DrawHorizontalRadioButton(SAM_ST_Higanbana_Suboption,
                         "Bosses Only",
                         "Only uses Higanbana when the targeted enemy is a boss.", 1);
 
                     break;
 
                 case CustomComboPreset.SAM_ST_ComboHeals:
-                    UserConfig.DrawSliderInt(0, 100, SAM_STSecondWindThreshold,
+                    DrawSliderInt(0, 100, SAM_STSecondWindThreshold,
                         "HP percent threshold to use Second Wind below (0 = Disabled)");
 
-                    UserConfig.DrawSliderInt(0, 100, SAM_STBloodbathThreshold,
+                    DrawSliderInt(0, 100, SAM_STBloodbathThreshold,
                         "HP percent threshold to use Bloodbath (0 = Disabled)");
 
                     break;
 
                 case CustomComboPreset.SAM_AoE_ComboHeals:
-                    UserConfig.DrawSliderInt(0, 100, SAM_AoESecondWindThreshold,
+                    DrawSliderInt(0, 100, SAM_AoESecondWindThreshold,
                         "HP percent threshold to use Second Wind below (0 = Disabled)");
 
-                    UserConfig.DrawSliderInt(0, 100, SAM_AoEBloodbathThreshold,
+                    DrawSliderInt(0, 100, SAM_AoEBloodbathThreshold,
                         "HP percent threshold to use Bloodbath below (0 = Disabled)");
 
                     break;
 
                 case CustomComboPreset.SAM_ST_Shinten:
-                    UserConfig.DrawSliderInt(50, 85, SAM_ST_KenkiOvercapAmount,
+                    DrawSliderInt(50, 85, SAM_ST_KenkiOvercapAmount,
                         "Set the Kenki overcap amount for ST combos.");
-                    UserConfig.DrawSliderInt(0, 100, SAM_ST_ExecuteThreshold, "HP percent threshold to not save Kenki");
+                    DrawSliderInt(0, 100, SAM_ST_ExecuteThreshold, "HP percent threshold to not save Kenki");
 
                     break;
 
                 case CustomComboPreset.SAM_AoE_Kyuten:
-                    UserConfig.DrawSliderInt(50, 85, SAM_AoE_KenkiOvercapAmount,
+                    DrawSliderInt(50, 85, SAM_AoE_KenkiOvercapAmount,
                         "Set the Kenki overcap amount for AOE combos.");
 
                     break;
 
                 case CustomComboPreset.SAM_Variant_Cure:
-                    UserConfig.DrawSliderInt(1, 100, SAM_VariantCure, "HP% to be at or under", 200);
+                    DrawSliderInt(1, 100, SAM_VariantCure, "HP% to be at or under", 200);
 
                     break;
 
                 case CustomComboPreset.SAM_ST_KashaCombo:
                 {
-                    UserConfig.DrawAdditionalBoolChoice(SAM_Kasha_KenkiOvercap, "Kenki Overcap Protection",
+                    DrawAdditionalBoolChoice(SAM_Kasha_KenkiOvercap, "Kenki Overcap Protection",
                         "Spends Kenki when at the set value or above.");
 
                     if (SAM_Kasha_KenkiOvercap)
-                        UserConfig.DrawSliderInt(25, 100, SAM_Kasha_KenkiOvercapAmount, "Kenki Amount",
+                        DrawSliderInt(25, 100, SAM_Kasha_KenkiOvercapAmount, "Kenki Amount",
                             sliderIncrement: SliderIncrements.Fives);
 
                     break;
@@ -100,11 +106,11 @@ internal partial class SAM
 
                 case CustomComboPreset.SAM_ST_YukikazeCombo:
                 {
-                    UserConfig.DrawAdditionalBoolChoice(SAM_Yukaze_KenkiOvercap, "Kenki Overcap Protection",
+                    DrawAdditionalBoolChoice(SAM_Yukaze_KenkiOvercap, "Kenki Overcap Protection",
                         "Spends Kenki when at the set value or above.");
 
                     if (SAM_Yukaze_KenkiOvercap)
-                        UserConfig.DrawSliderInt(25, 100, SAM_Yukaze_KenkiOvercapAmount, "Kenki Amount",
+                        DrawSliderInt(25, 100, SAM_Yukaze_KenkiOvercapAmount, "Kenki Amount",
                             sliderIncrement: SliderIncrements.Fives);
 
                     break;
@@ -112,11 +118,11 @@ internal partial class SAM
 
                 case CustomComboPreset.SAM_ST_GekkoCombo:
                 {
-                    UserConfig.DrawAdditionalBoolChoice(SAM_Gekko_KenkiOvercap, "Kenki Overcap Protection",
+                    DrawAdditionalBoolChoice(SAM_Gekko_KenkiOvercap, "Kenki Overcap Protection",
                         "Spends Kenki when at the set value or above.");
 
                     if (SAM_Gekko_KenkiOvercap)
-                        UserConfig.DrawSliderInt(25, 100, SAM_Gekko_KenkiOvercapAmount, "Kenki Amount",
+                        DrawSliderInt(25, 100, SAM_Gekko_KenkiOvercapAmount, "Kenki Amount",
                             sliderIncrement: SliderIncrements.Fives);
 
                     break;
@@ -124,11 +130,11 @@ internal partial class SAM
 
                 case CustomComboPreset.SAM_AoE_OkaCombo:
                 {
-                    UserConfig.DrawAdditionalBoolChoice(SAM_Oka_KenkiOvercap, "Kenki Overcap Protection",
+                    DrawAdditionalBoolChoice(SAM_Oka_KenkiOvercap, "Kenki Overcap Protection",
                         "Spends Kenki when at the set value or above.");
 
                     if (SAM_Oka_KenkiOvercap)
-                        UserConfig.DrawSliderInt(25, 100, SAM_Oka_KenkiOvercapAmount, "Kenki Amount",
+                        DrawSliderInt(25, 100, SAM_Oka_KenkiOvercapAmount, "Kenki Amount",
                             sliderIncrement: SliderIncrements.Fives);
 
                     break;
@@ -136,11 +142,11 @@ internal partial class SAM
 
                 case CustomComboPreset.SAM_AoE_MangetsuCombo:
                 {
-                    UserConfig.DrawAdditionalBoolChoice(SAM_Mangetsu_KenkiOvercap, "Kenki Overcap Protection",
+                    DrawAdditionalBoolChoice(SAM_Mangetsu_KenkiOvercap, "Kenki Overcap Protection",
                         "Spends Kenki when at the set value or above.");
 
                     if (SAM_Mangetsu_KenkiOvercap)
-                        UserConfig.DrawSliderInt(25, 100, SAM_Mangetsu_KenkiOvercapAmount, "Kenki Amount",
+                        DrawSliderInt(25, 100, SAM_Mangetsu_KenkiOvercapAmount, "Kenki Amount",
                             sliderIncrement: SliderIncrements.Fives);
 
                     break;
@@ -150,25 +156,25 @@ internal partial class SAM
 
                 // Chiten
                 case CustomComboPreset.SAMPvP_Chiten:
-                    UserConfig.DrawSliderInt(10, 100, SAMPvP.Config.SAMPvP_Chiten_PlayerHP, "Player HP%", 210);
+                    DrawSliderInt(10, 100, SAMPvP.Config.SAMPvP_Chiten_PlayerHP, "Player HP%", 210);
 
                     break;
 
                 // Mineuchi
                 case CustomComboPreset.SAMPvP_Mineuchi:
-                    UserConfig.DrawSliderInt(10, 100, SAMPvP.Config.SAMPvP_Mineuchi_TargetHP, "Target HP%", 210);
+                    DrawSliderInt(10, 100, SAMPvP.Config.SAMPvP_Mineuchi_TargetHP, "Target HP%", 210);
 
-                    UserConfig.DrawAdditionalBoolChoice(SAMPvP.Config.SAMPvP_Mineuchi_SubOption, "Burst Preparation",
+                    DrawAdditionalBoolChoice(SAMPvP.Config.SAMPvP_Mineuchi_SubOption, "Burst Preparation",
                         "Also uses Mineuchi before Tendo Setsugekka.");
 
                     break;
 
                 // Soten
                 case CustomComboPreset.SAMPvP_Soten:
-                    UserConfig.DrawSliderInt(0, 2, SAMPvP.Config.SAMPvP_Soten_Charges, "Charges to Keep", 178);
-                    UserConfig.DrawSliderInt(1, 10, SAMPvP.Config.SAMPvP_Soten_Range, "Maximum Range", 173);
+                    DrawSliderInt(0, 2, SAMPvP.Config.SAMPvP_Soten_Charges, "Charges to Keep", 178);
+                    DrawSliderInt(1, 10, SAMPvP.Config.SAMPvP_Soten_Range, "Maximum Range", 173);
 
-                    UserConfig.DrawAdditionalBoolChoice(SAMPvP.Config.SAMPvP_Soten_SubOption, "Yukikaze Only",
+                    DrawAdditionalBoolChoice(SAMPvP.Config.SAMPvP_Soten_SubOption, "Yukikaze Only",
                         "Also requires next weaponskill to be Yukikaze.");
 
                     break;

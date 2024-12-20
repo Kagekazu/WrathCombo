@@ -5,6 +5,7 @@ using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Game.ClientState.Statuses;
 using WrathCombo.Combos.PvE.Content;
 using WrathCombo.CustomComboNS;
+using WrathCombo.Data;
 
 namespace WrathCombo.Combos.PvE;
 
@@ -190,13 +191,14 @@ internal static partial class SGE
                     return Kardia;
 
                 // Opener for SGE
-                if (IsEnabled(CustomComboPreset.SGE_ST_DPS_Opener))
+                if (IsEnabled(CustomComboPreset.SGE_ST_DPS_Opener) &&
+                (Config.SGE_BalanceOpener_Content == 0 ||
+                Config.SGE_BalanceOpener_Content == 1 && ContentCheck.IsInBossOnlyContent()))
                     if (Opener().FullOpener(ref actionID))
                         return actionID;
 
                 if (CanSpellWeave())
                 {
-
                     // Lucid Dreaming
                     if (IsEnabled(CustomComboPreset.SGE_ST_DPS_Lucid) &&
                         All.CanUseLucid(actionID, Config.SGE_ST_DPS_Lucid))
