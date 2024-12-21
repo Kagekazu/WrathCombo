@@ -1,6 +1,4 @@
-﻿#region
-
-using Dalamud.Interface.Utility;
+﻿using Dalamud.Interface.Utility;
 using WrathCombo.Combos.PvP;
 using WrathCombo.CustomComboNS.Functions;
 using WrathCombo.Data;

@@ -3,7 +3,6 @@ using System.Linq;
 using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Game.ClientState.Statuses;
 using WrathCombo.Combos.PvE.Content;
-using WrathCombo.Combos.PvE.Enums;
 using WrathCombo.CustomComboNS;
 using WrathCombo.Data;
 using WrathCombo.Extensions;
@@ -183,7 +182,7 @@ internal static partial class SCH
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.SCH_DPS;
 
-            internal static int BroilCount => ActionWatching.CombatActions.Count(x => x == OriginalHook(Broil));
+        internal static int BroilCount => ActionWatching.CombatActions.Count(x => x == OriginalHook(Broil));
 
         protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
         {
@@ -199,18 +198,18 @@ internal static partial class SCH
             else
                 actionFound = BroilList.Contains(actionID); //default handling
 
-                if (ActionFound)
-                {
-                    if (IsEnabled(CustomComboPreset.SCH_DPS_Variant_Rampart) &&
-                        IsEnabled(Variant.VariantRampart) &&
-                        IsOffCooldown(Variant.VariantRampart) &&
-                        CanSpellWeave())
-                        return Variant.VariantRampart;
+            if (actionFound)
+            {
+                if (IsEnabled(CustomComboPreset.SCH_DPS_Variant_Rampart) &&
+                    IsEnabled(Variant.VariantRampart) &&
+                    IsOffCooldown(Variant.VariantRampart) &&
+                    CanSpellWeave())
+                    return Variant.VariantRampart;
 
-                    //Opener
-                    if (IsEnabled(CustomComboPreset.SCH_DPS_Balance_Opener) &&
-                        Opener().FullOpener(ref actionID) && ContentCheck.IsInConfiguredContent(Config.SCH_ST_DPS_OpenerContent, ContentCheck.ListSet.BossOnly))
-                        return actionID;
+                //Opener
+                if (IsEnabled(CustomComboPreset.SCH_DPS_Balance_Opener) &&
+                    Opener().FullOpener(ref actionID) && ContentCheck.IsInConfiguredContent(Config.SCH_ST_DPS_OpenerContent, ContentCheck.ListSet.BossOnly))
+                    return actionID;
 
                 // Aetherflow
                 if (IsEnabled(CustomComboPreset.SCH_DPS_Aetherflow) && !WasLastAction(Dissipation) &&
@@ -240,16 +239,16 @@ internal static partial class SCH
                             return EnergyDrain;
                     }
 
-                        // Chain Stratagem
-                        if (IsEnabled(CustomComboPreset.SCH_DPS_ChainStrat))
-                        {
-                            // If CS is available and usable, or if the Impact Buff is on Player
-                            if (ActionReady(ChainStratagem) &&
-                                !TargetHasEffectAny(Debuffs.ChainStratagem) &&
-                                GetTargetHPPercent() > Config.SCH_ST_DPS_ChainStratagemOption &&
-                                InCombat() &&
-                                CanSpellWeave())
-                                return ChainStratagem;
+                    // Chain Stratagem
+                    if (IsEnabled(CustomComboPreset.SCH_DPS_ChainStrat))
+                    {
+                        // If CS is available and usable, or if the Impact Buff is on Player
+                        if (ActionReady(ChainStratagem) &&
+                            !TargetHasEffectAny(Debuffs.ChainStratagem) &&
+                            GetTargetHPPercent() > Config.SCH_ST_DPS_ChainStratagemOption &&
+                            InCombat() &&
+                            CanSpellWeave())
+                            return ChainStratagem;
 
                         if (LevelChecked(BanefulImpaction) &&
                             HasEffect(Buffs.ImpactImminent) &&
