@@ -143,33 +143,26 @@ namespace WrathCombo.CustomComboNS
                     return false;
                 }
 
-
+                actionID = CurrentOpenerAction = OpenerActions[OpenerStep - 1];
+                
                 if (DelayedWeaveSteps.Any(x => x == OpenerStep))
                 {
-                    if (CustomComboFunctions.CanDelayedWeave())
-                    {
-                        actionID = CurrentOpenerAction;
-                        return true;
-                    }
-                    else
+                    if (!CustomComboFunctions.CanDelayedWeave())
                     {
                         actionID = 11;
                         return true;
                     }
                 }
 
-                if (ProcSteps.FindFirst(x => x.Steps.Any(y => y == OpenerStep), out var condtional))
+                foreach (var (Steps, NewAction, Condition) in ProcSteps.Where(x => x.Steps.Any(y => y == OpenerStep)))
                 {
-                    if (condtional.Condition())
+                    if (Condition())
                     {
-                        CurrentOpenerAction = actionID = condtional.NewAction;
-                        return true;
+                        CurrentOpenerAction = actionID = NewAction;
+                        break;
                     }
-
-                    CurrentOpenerAction = OpenerActions[OpenerStep - 1];
                 }
 
-                actionID = CurrentOpenerAction;
                 return true;
 
             }

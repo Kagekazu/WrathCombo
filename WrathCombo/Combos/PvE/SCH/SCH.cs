@@ -183,8 +183,7 @@ internal static partial class SCH
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.SCH_DPS;
 
-        internal OpenerState OpenerState = OpenerState.PreOpener;
-        internal static int BroilCount => ActionWatching.CombatActions.Count(x => x == OriginalHook(Broil));
+            internal static int BroilCount => ActionWatching.CombatActions.Count(x => x == OriginalHook(Broil));
 
         protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
         {
@@ -200,34 +199,18 @@ internal static partial class SCH
             else
                 actionFound = BroilList.Contains(actionID); //default handling
 
-            if (actionFound)
-            {
-
-                bool incombat = HasCondition(Dalamud.Game.ClientState.Conditions.ConditionFlag.InCombat);
-                if (!incombat)
+                if (ActionFound)
                 {
-                    OpenerState = OpenerState.PreOpener;
-                }
-                else if (BroilCount > 1)
-                {
-                    OpenerState = OpenerState.PostOpener;
-                }
-                else if (IsEnabled(CustomComboPreset.SCH_DPS_Dissipation_Opener) && (OpenerState != OpenerState.PostOpener))
-                {
-                    OpenerState = OpenerState.InOpener;
-                }
+                    if (IsEnabled(CustomComboPreset.SCH_DPS_Variant_Rampart) &&
+                        IsEnabled(Variant.VariantRampart) &&
+                        IsOffCooldown(Variant.VariantRampart) &&
+                        CanSpellWeave())
+                        return Variant.VariantRampart;
 
-                if (IsEnabled(CustomComboPreset.SCH_DPS_Variant_Rampart) &&
-                    IsEnabled(Variant.VariantRampart) &&
-                    IsOffCooldown(Variant.VariantRampart) &&
-                    CanSpellWeave())
-                    return Variant.VariantRampart;
-
-                // Dissipation
-                if (IsEnabled(CustomComboPreset.SCH_DPS_Dissipation_Opener) &&
-                    ActionReady(Dissipation) && HasPetPresent() && !Gauge.HasAetherflow() &&
-                    (OpenerState == OpenerState.InOpener) && InCombat() && CanSpellWeave())
-                    return Dissipation;
+                    //Opener
+                    if (IsEnabled(CustomComboPreset.SCH_DPS_Balance_Opener) &&
+                        Opener().FullOpener(ref actionID) && ContentCheck.IsInConfiguredContent(Config.SCH_ST_DPS_OpenerContent, ContentCheck.ListSet.BossOnly))
+                        return actionID;
 
                 // Aetherflow
                 if (IsEnabled(CustomComboPreset.SCH_DPS_Aetherflow) && !WasLastAction(Dissipation) &&
@@ -257,16 +240,16 @@ internal static partial class SCH
                             return EnergyDrain;
                     }
 
-                    // Chain Stratagem
-                    if (IsEnabled(CustomComboPreset.SCH_DPS_ChainStrat))
-                    {
-                        // If CS is available and usable, or if the Impact Buff is on Player
-                        if (ActionReady(ChainStratagem) &&
-                            !TargetHasEffectAny(Debuffs.ChainStratagem) && (OpenerState == OpenerState.PostOpener) &&
-                            GetTargetHPPercent() > Config.SCH_ST_DPS_ChainStratagemOption &&
-                            InCombat() &&
-                            CanSpellWeave())
-                            return ChainStratagem;
+                        // Chain Stratagem
+                        if (IsEnabled(CustomComboPreset.SCH_DPS_ChainStrat))
+                        {
+                            // If CS is available and usable, or if the Impact Buff is on Player
+                            if (ActionReady(ChainStratagem) &&
+                                !TargetHasEffectAny(Debuffs.ChainStratagem) &&
+                                GetTargetHPPercent() > Config.SCH_ST_DPS_ChainStratagemOption &&
+                                InCombat() &&
+                                CanSpellWeave())
+                                return ChainStratagem;
 
                         if (LevelChecked(BanefulImpaction) &&
                             HasEffect(Buffs.ImpactImminent) &&

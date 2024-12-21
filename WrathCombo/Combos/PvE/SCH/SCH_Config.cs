@@ -4,28 +4,30 @@ using static WrathCombo.Extensions.UIntExtensions;
 using static WrathCombo.Window.Functions.SliderIncrements;
 using static WrathCombo.Window.Functions.UserConfig;
 
-namespace WrathCombo.Combos.PvE;
-
-internal static partial class SCH
+namespace WrathCombo.Combos.PvE
 {
-    internal static class Config
+    internal static partial class SCH
     {
-        #region DPS
-        public static UserInt
-            SCH_ST_DPS_AltMode = new("SCH_ST_DPS_AltMode"),
-            SCH_ST_DPS_LucidOption = new("SCH_ST_DPS_LucidOption", 6500),
-            SCH_ST_DPS_BioOption = new("SCH_ST_DPS_BioOption", 10),
-            SCH_ST_DPS_ChainStratagemOption = new("SCH_ST_DPS_ChainStratagemOption", 10);
-        public static UserBool
-            SCH_ST_DPS_Adv = new("SCH_ST_DPS_Adv"),
-            SCH_ST_DPS_Bio_Adv = new("SCH_ST_DPS_Bio_Adv"),
-            SCH_ST_DPS_EnergyDrain_Adv = new("SCH_ST_DPS_EnergyDrain_Adv");
-        public static UserFloat
-            SCH_ST_DPS_Bio_Threshold = new("SCH_ST_DPS_Bio_Threshold", 3.0f),
-            SCH_ST_DPS_EnergyDrain = new("SCH_ST_DPS_EnergyDrain", 3.0f);
-        public static UserBoolArray
-            SCH_ST_DPS_Adv_Actions = new("SCH_ST_DPS_Adv_Actions");
-        #endregion
+        internal static class Config
+        {
+            #region DPS
+            public static UserInt
+                SCH_ST_DPS_AltMode = new("SCH_ST_DPS_AltMode"),
+                SCH_ST_DPS_LucidOption = new("SCH_ST_DPS_LucidOption", 6500),
+                SCH_ST_DPS_BioOption = new("SCH_ST_DPS_BioOption", 10),
+                SCH_ST_DPS_OpenerOption = new("SCH_ST_DPS_OpenerOption"),
+                SCH_ST_DPS_OpenerContent = new("SCH_ST_DPS_OpenerContent", 1),
+                SCH_ST_DPS_ChainStratagemOption = new("SCH_ST_DPS_ChainStratagemOption", 10);
+            public static UserBool
+                SCH_ST_DPS_Adv = new("SCH_ST_DPS_Adv"),
+                SCH_ST_DPS_Bio_Adv = new("SCH_ST_DPS_Bio_Adv"),
+                SCH_ST_DPS_EnergyDrain_Adv = new("SCH_ST_DPS_EnergyDrain_Adv");
+            public static UserFloat
+                SCH_ST_DPS_Bio_Threshold = new("SCH_ST_DPS_Bio_Threshold", 3.0f),
+                SCH_ST_DPS_EnergyDrain = new("SCH_ST_DPS_EnergyDrain", 3.0f);
+            public static UserBoolArray
+                SCH_ST_DPS_Adv_Actions = new("SCH_ST_DPS_Adv_Actions");
+            #endregion
 
         #region Healing
         public static UserInt
@@ -70,22 +72,27 @@ internal static partial class SCH
             SCH_Recitation_Mode = new("SCH_Recitation_Mode");
         #endregion
 
-        internal static void Draw(CustomComboPreset preset)
-        {
-            switch (preset)
+            internal static void Draw(CustomComboPreset preset)
             {
-                case CustomComboPreset.SCH_DPS:
-                    DrawAdditionalBoolChoice(SCH_ST_DPS_Adv, "Advanced Action Options", "Change how actions are handled", isConditionalChoice: true);
-                    if (SCH_ST_DPS_Adv)
-                    {
-                        ImGui.Indent();
-                        ImGui.Spacing();
-                        DrawHorizontalMultiChoice(SCH_ST_DPS_Adv_Actions, "On Ruin/Broils", "Apply options to Ruin and all Broils.", 3, 0);
-                        DrawHorizontalMultiChoice(SCH_ST_DPS_Adv_Actions, "On Bio/Bio II/Biolysis", "Apply options to Bio and Biolysis.", 3, 1);
-                        DrawHorizontalMultiChoice(SCH_ST_DPS_Adv_Actions, "On Ruin II", "Apply options to Ruin II.", 3, 2);
-                        ImGui.Unindent();
-                    }
-                    break;
+                switch (preset)
+                {
+                    case CustomComboPreset.SCH_DPS_Balance_Opener:
+                        DrawHorizontalRadioButton(SCH_ST_DPS_OpenerOption, "Dissipation First", "Uses Dissipation first, then Aetherflow", 0);
+                        DrawHorizontalRadioButton(SCH_ST_DPS_OpenerOption, "Aetherflow First", "Uses Aetherflow first, then Dissipation", 1);
+                        DrawBossOnlyChoice(SCH_ST_DPS_OpenerContent);
+                        break;
+
+                    case CustomComboPreset.SCH_DPS:
+                        DrawAdditionalBoolChoice(SCH_ST_DPS_Adv, "Advanced Action Options", "Change how actions are handled", isConditionalChoice: true);
+                        if (SCH_ST_DPS_Adv)
+                        {
+                            ImGui.Indent(); ImGui.Spacing();
+                            DrawHorizontalMultiChoice(SCH_ST_DPS_Adv_Actions, "On Ruin/Broils", "Apply options to Ruin and all Broils.", 3, 0);
+                            DrawHorizontalMultiChoice(SCH_ST_DPS_Adv_Actions, "On Bio/Bio II/Biolysis", "Apply options to Bio and Biolysis.", 3, 1);
+                            DrawHorizontalMultiChoice(SCH_ST_DPS_Adv_Actions, "On Ruin II", "Apply options to Ruin II.", 3, 2);
+                            ImGui.Unindent();
+                        }
+                        break;
 
                 case CustomComboPreset.SCH_DPS_Lucid:
                     DrawSliderInt(4000, 9500, SCH_ST_DPS_LucidOption, "MP Threshold", 150, Hundreds);
