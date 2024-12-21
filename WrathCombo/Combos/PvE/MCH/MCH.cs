@@ -175,8 +175,8 @@ internal static partial class MCH
 
             // Opener
             if (IsEnabled(CustomComboPreset.MCH_ST_Adv_Opener) && TargetIsHostile() &&
-                (Config.MCH_BalanceOpener_Content == 0 ||
-                Config.MCH_BalanceOpener_Content == 1 && ContentCheck.IsInBossOnlyContent()))
+                (Config.MCH_Balance_Content == 0 ||
+                Config.MCH_Balance_Content == 1 && ContentCheck.IsInBossOnlyContent()))
                 if (Opener().FullOpener(ref actionID))
                     return actionID;
 

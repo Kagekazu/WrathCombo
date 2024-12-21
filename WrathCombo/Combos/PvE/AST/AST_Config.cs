@@ -5,65 +5,65 @@ using static WrathCombo.Extensions.UIntExtensions;
 using static WrathCombo.Window.Functions.SliderIncrements;
 using static WrathCombo.Window.Functions.UserConfig;
 
-namespace WrathCombo.Combos.PvE
-{
-    internal static partial class AST
-    {
-        public static class Config
-        {
-            public static UserInt
-                AST_LucidDreaming = new("ASTLucidDreamingFeature", 8000),
-                AST_EssentialDignity = new("ASTCustomEssentialDignity", 50),
-                AST_Spire = new("AST_Spire", 80),
-                AST_Ewer = new("AST_Ewer", 80),
-                AST_Arrow = new("AST_Arrow", 80),
-                AST_Bole = new("AST_Bole", 80),
-                AST_ST_SimpleHeals_Esuna = new("AST_ST_SimpleHeals_Esuna", 100),
-                AST_DPS_AltMode = new("AST_DPS_AltMode"),
-                AST_AoEHeals_AltMode = new("AST_AoEHeals_AltMode"),
-                AST_DPS_DivinationOption = new("AST_DPS_DivinationOption"),
-                AST_AOE_DivinationOption = new("AST_AOE_DivinationOption"),
-                AST_DPS_LightSpeedOption = new("AST_DPS_LightSpeedOption"),
-                AST_AOE_LightSpeedOption = new("AST_AOE_LightSpeedOption"),
-                AST_DPS_CombustOption = new("AST_DPS_CombustOption"),
-                AST_QuickTarget_Override = new("AST_QuickTarget_Override"),
-                AST_ST_DPS_Play_SpeedSetting = new("AST_ST_DPS_Play_SpeedSetting"),
-                AST_ST_DPS_Balance_Content = new("AST_ST_DPS_Balance_Content", 1),
-                //PVP
-                ASTPvP_Burst_PlayCardOption = new("ASTPvP_Burst_PlayCardOption");
-            public static UserBool
-                AST_QuickTarget_SkipDamageDown = new("AST_QuickTarget_SkipDamageDown"),
-                AST_QuickTarget_SkipRezWeakness = new("AST_QuickTarget_SkipRezWeakness"),
-                AST_ST_SimpleHeals_Adv = new("AST_ST_SimpleHeals_Adv"),
-                AST_ST_SimpleHeals_UIMouseOver = new("AST_ST_SimpleHeals_UIMouseOver"),
-                AST_ST_SimpleHeals_IncludeShields = new("AST_ST_SimpleHeals_IncludeShields"),
-                AST_ST_SimpleHeals_WeaveDignity = new("AST_ST_SimpleHeals_WeaveDignity"),
-                AST_ST_SimpleHeals_WeaveIntersection = new("AST_ST_SimpleHeals_WeaveIntersection"),
-                AST_ST_SimpleHeals_WeaveEwer = new("AST_ST_SimpleHeals_WeaveEwer"),
-                AST_ST_SimpleHeals_WeaveSpire = new("AST_ST_SimpleHeals_WeaveSpire"),
-                AST_ST_SimpleHeals_WeaveArrow = new("AST_ST_SimpleHeals_WeaveArrow"),
-                AST_ST_SimpleHeals_WeaveBole = new("AST_ST_SimpleHeals_WeaveBole"),
-                AST_ST_SimpleHeals_WeaveExalt = new("AST_ST_SimpleHeals_WeaveExalt"),
-                AST_AoE_SimpleHeals_WeaveLady = new("AST_AoE_SimpleHeals_WeaveLady"),
-                AST_AoE_SimpleHeals_Opposition = new("AST_AoE_SimpleHeals_Opposition"),
-                AST_AoE_SimpleHeals_Horoscope = new("AST_AoE_SimpleHeals_Horoscope"),
-                AST_ST_DPS_OverwriteCards = new("AST_ST_DPS_OverwriteCards"),
-                AST_AOE_DPS_OverwriteCards = new("AST_AOE_DPS_OverwriteCards"),
-                AST_ST_DPS_CombustUptime_Adv = new("AST_ST_DPS_CombustUptime_Adv");
-            public static UserFloat
-                AST_ST_DPS_CombustUptime_Threshold = new("AST_ST_DPS_CombustUptime_Threshold");
+namespace WrathCombo.Combos.PvE;
 
-            internal static void Draw(CustomComboPreset preset)
+internal static partial class AST
+{
+    public static class Config
+    {
+        public static UserInt
+            AST_LucidDreaming = new("ASTLucidDreamingFeature", 8000),
+            AST_EssentialDignity = new("ASTCustomEssentialDignity", 50),
+            AST_Spire = new("AST_Spire", 80),
+            AST_Ewer = new("AST_Ewer", 80),
+            AST_Arrow = new("AST_Arrow", 80),
+            AST_Bole = new("AST_Bole", 80),
+            AST_ST_SimpleHeals_Esuna = new("AST_ST_SimpleHeals_Esuna", 100),
+            AST_DPS_AltMode = new("AST_DPS_AltMode"),
+            AST_AoEHeals_AltMode = new("AST_AoEHeals_AltMode"),
+            AST_DPS_DivinationOption = new("AST_DPS_DivinationOption"),
+            AST_AOE_DivinationOption = new("AST_AOE_DivinationOption"),
+            AST_DPS_LightSpeedOption = new("AST_DPS_LightSpeedOption"),
+            AST_AOE_LightSpeedOption = new("AST_AOE_LightSpeedOption"),
+            AST_DPS_CombustOption = new("AST_DPS_CombustOption"),
+            AST_QuickTarget_Override = new("AST_QuickTarget_Override"),
+            AST_ST_DPS_Play_SpeedSetting = new("AST_ST_DPS_Play_SpeedSetting"),
+            AST_ST_DPS_Balance_Content = new("AST_ST_DPS_Balance_Content", 1),
+            //PVP
+            ASTPvP_Burst_PlayCardOption = new("ASTPvP_Burst_PlayCardOption");
+        public static UserBool
+            AST_QuickTarget_SkipDamageDown = new("AST_QuickTarget_SkipDamageDown"),
+            AST_QuickTarget_SkipRezWeakness = new("AST_QuickTarget_SkipRezWeakness"),
+            AST_ST_SimpleHeals_Adv = new("AST_ST_SimpleHeals_Adv"),
+            AST_ST_SimpleHeals_UIMouseOver = new("AST_ST_SimpleHeals_UIMouseOver"),
+            AST_ST_SimpleHeals_IncludeShields = new("AST_ST_SimpleHeals_IncludeShields"),
+            AST_ST_SimpleHeals_WeaveDignity = new("AST_ST_SimpleHeals_WeaveDignity"),
+            AST_ST_SimpleHeals_WeaveIntersection = new("AST_ST_SimpleHeals_WeaveIntersection"),
+            AST_ST_SimpleHeals_WeaveEwer = new("AST_ST_SimpleHeals_WeaveEwer"),
+            AST_ST_SimpleHeals_WeaveSpire = new("AST_ST_SimpleHeals_WeaveSpire"),
+            AST_ST_SimpleHeals_WeaveArrow = new("AST_ST_SimpleHeals_WeaveArrow"),
+            AST_ST_SimpleHeals_WeaveBole = new("AST_ST_SimpleHeals_WeaveBole"),
+            AST_ST_SimpleHeals_WeaveExalt = new("AST_ST_SimpleHeals_WeaveExalt"),
+            AST_AoE_SimpleHeals_WeaveLady = new("AST_AoE_SimpleHeals_WeaveLady"),
+            AST_AoE_SimpleHeals_Opposition = new("AST_AoE_SimpleHeals_Opposition"),
+            AST_AoE_SimpleHeals_Horoscope = new("AST_AoE_SimpleHeals_Horoscope"),
+            AST_ST_DPS_OverwriteCards = new("AST_ST_DPS_OverwriteCards"),
+            AST_AOE_DPS_OverwriteCards = new("AST_AOE_DPS_OverwriteCards"),
+            AST_ST_DPS_CombustUptime_Adv = new("AST_ST_DPS_CombustUptime_Adv");
+        public static UserFloat
+            AST_ST_DPS_CombustUptime_Threshold = new("AST_ST_DPS_CombustUptime_Threshold");
+
+        internal static void Draw(CustomComboPreset preset)
+        {
+            switch (preset)
             {
-                switch (preset)
-                {
-                    case CustomComboPreset.AST_ST_DPS_Opener:
-                        DrawBossOnlyChoice(AST_ST_DPS_Balance_Content);
-                        break;
-                    case CustomComboPreset.AST_ST_DPS:
-                        DrawRadioButton(AST_DPS_AltMode, $"On {Malefic.ActionName()}", "", 0);
-                        DrawRadioButton(AST_DPS_AltMode, $"On {Combust.ActionName()}", $"Alternative DPS Mode. Leaves {Malefic.ActionName()} alone for pure DPS, becomes {Malefic.ActionName()} when features are on cooldown", 1);
-                        break;
+                case CustomComboPreset.AST_ST_DPS_Opener:
+                    DrawBossOnlyChoice(AST_ST_DPS_Balance_Content);
+                    break;
+                case CustomComboPreset.AST_ST_DPS:
+                    DrawRadioButton(AST_DPS_AltMode, $"On {Malefic.ActionName()}", "", 0);
+                    DrawRadioButton(AST_DPS_AltMode, $"On {Combust.ActionName()}", $"Alternative DPS Mode. Leaves {Malefic.ActionName()} alone for pure DPS, becomes {Malefic.ActionName()} when features are on cooldown", 1);
+                    break;
 
                 case CustomComboPreset.AST_DPS_Lucid:
                     DrawSliderInt(4000, 9500, AST_LucidDreaming, "Set value for your MP to be at or under for this feature to work", 150, Hundreds);

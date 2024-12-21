@@ -1,8 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using Dalamud.Game.ClientState.Conditions;
+﻿using Dalamud.Game.ClientState.Conditions;
 using Dalamud.Game.ClientState.JobGauge.Types;
+using System;
+using System.Collections.Generic;
 using WrathCombo.CustomComboNS;
+using WrathCombo.CustomComboNS.Functions;
 using static WrathCombo.CustomComboNS.Functions.CustomComboFunctions;
 
 namespace WrathCombo.Combos.PvE;
@@ -774,14 +775,14 @@ internal partial class RDM
         public override int MinOpenerLevel => 100;
         public override int MaxOpenerLevel => 109;
 
-            internal override UserData? ContentCheckConfig => Config.RDM_BalanceOpener_Content;
+        internal override UserData? ContentCheckConfig => Config.RDM_BalanceOpener_Content;
 
-            public override bool HasCooldowns()
-            {
-                if (!ActionsReady([All.Swiftcast, Fleche, Embolden, Manafication, ContreSixte]) || GetRemainingCharges(Acceleration) < 2 ||
-                    GetRemainingCharges(Engagement) < 2 ||
-                    GetRemainingCharges(Corpsacorps) < 2)
-                    return false;
+        public override bool HasCooldowns()
+        {
+            if (!ActionsReady([All.Swiftcast, Fleche, Embolden, Manafication, ContreSixte]) || GetRemainingCharges(Acceleration) < 2 ||
+                GetRemainingCharges(Engagement) < 2 ||
+                GetRemainingCharges(Corpsacorps) < 2)
+                return false;
 
             return true;
         }

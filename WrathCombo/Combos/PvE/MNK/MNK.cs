@@ -177,8 +177,8 @@ internal static partial class MNK
                 return FormShift;
 
             if (IsEnabled(CustomComboPreset.MNK_STUseOpener) &&
-                (Config.MNK_BalanceOpener_Content == 0 ||
-                Config.MNK_BalanceOpener_Content == 1 && ContentCheck.IsInBossOnlyContent()))
+                (Config.MNK_Balance_Content == 0 ||
+                Config.MNK_Balance_Content == 1 && ContentCheck.IsInBossOnlyContent()))
                 if (Opener().FullOpener(ref actionID))
                 {
                     if (IsOnCooldown(RiddleOfWind) &&

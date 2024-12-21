@@ -299,8 +299,8 @@ internal static partial class SAM
 
             // Opener for SAM
             if (IsEnabled(CustomComboPreset.SAM_ST_Opener) &&
-                (Config.SAM_BalanceOpener_Content == 0 ||
-                Config.SAM_BalanceOpener_Content == 1 && ContentCheck.IsInBossOnlyContent()))
+                (Config.SAM_Balance_Content == 0 ||
+                Config.SAM_Balance_Content == 1 && ContentCheck.IsInBossOnlyContent()))
                 if (Opener().FullOpener(ref actionID))
                     return actionID;
 

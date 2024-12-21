@@ -1,40 +1,24 @@
-﻿using System.Collections.Generic;
-using Dalamud.Game.ClientState.JobGauge.Types;
+﻿using Dalamud.Game.ClientState.JobGauge.Types;
 using Dalamud.Game.ClientState.Statuses;
+using System.Collections.Generic;
 using WrathCombo.CustomComboNS;
+using WrathCombo.CustomComboNS.Functions;
 using WrathCombo.Data;
 using WrathCombo.Extensions;
-using static WrathCombo.CustomComboNS.Functions.CustomComboFunctions;
 
 namespace WrathCombo.Combos.PvE;
 
 internal partial class NIN
 {
-    internal static NINGauge Gauge = GetJobGauge<NINGauge>();
     internal static bool InMudra = false;
     internal static NINOpenerMaxLevel4thGCDKunai Opener1 = new();
     internal static NINOpenerMaxLevel3rdGCDDokumori Opener2 = new();
     internal static NINOpenerMaxLevel3rdGCDKunai Opener3 = new();
-
-    internal static bool OriginalJutsu => IsOriginal(Ninjutsu);
-
-    private static bool TargetHasTrickDebuff() => TargetHasEffect(Debuffs.TrickAttack) ||
-               TargetHasEffect(Debuffs.KunaisBane);
-
-    private static bool TargetHasMugDebuff() => TargetHasEffect(Debuffs.Mug) ||
-               TargetHasEffect(Debuffs.Dokumori);
-
-    public static Status? MudraBuff => FindEffect(Buffs.Mudra);
-
-    public static uint CurrentNinjutsu => OriginalHook(Ninjutsu);
-
-    internal static bool TrickDebuff => TargetHasTrickDebuff();
-
-    internal static bool MugDebuff => TargetHasMugDebuff();
+    internal static NINGauge Gauge = CustomComboFunctions.GetJobGauge<NINGauge>();
 
     internal static WrathOpener Opener()
     {
-        if (IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode))
+        if (CustomComboFunctions.IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode))
         {
             if (Config.NIN_Adv_Opener_Selection == 0 && Opener1.LevelChecked)
                 return Opener1;
@@ -48,6 +32,22 @@ internal partial class NIN
             return Opener1;
         return WrathOpener.Dummy;
     }
+
+    internal static bool OriginalJutsu => CustomComboFunctions.IsOriginal(Ninjutsu);
+
+    internal static bool TrickDebuff => TargetHasTrickDebuff();
+
+    internal static bool MugDebuff => TargetHasMugDebuff();
+
+    private static bool TargetHasTrickDebuff() => CustomComboFunctions.TargetHasEffect(Debuffs.TrickAttack) ||
+               CustomComboFunctions.TargetHasEffect(Debuffs.KunaisBane);
+
+    private static bool TargetHasMugDebuff() => CustomComboFunctions.TargetHasEffect(Debuffs.Mug) ||
+               CustomComboFunctions.TargetHasEffect(Debuffs.Dokumori);
+
+    public static Status? MudraBuff => CustomComboFunctions.FindEffect(Buffs.Mudra);
+
+    public static uint CurrentNinjutsu => CustomComboFunctions.OriginalHook(Ninjutsu);
 
     internal class MudraCasting
     {
@@ -73,14 +73,14 @@ internal partial class NIN
             if (InMudra)
                 return true;
 
-            float gcd = GetCooldown(GustSlash).CooldownTotal;
+            float gcd = CustomComboFunctions.GetCooldown(GustSlash).CooldownTotal;
 
             if (gcd == 0.5)
                 return true;
 
-            if (GetRemainingCharges(Ten) == 0 &&
-                !HasEffect(Buffs.Mudra) &&
-                !HasEffect(Buffs.Kassatsu))
+            if (CustomComboFunctions.GetRemainingCharges(Ten) == 0 &&
+                !CustomComboFunctions.HasEffect(Buffs.Mudra) &&
+                !CustomComboFunctions.HasEffect(Buffs.Kassatsu))
                 return false;
 
             return true;
@@ -102,12 +102,12 @@ internal partial class NIN
 
                 if (ActionWatching.LastAction is Ten or TenCombo)
                 {
-                    actionID = OriginalHook(Ninjutsu);
+                    actionID = CustomComboFunctions.OriginalHook(Ninjutsu);
 
                     return true;
                 }
 
-                actionID = OriginalHook(Ten);
+                actionID = CustomComboFunctions.OriginalHook(Ten);
                 CurrentMudra = MudraState.CastingFumaShuriken;
 
                 return true;
@@ -134,19 +134,19 @@ internal partial class NIN
 
                 if (ActionWatching.LastAction is Ten or TenCombo)
                 {
-                    actionID = OriginalHook(Chi);
+                    actionID = CustomComboFunctions.OriginalHook(Chi);
 
                     return true;
                 }
 
                 if (ActionWatching.LastAction == ChiCombo)
                 {
-                    actionID = OriginalHook(Ninjutsu);
+                    actionID = CustomComboFunctions.OriginalHook(Ninjutsu);
 
                     return true;
                 }
 
-                actionID = OriginalHook(Ten);
+                actionID = CustomComboFunctions.OriginalHook(Ten);
                 CurrentMudra = MudraState.CastingRaiton;
 
                 return true;
@@ -173,19 +173,19 @@ internal partial class NIN
 
                 if (ActionWatching.LastAction is Chi or ChiCombo)
                 {
-                    actionID = OriginalHook(Ten);
+                    actionID = CustomComboFunctions.OriginalHook(Ten);
 
                     return true;
                 }
 
                 if (ActionWatching.LastAction == TenCombo)
                 {
-                    actionID = OriginalHook(Ninjutsu);
+                    actionID = CustomComboFunctions.OriginalHook(Ninjutsu);
 
                     return true;
                 }
 
-                actionID = OriginalHook(Chi);
+                actionID = CustomComboFunctions.OriginalHook(Chi);
                 CurrentMudra = MudraState.CastingKaton;
 
                 return true;
@@ -203,7 +203,7 @@ internal partial class NIN
         {
             if (Hyoton.LevelChecked() && CurrentMudra is MudraState.None or MudraState.CastingHyoton)
             {
-                if (!CanCast() || HasEffect(Buffs.Kassatsu) || ActionWatching.LastAction == Hyoton)
+                if (!CanCast() || CustomComboFunctions.HasEffect(Buffs.Kassatsu) || ActionWatching.LastAction == Hyoton)
                 {
                     CurrentMudra = MudraState.None;
 
@@ -212,19 +212,19 @@ internal partial class NIN
 
                 if (ActionWatching.LastAction == TenCombo)
                 {
-                    actionID = OriginalHook(Jin);
+                    actionID = CustomComboFunctions.OriginalHook(Jin);
 
                     return true;
                 }
 
                 if (ActionWatching.LastAction == JinCombo)
                 {
-                    actionID = OriginalHook(Ninjutsu);
+                    actionID = CustomComboFunctions.OriginalHook(Ninjutsu);
 
                     return true;
                 }
 
-                actionID = OriginalHook(Ten);
+                actionID = CustomComboFunctions.OriginalHook(Ten);
                 CurrentMudra = MudraState.CastingHyoton;
 
                 return true;
@@ -251,26 +251,26 @@ internal partial class NIN
 
                 if (ActionWatching.LastAction is Chi or ChiCombo)
                 {
-                    actionID = OriginalHook(Jin);
+                    actionID = CustomComboFunctions.OriginalHook(Jin);
 
                     return true;
                 }
 
                 if (ActionWatching.LastAction == JinCombo)
                 {
-                    actionID = OriginalHook(Ten);
+                    actionID = CustomComboFunctions.OriginalHook(Ten);
 
                     return true;
                 }
 
                 if (ActionWatching.LastAction == TenCombo)
                 {
-                    actionID = OriginalHook(Ninjutsu);
+                    actionID = CustomComboFunctions.OriginalHook(Ninjutsu);
 
                     return true;
                 }
 
-                actionID = OriginalHook(Chi);
+                actionID = CustomComboFunctions.OriginalHook(Chi);
                 CurrentMudra = MudraState.CastingHuton;
 
                 return true;
@@ -297,26 +297,26 @@ internal partial class NIN
 
                 if (ActionWatching.LastAction is Ten or TenCombo)
                 {
-                    actionID = OriginalHook(Jin);
+                    actionID = CustomComboFunctions.OriginalHook(Jin);
 
                     return true;
                 }
 
                 if (ActionWatching.LastAction == JinCombo)
                 {
-                    actionID = OriginalHook(Chi);
+                    actionID = CustomComboFunctions.OriginalHook(Chi);
 
                     return true;
                 }
 
                 if (ActionWatching.LastAction == ChiCombo)
                 {
-                    actionID = OriginalHook(Ninjutsu);
+                    actionID = CustomComboFunctions.OriginalHook(Ninjutsu);
 
                     return true;
                 }
 
-                actionID = OriginalHook(Ten);
+                actionID = CustomComboFunctions.OriginalHook(Ten);
                 CurrentMudra = MudraState.CastingDoton;
 
                 return true;
@@ -343,26 +343,26 @@ internal partial class NIN
 
                 if (ActionWatching.LastAction is Ten or TenCombo)
                 {
-                    actionID = OriginalHook(Chi);
+                    actionID = CustomComboFunctions.OriginalHook(Chi);
 
                     return true;
                 }
 
                 if (ActionWatching.LastAction == ChiCombo)
                 {
-                    actionID = OriginalHook(Jin);
+                    actionID = CustomComboFunctions.OriginalHook(Jin);
 
                     return true;
                 }
 
                 if (ActionWatching.LastAction == JinCombo)
                 {
-                    actionID = OriginalHook(Ninjutsu);
+                    actionID = CustomComboFunctions.OriginalHook(Ninjutsu);
 
                     return true;
                 }
 
-                actionID = OriginalHook(Ten);
+                actionID = CustomComboFunctions.OriginalHook(Ten);
                 CurrentMudra = MudraState.CastingSuiton;
 
                 return true;
@@ -380,7 +380,7 @@ internal partial class NIN
         {
             if (GokaMekkyaku.LevelChecked() && CurrentMudra is MudraState.None or MudraState.CastingGokaMekkyaku)
             {
-                if (!CanCast() || !HasEffect(Buffs.Kassatsu) || ActionWatching.LastAction == GokaMekkyaku)
+                if (!CanCast() || !CustomComboFunctions.HasEffect(Buffs.Kassatsu) || ActionWatching.LastAction == GokaMekkyaku)
                 {
                     CurrentMudra = MudraState.None;
 
@@ -389,19 +389,19 @@ internal partial class NIN
 
                 if (ActionWatching.LastAction == ChiCombo)
                 {
-                    actionID = OriginalHook(Ten);
+                    actionID = CustomComboFunctions.OriginalHook(Ten);
 
                     return true;
                 }
 
                 if (ActionWatching.LastAction == TenCombo)
                 {
-                    actionID = OriginalHook(Ninjutsu);
+                    actionID = CustomComboFunctions.OriginalHook(Ninjutsu);
 
                     return true;
                 }
 
-                actionID = OriginalHook(Chi);
+                actionID = CustomComboFunctions.OriginalHook(Chi);
                 CurrentMudra = MudraState.CastingGokaMekkyaku;
 
                 return true;
@@ -419,7 +419,7 @@ internal partial class NIN
         {
             if (HyoshoRanryu.LevelChecked() && CurrentMudra is MudraState.None or MudraState.CastingHyoshoRanryu)
             {
-                if (!CanCast() || !HasEffect(Buffs.Kassatsu) || ActionWatching.LastAction == HyoshoRanryu)
+                if (!CanCast() || !CustomComboFunctions.HasEffect(Buffs.Kassatsu) || ActionWatching.LastAction == HyoshoRanryu)
                 {
                     CurrentMudra = MudraState.None;
 
@@ -428,19 +428,19 @@ internal partial class NIN
 
                 if (ActionWatching.LastAction == ChiCombo)
                 {
-                    actionID = OriginalHook(Jin);
+                    actionID = CustomComboFunctions.OriginalHook(Jin);
 
                     return true;
                 }
 
                 if (ActionWatching.LastAction == JinCombo)
                 {
-                    actionID = OriginalHook(Ninjutsu);
+                    actionID = CustomComboFunctions.OriginalHook(Ninjutsu);
 
                     return true;
                 }
 
-                actionID = OriginalHook(Chi);
+                actionID = CustomComboFunctions.OriginalHook(Chi);
                 CurrentMudra = MudraState.CastingHyoshoRanryu;
 
                 return true;
@@ -544,21 +544,21 @@ internal partial class NIN
 
         public override bool HasCooldowns()
         {
-            if (GetRemainingCharges(Ten) < 1)
+            if (CustomComboFunctions.GetRemainingCharges(Ten) < 1)
                 return false;
-            if (IsOnCooldown(Mug))
+            if (CustomComboFunctions.IsOnCooldown(Mug))
                 return false;
-            if (IsOnCooldown(TenChiJin))
+            if (CustomComboFunctions.IsOnCooldown(TenChiJin))
                 return false;
-            if (IsOnCooldown(PhantomKamaitachi))
+            if (CustomComboFunctions.IsOnCooldown(PhantomKamaitachi))
                 return false;
-            if (IsOnCooldown(Bunshin))
+            if (CustomComboFunctions.IsOnCooldown(Bunshin))
                 return false;
-            if (IsOnCooldown(DreamWithinADream))
+            if (CustomComboFunctions.IsOnCooldown(DreamWithinADream))
                 return false;
-            if (IsOnCooldown(Kassatsu))
+            if (CustomComboFunctions.IsOnCooldown(Kassatsu))
                 return false;
-            if (IsOnCooldown(TrickAttack))
+            if (CustomComboFunctions.IsOnCooldown(TrickAttack))
                 return false;
 
             return true;
@@ -618,21 +618,21 @@ internal partial class NIN
 
         public override bool HasCooldowns()
         {
-            if (GetRemainingCharges(Ten) < 1)
+            if (CustomComboFunctions.GetRemainingCharges(Ten) < 1)
                 return false;
-            if (IsOnCooldown(Mug))
+            if (CustomComboFunctions.IsOnCooldown(Mug))
                 return false;
-            if (IsOnCooldown(TenChiJin))
+            if (CustomComboFunctions.IsOnCooldown(TenChiJin))
                 return false;
-            if (IsOnCooldown(PhantomKamaitachi))
+            if (CustomComboFunctions.IsOnCooldown(PhantomKamaitachi))
                 return false;
-            if (IsOnCooldown(Bunshin))
+            if (CustomComboFunctions.IsOnCooldown(Bunshin))
                 return false;
-            if (IsOnCooldown(DreamWithinADream))
+            if (CustomComboFunctions.IsOnCooldown(DreamWithinADream))
                 return false;
-            if (IsOnCooldown(Kassatsu))
+            if (CustomComboFunctions.IsOnCooldown(Kassatsu))
                 return false;
-            if (IsOnCooldown(TrickAttack))
+            if (CustomComboFunctions.IsOnCooldown(TrickAttack))
                 return false;
 
             return true;
@@ -690,25 +690,24 @@ internal partial class NIN
 
         public override bool HasCooldowns()
         {
-            if (GetRemainingCharges(Ten) < 1)
+            if (CustomComboFunctions.GetRemainingCharges(Ten) < 1)
                 return false;
-            if (IsOnCooldown(Mug))
+            if (CustomComboFunctions.IsOnCooldown(Mug))
                 return false;
-            if (IsOnCooldown(TenChiJin))
+            if (CustomComboFunctions.IsOnCooldown(TenChiJin))
                 return false;
-            if (IsOnCooldown(PhantomKamaitachi))
+            if (CustomComboFunctions.IsOnCooldown(PhantomKamaitachi))
                 return false;
-            if (IsOnCooldown(Bunshin))
+            if (CustomComboFunctions.IsOnCooldown(Bunshin))
                 return false;
-            if (IsOnCooldown(DreamWithinADream))
+            if (CustomComboFunctions.IsOnCooldown(DreamWithinADream))
                 return false;
-            if (IsOnCooldown(Kassatsu))
+            if (CustomComboFunctions.IsOnCooldown(Kassatsu))
                 return false;
-            if (IsOnCooldown(TrickAttack))
+            if (CustomComboFunctions.IsOnCooldown(TrickAttack))
                 return false;
 
             return true;
         }
     }
 }
-

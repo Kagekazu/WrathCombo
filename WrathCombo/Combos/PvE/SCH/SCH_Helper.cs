@@ -1,7 +1,8 @@
-﻿using System;
+﻿using Dalamud.Game.ClientState.JobGauge.Types;
+using System;
 using System.Collections.Generic;
-using Dalamud.Game.ClientState.JobGauge.Types;
 using WrathCombo.CustomComboNS;
+using WrathCombo.CustomComboNS.Functions;
 using static WrathCombo.CustomComboNS.Functions.CustomComboFunctions;
 
 namespace WrathCombo.Combos.PvE;
@@ -115,7 +116,7 @@ internal static partial class SCH
                 Biolysis
         ];
 
-        public override List<(int[] Steps, uint NewAction, Func<bool> Condition)> ProcSteps { get; set; } =
+        public override List<(int [] Steps, uint NewAction, Func<bool> Condition)> ProcSteps { get; set; } =
         [
             ([3], Aetherflow, () => Config.SCH_ST_DPS_OpenerOption == 1),
                 ([13], Dissipation, () => Config.SCH_ST_DPS_OpenerOption == 1),
@@ -124,12 +125,12 @@ internal static partial class SCH
         public override int MinOpenerLevel => 100;
         public override int MaxOpenerLevel => 109;
 
-            internal override UserData? ContentCheckConfig => Config.SCH_ST_DPS_OpenerContent;
+        internal override UserData? ContentCheckConfig => Config.SCH_ST_DPS_OpenerContent;
 
-            public override bool HasCooldowns()
-            {
-                if (!ActionsReady([ChainStratagem, Dissipation, Aetherflow]))
-                    return false;
+        public override bool HasCooldowns()
+        {
+            if (!ActionsReady([ChainStratagem, Dissipation, Aetherflow]))
+                return false;
 
             return true;
         }

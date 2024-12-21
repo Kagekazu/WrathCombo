@@ -192,8 +192,8 @@ internal static partial class SGE
 
                 // Opener for SGE
                 if (IsEnabled(CustomComboPreset.SGE_ST_DPS_Opener) &&
-                (Config.SGE_BalanceOpener_Content == 0 ||
-                Config.SGE_BalanceOpener_Content == 1 && ContentCheck.IsInBossOnlyContent()))
+                (Config.SGE_Balance_Content == 0 ||
+                Config.SGE_Balance_Content == 1 && ContentCheck.IsInBossOnlyContent()))
                     if (Opener().FullOpener(ref actionID))
                         return actionID;
 
