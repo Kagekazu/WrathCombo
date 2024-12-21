@@ -5,6 +5,7 @@ using FFXIVClientStructs.FFXIV.Client.Game;
 using WrathCombo.CustomComboNS;
 using WrathCombo.Data;
 using static WrathCombo.CustomComboNS.Functions.CustomComboFunctions;
+using WrathCombo.CustomComboNS.Functions;
 
 namespace WrathCombo.Combos.PvE;
 
@@ -82,7 +83,73 @@ internal static partial class MCH
         if (Opener1.LevelChecked)
             return Opener1;
 
-        return WrathOpener.Dummy;
+        public override int MaxOpenerLevel => 109;
+        public override List<uint> OpenerActions { get; set; } = new()
+        {
+            Reassemble,
+            AirAnchor,
+            CheckMate,
+            DoubleCheck,
+            Drill,
+            BarrelStabilizer,
+            Chainsaw,
+            Excavator,
+            AutomatonQueen,
+            Reassemble,
+            Drill,
+            CheckMate,
+            Wildfire,
+            FullMetalField,
+            DoubleCheck,
+            Hypercharge,
+            BlazingShot,
+            CheckMate,
+            BlazingShot,
+            DoubleCheck,
+            BlazingShot,
+            CheckMate,
+            BlazingShot,
+            DoubleCheck,
+            BlazingShot,
+            CheckMate,
+            Drill,
+            DoubleCheck,
+            CheckMate,
+            HeatedSplitShot,
+            DoubleCheck,
+            HeatedSlugShot,
+            HeatedCleanShot
+        };
+        internal override UserData? ContentCheckConfig => Config.MCH_Balance_Content;
+
+        public override bool HasCooldowns()
+        {
+            if (GetRemainingCharges(Reassemble) < 2)
+                return false;
+
+            if (GetRemainingCharges(CheckMate) < 3)
+                return false;
+
+            if (GetRemainingCharges(DoubleCheck) < 3)
+                return false;
+
+            if (!ActionReady(Chainsaw))
+                return false;
+
+            if (!ActionReady(Wildfire))
+                return false;
+
+            if (!ActionReady(BarrelStabilizer))
+                return false;
+
+            if (!ActionReady(Excavator))
+                return false;
+
+            if (!ActionReady(FullMetalField))
+                return false;
+
+            return true;
+        }
     }
 
     internal static unsafe bool IsComboExpiring(float times)

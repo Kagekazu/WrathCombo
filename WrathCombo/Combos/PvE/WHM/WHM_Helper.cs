@@ -2,6 +2,7 @@
 using Dalamud.Game.ClientState.Objects.Types;
 using System.Collections.Generic;
 using WrathCombo.CustomComboNS;
+using WrathCombo.CustomComboNS.Functions;
 using static WrathCombo.CustomComboNS.Functions.CustomComboFunctions;
 
 namespace WrathCombo.Combos.PvE;
@@ -97,6 +98,7 @@ internal partial class WHM
             Glare4,
             Dia
         ];
+        internal override UserData? ContentCheckConfig => Config.WHM_Balance_Content;
 
         public override bool HasCooldowns()
         {

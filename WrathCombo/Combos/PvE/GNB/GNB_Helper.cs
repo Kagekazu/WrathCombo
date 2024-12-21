@@ -58,6 +58,7 @@ internal partial class GNB
             2,
             5,
         ];
+        internal override UserData? ContentCheckConfig => Config.GNB_ST_Balance_Content;
 
         public override bool HasCooldowns()
         {
@@ -117,6 +118,7 @@ internal partial class GNB
             2,
         ];
 
+        internal override UserData? ContentCheckConfig => Config.GNB_ST_Balance_Content;
         public override bool HasCooldowns()
         {
             if (!CustomComboFunctions.ActionReady(Bloodfest))

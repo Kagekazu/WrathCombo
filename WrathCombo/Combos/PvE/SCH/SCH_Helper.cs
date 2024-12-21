@@ -124,10 +124,12 @@ internal static partial class SCH
         public override int MinOpenerLevel => 100;
         public override int MaxOpenerLevel => 109;
 
-        public override bool HasCooldowns()
-        {
-            if (!ActionsReady([ChainStratagem, Dissipation, Aetherflow]))
-                return false;
+            internal override UserData? ContentCheckConfig => Config.SCH_ST_DPS_OpenerContent;
+
+            public override bool HasCooldowns()
+            {
+                if (!ActionsReady([ChainStratagem, Dissipation, Aetherflow]))
+                    return false;
 
             return true;
         }

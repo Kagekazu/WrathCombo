@@ -774,12 +774,14 @@ internal partial class RDM
         public override int MinOpenerLevel => 100;
         public override int MaxOpenerLevel => 109;
 
-        public override bool HasCooldowns()
-        {
-            if (!ActionsReady([All.Swiftcast, Fleche, Embolden, Manafication, ContreSixte]) || GetRemainingCharges(Acceleration) < 2 ||
-                GetRemainingCharges(Engagement) < 2 ||
-                GetRemainingCharges(Corpsacorps) < 2)
-                return false;
+            internal override UserData? ContentCheckConfig => Config.RDM_BalanceOpener_Content;
+
+            public override bool HasCooldowns()
+            {
+                if (!ActionsReady([All.Swiftcast, Fleche, Embolden, Manafication, ContreSixte]) || GetRemainingCharges(Acceleration) < 2 ||
+                    GetRemainingCharges(Engagement) < 2 ||
+                    GetRemainingCharges(Corpsacorps) < 2)
+                    return false;
 
             return true;
         }

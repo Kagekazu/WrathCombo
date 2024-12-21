@@ -4,29 +4,68 @@ using static WrathCombo.Extensions.UIntExtensions;
 using static WrathCombo.Window.Functions.SliderIncrements;
 using static WrathCombo.Window.Functions.UserConfig;
 
-namespace WrathCombo.Combos.PvE;
-
-internal static partial class SGE
+namespace WrathCombo.Combos.PvE
 {
-    public static class Config
+    internal static partial class SGE
     {
-        public static UserInt
-            SGE_Eukrasia_Mode = new("SGE_Eukrasia_Mode");
-
-        internal static void Draw(CustomComboPreset preset)
+        public static class Config
         {
-            switch (preset)
+            #region DPS
+            public static UserBool
+                SGE_ST_DPS_Adv = new("SGE_ST_DPS_Adv"),
+                SGE_ST_DPS_EDosis_Adv = new("SGE_ST_Dosis_EDosis_Adv");
+            public static UserBoolArray
+                SGE_ST_DPS_Movement = new("SGE_ST_DPS_Movement");
+            public static UserInt
+                SGE_ST_DPS_EDosisHPPer = new("SGE_ST_DPS_EDosisHPPer", 10),
+                SGE_ST_DPS_Lucid = new("SGE_ST_DPS_Lucid", 6500),
+                SGE_ST_DPS_Rhizo = new("SGE_ST_DPS_Rhizo"),
+                SGE_ST_DPS_AddersgallProtect = new("SGE_ST_DPS_AddersgallProtect", 3),
+                SGE_AoE_DPS_Lucid = new("SGE_AoE_Phlegma_Lucid", 6500),
+                SGE_AoE_DPS_Rhizo = new("SGE_AoE_DPS_Rhizo"),
+                SGE_AoE_DPS_AddersgallProtect = new("SGE_AoE_DPS_AddersgallProtect", 3),
+                SGE_Balance_Content = new("SGE_Balance_Content");
+            public static UserFloat
+                SGE_ST_DPS_EDosisThreshold = new("SGE_ST_Dosis_EDosisThreshold", 3.0f);
+            #endregion
+
+            #region Healing
+            public static UserBool
+                SGE_ST_Heal_Adv = new("SGE_ST_Heal_Adv"),
+                SGE_ST_Heal_UIMouseOver = new("SGE_ST_Heal_UIMouseOver"),
+                SGE_ST_Heal_IncludeShields = new("SGE_ST_Heal_IncludeShields"),
+                SGE_AoE_Heal_KeracholeTrait = new("SGE_AoE_Heal_KeracholeTrait");
+            public static UserInt
+                SGE_ST_Heal_Zoe = new("SGE_ST_Heal_Zoe", 99),
+                SGE_ST_Heal_Haima = new("SGE_ST_Heal_Haima", 99),
+                SGE_ST_Heal_Krasis = new("SGE_ST_Heal_Krasis", 99),
+                SGE_ST_Heal_Pepsis = new("SGE_ST_Heal_Pepsis"),
+                SGE_ST_Heal_Soteria = new("SGE_ST_Heal_Soteria", 99),
+                SGE_ST_Heal_EDiagnosisHP = new("SGE_ST_Heal_EDiagnosisHP", 99),
+                SGE_ST_Heal_Druochole = new("SGE_ST_Heal_Druochole", 99),
+                SGE_ST_Heal_Taurochole = new("SGE_ST_Heal_Taurochole", 99),
+                SGE_ST_Heal_Esuna = new("SGE_ST_Heal_Esuna", 100);
+            public static UserIntArray
+                SGE_ST_Heals_Priority = new("SGE_ST_Heals_Priority"),
+                SGE_AoE_Heals_Priority = new("SGE_AoE_Heals_Priority");
+            public static UserBoolArray
+                SGE_ST_Heal_EDiagnosisOpts = new("SGE_ST_Heal_EDiagnosisOpts");
+            #endregion
+
+            public static UserInt
+                SGE_Eukrasia_Mode = new("SGE_Eukrasia_Mode");
+
+            internal static void Draw(CustomComboPreset preset)
             {
-                case CustomComboPreset.SGE_ST_DPS_Opener:
-                    DrawBossOnlyChoice(SGE_BalanceOpener_Content);
-                    break;
+                switch (preset)
+                {
+                    case CustomComboPreset.SGE_ST_DPS_Opener:
+                        DrawBossOnlyChoice(SGE_Balance_Content);
+                        break;
 
-
-                case CustomComboPreset.SGE_ST_DPS:
-                    DrawAdditionalBoolChoice(SGE_ST_DPS_Adv, $"Apply all selected options to {Dosis2.ActionName()}",
-                        $"{Dosis.ActionName()} & {Dosis3.ActionName()} will behave normally.");
-
-                    break;
+                    case CustomComboPreset.SGE_ST_DPS:
+                        DrawAdditionalBoolChoice(SGE_ST_DPS_Adv, $"Apply all selected options to {Dosis2.ActionName()}", $"{Dosis.ActionName()} & {Dosis3.ActionName()} will behave normally.");
+                        break;
 
                 case CustomComboPreset.SGE_ST_DPS_EDosis:
                     DrawSliderInt(0, 100, SGE_ST_DPS_EDosisHPPer,

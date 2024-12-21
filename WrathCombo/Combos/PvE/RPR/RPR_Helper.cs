@@ -2,6 +2,7 @@
 using Dalamud.Game.ClientState.JobGauge.Types;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using WrathCombo.CustomComboNS;
+using WrathCombo.CustomComboNS.Functions;
 using static WrathCombo.CustomComboNS.Functions.CustomComboFunctions;
 
 namespace WrathCombo.Combos.PvE;
@@ -148,6 +149,7 @@ internal static partial class RPR
             ShadowOfDeath,
             Slice
         ];
+        internal override UserData? ContentCheckConfig => Config.RPR_Balance_Content;
 
         public override bool HasCooldowns()
         {

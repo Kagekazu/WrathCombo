@@ -19,7 +19,7 @@ internal partial class MCH
             MCH_ST_WildfireHP = new("MCH_ST_WildfireHP", 1),
             MCH_ST_HyperchargeHP = new("MCH_ST_HyperchargeHP", 1),
             MCH_ST_QueenOverDrive = new("MCH_ST_QueenOverDrive"),
-            MCH_BalanceOpener_Content = new("MCH_BalanceOpener_Content", 1);
+            MCH_Balance_Content = new("MCH_Balance_Content", 1);
 
         public static UserBoolArray
             MCH_ST_Reassembled = new("MCH_ST_Reassembled"),
@@ -33,7 +33,7 @@ internal partial class MCH
             switch (preset)
             {
                 case CustomComboPreset.MCH_ST_Adv_Opener:
-                    DrawBossOnlyChoice(MCH_BalanceOpener_Content);
+                    DrawBossOnlyChoice(MCH_Balance_Content);
                     break;
 
                 case CustomComboPreset.MCH_ST_Adv_Reassemble:

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Dalamud.Game.ClientState.JobGauge.Types;
 using WrathCombo.CustomComboNS;
+using WrathCombo.CustomComboNS.Functions;
 using static WrathCombo.CustomComboNS.Functions.CustomComboFunctions;
 
 namespace WrathCombo.Combos.PvE;
@@ -61,6 +62,7 @@ internal partial class PCT
             ClawMotif,
             ClawedMuse,
         ];
+        internal override UserData? ContentCheckConfig => Config.PCT_Balance_Content;
 
         public override bool HasCooldowns()
         {

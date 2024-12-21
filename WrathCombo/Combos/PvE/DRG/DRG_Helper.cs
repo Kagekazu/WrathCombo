@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using WrathCombo.Combos.PvE.Content;
 using WrathCombo.CustomComboNS;
+using WrathCombo.CustomComboNS.Functions;
 using static WrathCombo.CustomComboNS.Functions.CustomComboFunctions;
 
 namespace WrathCombo.Combos.PvE;
@@ -108,6 +109,7 @@ internal static partial class DRG
             RaidenThrust,
             WyrmwindThrust
         ];
+        internal override UserData? ContentCheckConfig => Config.DRG_Balance_Content;
 
         public override bool HasCooldowns()
         {

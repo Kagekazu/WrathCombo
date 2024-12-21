@@ -206,10 +206,10 @@ internal static partial class SCH
                     CanSpellWeave())
                     return Variant.VariantRampart;
 
-                //Opener
-                if (IsEnabled(CustomComboPreset.SCH_DPS_Balance_Opener) &&
-                    Opener().FullOpener(ref actionID) && ContentCheck.IsInConfiguredContent(Config.SCH_ST_DPS_OpenerContent, ContentCheck.ListSet.BossOnly))
-                    return actionID;
+                    //Opener
+                    if (IsEnabled(CustomComboPreset.SCH_DPS_Balance_Opener) &&
+                        Opener().FullOpener(ref actionID))
+                        return actionID;
 
                 // Aetherflow
                 if (IsEnabled(CustomComboPreset.SCH_DPS_Aetherflow) && !WasLastAction(Dissipation) &&

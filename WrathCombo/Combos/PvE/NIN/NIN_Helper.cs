@@ -540,6 +540,8 @@ internal partial class NIN
         public override int MinOpenerLevel => 100;
         public override int MaxOpenerLevel => 109;
 
+        internal override UserData? ContentCheckConfig => Config.NIN_Balance_Content;
+
         public override bool HasCooldowns()
         {
             if (GetRemainingCharges(Ten) < 1)
@@ -612,6 +614,8 @@ internal partial class NIN
         public override int MinOpenerLevel => 100;
         public override int MaxOpenerLevel => 109;
 
+        internal override UserData? ContentCheckConfig => Config.NIN_Balance_Content;
+
         public override bool HasCooldowns()
         {
             if (GetRemainingCharges(Ten) < 1)
@@ -680,6 +684,7 @@ internal partial class NIN
             11
         ];
 
+        internal override UserData? ContentCheckConfig => Config.NIN_Balance_Content;
         public override int MinOpenerLevel => 100;
         public override int MaxOpenerLevel => 109;
 
