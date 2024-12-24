@@ -228,7 +228,7 @@ namespace WrathCombo.CustomComboNS.Functions
         /// <returns> True or false. </returns>
         public static unsafe bool CanDelayedWeave(double start = 1.25, double end = 0.6)
         {
-            var halfGCD = GCDTotal / 2f;
+            float halfGCD = GCDTotal / 2f;
             return RemainingGCD <= (start > halfGCD ? halfGCD : start) && RemainingGCD >= end;
         }
 
