@@ -5510,6 +5510,12 @@ public enum CustomComboPreset
         SMN.JobID)]
     SMN_DemiEgiMenu_EgiOrder_AoE = 17065,
 
+    [ParentCombo(SMN_Advanced_Combo)]
+    [CustomComboInfo("Use Ruin III instead of Emerald Ruin III", 
+        "Replaces Emerald Ruin III with Ruin III in the rotation when Ruin Mastery III is not active.", 
+        SMN.JobID, 15)]
+    SMN_ST_Ruin3_Emerald_Ruin3 = 17067,
+
     #endregion
 
     #region VIPER
@@ -6435,8 +6441,8 @@ public enum CustomComboPreset
     #region BLACK MAGE
 
     [PvPCustomCombo]
-    [ReplaceSkill(BLMPvP.Fire)]
-    [CustomComboInfo("Burst Mode", "Turns Fire into an all-in-one button.\n- Uses Blizzard spells while moving.\n- Will use Paradox when appropriate.", BLMPvP.JobID)]
+    [ReplaceSkill(BLMPvP.Fire, BLMPvP.Blizzard)]
+    [CustomComboInfo("Burst Mode", "Turns Fire into an all-in-one button.\n- Uses Blizzard spells while moving (One Button Mode only).\n- Will use Paradox when appropriate.", BLMPvP.JobID)]
     BLMPvP_BurstMode = 112000,
 
     [ParentCombo(BLMPvP_BurstMode)]
