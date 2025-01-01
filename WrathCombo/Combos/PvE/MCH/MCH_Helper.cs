@@ -92,7 +92,8 @@ internal static partial class MCH
             gauge is { IsRobotActive: false, Battery: >= 50 })
         {
             if (Config.MCH_ST_Adv_Turret_SubOption == 0 ||
-                 (Config.MCH_ST_Adv_Turret_SubOption == 1 && InBossEncounter()))
+                (Config.MCH_ST_Adv_Turret_SubOption == 1 && InBossEncounter()) ||
+                (IsEnabled(CustomComboPreset.MCH_ST_SimpleMode) && InBossEncounter()))
             {
                 if (LevelChecked(BarrelStabilizer))
                 {
@@ -125,9 +126,9 @@ internal static partial class MCH
                     return true;
             }
 
-            if (Config.MCH_ST_Adv_Turret_SubOption == 1 &&
-                !InBossEncounter() &&
-                gauge.Battery == 100)
+            if (((Config.MCH_ST_Adv_Turret_SubOption == 1 && !InBossEncounter()) ||
+                (IsEnabled(CustomComboPreset.MCH_ST_SimpleMode) && !InBossEncounter())) &&
+                gauge.Battery >= Config.MCH_ST_TurretUsage)
                 return true;
         }
 
@@ -227,8 +228,7 @@ internal static partial class MCH
         if ((IsEnabled(CustomComboPreset.MCH_ST_SimpleMode) ||
              (IsEnabled(CustomComboPreset.MCH_ST_Adv_AirAnchor) && ReassembledAnchorST)) &&
             LevelChecked(AirAnchor) && !Battery &&
-            (GetCooldownRemainingTime(AirAnchor) <=
-                GetCooldownRemainingTime(OriginalHook(SplitShot)) + 0.25 || ActionReady(AirAnchor)))
+            (GetCooldownRemainingTime(AirAnchor) <= GetCooldownRemainingTime(OriginalHook(SplitShot)) + 0.25 || ActionReady(AirAnchor)))
         {
             actionID = AirAnchor;
 
