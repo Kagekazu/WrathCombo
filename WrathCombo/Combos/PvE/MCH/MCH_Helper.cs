@@ -306,7 +306,7 @@ internal static partial class MCH
 
         public override List<(int [] Steps, int HoldDelay)> PrepullDelays { get; set; } =
            [
-           ([1], 5)
+           ([2], 5)
            ];
 
         public override bool HasCooldowns()
