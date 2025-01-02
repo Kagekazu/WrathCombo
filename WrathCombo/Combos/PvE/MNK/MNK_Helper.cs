@@ -10,7 +10,6 @@ namespace WrathCombo.Combos.PvE;
 
 internal static partial class MNK
 {
-
     #region ID's
 
     public const byte ClassID = 2;

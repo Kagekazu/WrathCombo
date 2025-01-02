@@ -10,7 +10,6 @@ namespace WrathCombo.Combos.PvE;
 
 internal static partial class SCH
 {
-
     /*
      * SCH_Consolation
      * Even though Summon Seraph becomes Consolation, 
@@ -87,7 +86,6 @@ internal static partial class SCH
             {
                 //Recitation Indominability and Excogitation, with optional check against AF zero stack count
                 bool AlwaysShowReciteExcog = Config.SCH_Aetherflow_Recite_ExcogMode == 1;
-
                 if (Config.SCH_Aetherflow_Recite_Excog &&
                     (AlwaysShowReciteExcog ||
                     (!AlwaysShowReciteExcog && !HasAetherFlows)) && actionID is Excogitation)
@@ -98,7 +96,6 @@ internal static partial class SCH
                 }
 
                 bool AlwaysShowReciteIndom = Config.SCH_Aetherflow_Recite_IndomMode == 1;
-
                 if (Config.SCH_Aetherflow_Recite_Indom &&
                     (AlwaysShowReciteIndom ||
                     (!AlwaysShowReciteIndom && !HasAetherFlows)) && actionID is Indomitability)

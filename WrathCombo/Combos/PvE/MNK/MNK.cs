@@ -610,7 +610,6 @@ internal static partial class MNK
                 ? Brotherhood
                 : actionID;
     }
-
     internal class MNK_BeastChakras : CustomCombo
     {
         protected internal override CustomComboPreset Preset => CustomComboPreset.MNK_ST_BeastChakras;

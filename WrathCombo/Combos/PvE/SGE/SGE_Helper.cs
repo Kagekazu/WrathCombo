@@ -87,7 +87,6 @@ internal static partial class SGE
             EukrasianPrognosis = 2609,
             Panhaima = 2613,
             Kerachole = 2618,
-            Zoe = 2611,
             Eudaimonia = 3899;
     }
 
@@ -109,7 +108,6 @@ internal static partial class SGE
 
     #endregion
 
-    // Sage Gauge & Extensions
     internal static SGEOpenerMaxLevel1 Opener1 = new();
     internal static SGEGauge Gauge = GetJobGauge<SGEGauge>();
 
