@@ -189,9 +189,7 @@ internal partial class BLM
 
     internal static bool DoubleBlizz()
     {
-        List<uint> spells = ActionWatching.CombatActions.Where(x =>
-            ActionWatching.GetAttackType(x) == ActionWatching.ActionAttackType.Spell &&
-            x != OriginalHook(Thunder) && x != OriginalHook(Thunder2)).ToList();
+        List<uint> spells = ActionWatching.CombatActions.Where(x => ActionWatching.GetAttackType(x) == ActionWatching.ActionAttackType.Spell && x != OriginalHook(Thunder) && x != OriginalHook(Thunder2)).ToList();
 
         if (spells.Count < 1)
             return false;
