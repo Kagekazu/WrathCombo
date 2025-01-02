@@ -83,6 +83,7 @@ internal partial class SGE
         {
             if (!DyskrasiaList.Contains(actionID))
                 return actionID;
+
             if (HasEffect(Buffs.Eukrasia))
                 return actionID;
 
@@ -138,12 +139,10 @@ internal partial class SGE
                         GetDebuffRemainingTime(Debuffs.EukrasianDyskrasia));
 
                     float
-                        refreshtimer =
-                            3; //Will revisit if it's really needed....SGE_ST_DPS_EDosis_Adv ? Config.SGE_ST_DPS_EDosisThreshold : 3;
+                        refreshtimer = 3; //Will revisit if it's really needed....SGE_ST_DPS_EDosis_Adv ? Config.SGE_ST_DPS_EDosisThreshold : 3;
 
                     if (dotDebuff <= refreshtimer &&
-                        GetTargetHPPercent() >
-                        10) //Will Revisit if Config is needed Config.SGE_ST_DPS_EDosisHPPer)
+                        GetTargetHPPercent() > 10) //Will Revisit if Config is needed Config.SGE_ST_DPS_EDosisHPPer)
                         return Eukrasia;
                 }
 
@@ -204,7 +203,7 @@ internal partial class SGE
             uint toxikonID = OriginalHook(Toxikon);
             bool actionFound = actionID is Dosis2 || (!Config.SGE_ST_DPS_Adv && DosisList.ContainsKey(actionID));
 
-            if (!ActionFound)
+            if (!actionFound)
                 return actionID;
 
             // Kardia Reminder
