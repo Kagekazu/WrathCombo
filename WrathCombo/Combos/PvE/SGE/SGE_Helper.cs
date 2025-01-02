@@ -10,7 +10,6 @@ namespace WrathCombo.Combos.PvE;
 internal static partial class SGE
 {
     internal static SGEOpenerMaxLevel1 Opener1 = new();
-
     internal static SGEGauge Gauge = GetJobGauge<SGEGauge>();
 
     internal static bool HasAddersgall(this SGEGauge gauge) => gauge.Addersgall > 0;
@@ -25,10 +24,9 @@ internal static partial class SGE
         return WrathOpener.Dummy;
     }
 
-    public static int GetMatchingConfigST(int i, IGameObject? optionalTarget, out uint action, out bool enabled)
+    internal static int GetMatchingConfigST(int i, IGameObject? optionalTarget, out uint action, out bool enabled)
     {
-        IGameObject? healTarget =
-            optionalTarget ?? GetHealTarget(Config.SGE_ST_Heal_Adv && Config.SGE_ST_Heal_UIMouseOver);
+        IGameObject? healTarget = optionalTarget ?? GetHealTarget(Config.SGE_ST_Heal_Adv && Config.SGE_ST_Heal_UIMouseOver);
 
         switch (i)
         {
@@ -83,7 +81,7 @@ internal static partial class SGE
         return 0;
     }
 
-    public static int GetMatchingConfigAoE(int i, out uint action, out bool enabled)
+    internal static int GetMatchingConfigAoE(int i, out uint action, out bool enabled)
     {
         switch (i)
         {
@@ -91,15 +89,16 @@ internal static partial class SGE
                 action = Kerachole;
 
                 enabled = IsEnabled(CustomComboPreset.SGE_AoE_Heal_Kerachole) &&
-                          (!Config.SGE_AoE_Heal_KeracholeTrait ||
-                           (Config.SGE_AoE_Heal_KeracholeTrait && TraitLevelChecked(Traits.EnhancedKerachole))) &&
-                          Gauge.HasAddersgall();
+                    (!Config.SGE_AoE_Heal_KeracholeTrait ||
+                    (Config.SGE_AoE_Heal_KeracholeTrait && TraitLevelChecked(Traits.EnhancedKerachole))) &&
+                    Gauge.HasAddersgall();
 
                 return 0;
 
             case 1:
                 action = Ixochole;
-                enabled = IsEnabled(CustomComboPreset.SGE_AoE_Heal_Ixochole) && Gauge.HasAddersgall();
+                enabled = IsEnabled(CustomComboPreset.SGE_AoE_Heal_Ixochole) &&
+                    Gauge.HasAddersgall();
 
                 return 0;
 
@@ -134,6 +133,13 @@ internal static partial class SGE
                 enabled = IsEnabled(CustomComboPreset.SGE_AoE_Heal_Philosophia);
 
                 return 0;
+
+            case 7:
+                action = Pneuma;
+                enabled = IsEnabled(CustomComboPreset.SGE_AoE_Heal_Pneuma) &&
+                    HasEffect(Buffs.Zoe);
+
+                return 0;
         }
 
         enabled = false;
@@ -141,7 +147,6 @@ internal static partial class SGE
 
         return 0;
     }
-
     internal class SGEOpenerMaxLevel1 : WrathOpener
     {
         public override int MinOpenerLevel => 92;

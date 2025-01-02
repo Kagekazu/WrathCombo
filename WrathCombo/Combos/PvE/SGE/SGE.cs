@@ -10,101 +10,6 @@ namespace WrathCombo.Combos.PvE;
 
 internal partial class SGE
 {
-    internal const byte JobID = 40;
-
-    // Actions
-    internal const uint
-
-        // Heals and Shields
-        Diagnosis = 24284,
-        Prognosis = 24286,
-        Physis = 24288,
-        Druochole = 24296,
-        Kerachole = 24298,
-        Ixochole = 24299,
-        Pepsis = 24301,
-        Physis2 = 24302,
-        Taurochole = 24303,
-        Haima = 24305,
-        Panhaima = 24311,
-        Holos = 24310,
-        EukrasianDiagnosis = 24291,
-        EukrasianPrognosis = 24292,
-        Egeiro = 24287,
-
-        // DPS
-        Dosis = 24283,
-        Dosis2 = 24306,
-        Dosis3 = 24312,
-        EukrasianDosis = 24293,
-        EukrasianDosis2 = 24308,
-        EukrasianDosis3 = 24314,
-        Phlegma = 24289,
-        Phlegma2 = 24307,
-        Phlegma3 = 24313,
-        Dyskrasia = 24297,
-        Dyskrasia2 = 24315,
-        Toxikon = 24304,
-        Toxikon2 = 24316,
-        Pneuma = 24318,
-        EukrasianDyskrasia = 37032,
-        Psyche = 37033,
-
-        // Buffs
-        Soteria = 24294,
-        Zoe = 24300,
-        Krasis = 24317,
-        Philosophia = 37035,
-
-        // Other
-        Kardia = 24285,
-        Eukrasia = 24290,
-        Rhizomata = 24309;
-
-    // Action Groups
-    internal static readonly List<uint>
-        AddersgallList = [Taurochole, Druochole, Ixochole, Kerachole],
-        DyskrasiaList = [Dyskrasia, Dyskrasia2];
-
-    // Debuff Pairs of Actions and Debuff
-    internal static readonly Dictionary<uint, ushort>
-        DosisList = new()
-        {
-            { Dosis, Debuffs.EukrasianDosis },
-            { Dosis2, Debuffs.EukrasianDosis2 },
-            { Dosis3, Debuffs.EukrasianDosis3 }
-        };
-
-    // Action Buffs
-    internal static class Buffs
-    {
-        internal const ushort
-            Kardia = 2604,
-            Kardion = 2605,
-            Eukrasia = 2606,
-            EukrasianDiagnosis = 2607,
-            EukrasianPrognosis = 2609,
-            Panhaima = 2613,
-            Kerachole = 2618,
-            Eudaimonia = 3899;
-    }
-
-    internal static class Debuffs
-    {
-        internal const ushort
-            EukrasianDosis = 2614,
-            EukrasianDosis2 = 2615,
-            EukrasianDosis3 = 2616,
-            EukrasianDyskrasia = 3897;
-    }
-
-    internal static class Traits
-    {
-        internal const ushort
-            EnhancedKerachole = 375,
-            OffensiveMagicMasteryII = 376;
-    }
-
     /*
      * SGE_Kardia
      * Soteria becomes Kardia when Kardia's Buff is not active or Soteria is on cooldown.
@@ -113,7 +18,11 @@ internal partial class SGE
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.SGE_Kardia;
 
-        protected override uint Invoke(uint actionID) => actionID is Soteria && (!HasEffect(Buffs.Kardia) || IsOnCooldown(Soteria)) ? Kardia : actionID;
+        protected override uint Invoke(uint actionID) =>
+            actionID is Soteria &&
+            (!HasEffect(Buffs.Kardia) || IsOnCooldown(Soteria))
+            ? Kardia
+            : actionID;
     }
 
     /*
@@ -125,8 +34,9 @@ internal partial class SGE
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.SGE_Rhizo;
 
-        protected override uint Invoke(uint actionID) => AddersgallList.Contains(actionID) && ActionReady(Rhizomata) && !Gauge.HasAddersgall() &&
-                   IsOffCooldown(actionID)
+        protected override uint Invoke(uint actionID) =>
+            AddersgallList.Contains(actionID) &&
+            ActionReady(Rhizomata) && !Gauge.HasAddersgall() && IsOffCooldown(actionID)
                 ? Rhizomata
                 : actionID;
     }
@@ -141,7 +51,10 @@ internal partial class SGE
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.SGE_TauroDruo;
 
-        protected override uint Invoke(uint actionID) => actionID is Taurochole && IsOnCooldown(Taurochole) ? Druochole : actionID;
+        protected override uint Invoke(uint actionID) =>
+            actionID is Taurochole && IsOnCooldown(Taurochole)
+            ? Druochole
+            : actionID;
     }
 
     /*
@@ -152,7 +65,10 @@ internal partial class SGE
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.SGE_ZoePneuma;
 
-        protected override uint Invoke(uint actionID) => actionID is Pneuma && ActionReady(Pneuma) && IsOffCooldown(Zoe) ? Zoe : actionID;
+        protected override uint Invoke(uint actionID) =>
+            actionID is Pneuma && ActionReady(Pneuma) && IsOffCooldown(Zoe)
+            ? Zoe
+            : actionID;
     }
 
     /*
@@ -262,6 +178,13 @@ internal partial class SGE
                     return ToxikonID;
             }
 
+            //Pneuma
+            if (IsEnabled(CustomComboPreset.SGE_AoE_DPS__Pneuma) &&
+                ActionReady(Pneuma) &&
+                HasBattleTarget() &&
+                InActionRange(Pneuma))
+                return Pneuma;
+
             return actionID;
         }
     }
@@ -281,7 +204,7 @@ internal partial class SGE
             uint toxikonID = OriginalHook(Toxikon);
             bool actionFound = actionID is Dosis2 || (!Config.SGE_ST_DPS_Adv && DosisList.ContainsKey(actionID));
 
-            if (!actionFound)
+            if (!ActionFound)
                 return actionID;
 
             // Kardia Reminder
@@ -335,7 +258,6 @@ internal partial class SGE
                 InActionRange(toxikonID) && Gauge.HasAddersting())
                 return toxikonID;
 
-            if (HasBattleTarget() && !HasEffect(Buffs.Eukrasia))
             // Buff check Above. Without it, Toxikon and any future option will interfere in the Eukrasia->Eukrasia Dosis combo
             {
                 // Eukrasian Dosis.
@@ -410,7 +332,10 @@ internal partial class SGE
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.SGE_Raise;
 
-        protected override uint Invoke(uint actionID) => actionID is All.Swiftcast && IsOnCooldown(All.Swiftcast) ? Egeiro : actionID;
+        protected override uint Invoke(uint actionID) =>
+            actionID is All.Swiftcast && IsOnCooldown(All.Swiftcast)
+            ? Egeiro
+            : actionID;
     }
 
     /*
@@ -566,4 +491,104 @@ internal partial class SGE
             return actionID;
         }
     }
+
+    #region ID's
+
+    internal const byte JobID = 40;
+
+    // Actions
+    internal const uint
+
+        // Heals and Shields
+        Diagnosis = 24284,
+        Prognosis = 24286,
+        Physis = 24288,
+        Druochole = 24296,
+        Kerachole = 24298,
+        Ixochole = 24299,
+        Pepsis = 24301,
+        Physis2 = 24302,
+        Taurochole = 24303,
+        Haima = 24305,
+        Panhaima = 24311,
+        Holos = 24310,
+        EukrasianDiagnosis = 24291,
+        EukrasianPrognosis = 24292,
+        Egeiro = 24287,
+
+        // DPS
+        Dosis = 24283,
+        Dosis2 = 24306,
+        Dosis3 = 24312,
+        EukrasianDosis = 24293,
+        EukrasianDosis2 = 24308,
+        EukrasianDosis3 = 24314,
+        Phlegma = 24289,
+        Phlegma2 = 24307,
+        Phlegma3 = 24313,
+        Dyskrasia = 24297,
+        Dyskrasia2 = 24315,
+        Toxikon = 24304,
+        Toxikon2 = 24316,
+        Pneuma = 24318,
+        EukrasianDyskrasia = 37032,
+        Psyche = 37033,
+
+        // Buffs
+        Soteria = 24294,
+        Zoe = 24300,
+        Krasis = 24317,
+        Philosophia = 37035,
+
+        // Other
+        Kardia = 24285,
+        Eukrasia = 24290,
+        Rhizomata = 24309;
+
+    // Action Groups
+    internal static readonly List<uint>
+        AddersgallList = [Taurochole, Druochole, Ixochole, Kerachole],
+        DyskrasiaList = [Dyskrasia, Dyskrasia2];
+
+    // Debuff Pairs of Actions and Debuff
+    internal static readonly Dictionary<uint, ushort>
+        DosisList = new()
+        {
+            { Dosis, Debuffs.EukrasianDosis },
+            { Dosis2, Debuffs.EukrasianDosis2 },
+            { Dosis3, Debuffs.EukrasianDosis3 }
+        };
+
+    // Action Buffs
+    internal static class Buffs
+    {
+        internal const ushort
+            Kardia = 2604,
+            Kardion = 2605,
+            Eukrasia = 2606,
+            EukrasianDiagnosis = 2607,
+            EukrasianPrognosis = 2609,
+            Panhaima = 2613,
+            Kerachole = 2618,
+            Zoe = 2611,
+            Eudaimonia = 3899;
+    }
+
+    internal static class Debuffs
+    {
+        internal const ushort
+            EukrasianDosis = 2614,
+            EukrasianDosis2 = 2615,
+            EukrasianDosis3 = 2616,
+            EukrasianDyskrasia = 3897;
+    }
+
+    internal static class Traits
+    {
+        internal const ushort
+            EnhancedKerachole = 375,
+            OffensiveMagicMasteryII = 376;
+    }
+
+    #endregion
 }
