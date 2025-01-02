@@ -87,6 +87,7 @@ internal static partial class SGE
             EukrasianPrognosis = 2609,
             Panhaima = 2613,
             Kerachole = 2618,
+            Zoe = 2611,
             Eudaimonia = 3899;
     }
 
