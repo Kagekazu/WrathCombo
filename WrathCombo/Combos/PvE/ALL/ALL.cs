@@ -573,11 +573,11 @@ internal class All
     public static bool IsInPotionWindow(float currentTime, float[] potionTimes) => potionTimes.Any(time => currentTime >= time && currentTime <= time + 30);
 
     // Helper method to determine if rotation potion should be used
-    public static bool ShouldUseRotationPotion() => RotationSkills.Any(CustomComboFunctions.CanWeave());
+  //  public static bool ShouldUseRotationPotion() => RotationSkills.Any(CustomComboFunctions.CanWeave());
 
     #endregion
 
-    #region STR POTION
+  /*  #region STR POTION
 
     internal class ALL_Strength_Potion : CustomCombo
     {
@@ -723,5 +723,6 @@ internal class All
         }
     }
     #endregion
+  */
     #endregion
 }
