@@ -290,10 +290,10 @@ internal static partial class MCH
             if (IsEnabled(CustomComboPreset.MCH_ST_Adv_Stabilizer_FullMetalField) &&
                 ((Config.MCH_ST_Adv_FullMetalMachinist_SubOption == 0) ||
                 (Config.MCH_ST_Adv_FullMetalMachinist_SubOption == 1 && InBossEncounter())) &&
-                HasEffect(Buffs.FullMetalMachinist) &&
-                (GetCooldownRemainingTime(Wildfire) <= GCD || ActionReady(Wildfire) ||
-                 GetBuffRemainingTime(Buffs.FullMetalMachinist) <= 6) &&
-                LevelChecked(FullMetalField))
+                HasEffect(Buffs.FullMetalMachinist) && LevelChecked(FullMetalField) &&
+                (GetBuffRemainingTime(Buffs.FullMetalMachinist) <= 6 ||
+                GetCooldownRemainingTime(Wildfire) <= GCD ||
+                ActionReady(Wildfire)))
                 return FullMetalField;
 
             // Heatblast
