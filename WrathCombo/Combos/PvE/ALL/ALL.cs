@@ -1,6 +1,10 @@
 ﻿using ECommons.DalamudServices;
+using System.Collections.Generic;
+using System.Linq;
 using WrathCombo.CustomComboNS;
 using WrathCombo.CustomComboNS.Functions;
+using WrathCombo.Services;
+using static WrathCombo.Combos.PvE.ALL;
 
 namespace WrathCombo.Combos.PvE;
 
@@ -50,16 +54,11 @@ internal class All
         Sleep = 25880, //Lv10 BLM/SMN/RDM/BLU, 2.5s cast, GCD, range 30, AOE 5 circle, targets=hostile
 
         //Multi-role actions
-        SecondWind =
-            7541, //Lv8 MNK/DRG/BRD/NIN/MCH/SAM/DNC/RPR, instant, 120.0s CD (group 49), range 0, single-target, targets=self
-        LucidDreaming =
-            7562, //Lv14 WHM/BLM/SMN/SCH/AST/RDM/BLU/SGE, instant, 60.0s CD (group 45), range 0, single-target, targets=self
-        Swiftcast =
-            7561, //Lv18 WHM/BLM/SMN/SCH/AST/RDM/BLU/SGE, instant, 60.0s CD (group 44), range 0, single-target, targets=self
-        ArmsLength =
-            7548, //Lv32 PLD/MNK/WAR/DRG/BRD/NIN/MCH/DRK/SAM/GNB/DNC/RPR, instant, 120.0s CD (group 48), range 0, single-target, targets=self
-        Surecast =
-            7559, //Lv44 WHM/BLM/SMN/SCH/AST/RDM/BLU/SGE, instant, 120.0s CD (group 48), range 0, single-target, targets=self
+        SecondWind = 7541, //Lv8 MNK/DRG/BRD/NIN/MCH/SAM/DNC/RPR, instant, 120.0s CD (group 49), range 0, single-target, targets=self
+        LucidDreaming = 7562, //Lv14 WHM/BLM/SMN/SCH/AST/RDM/BLU/SGE, instant, 60.0s CD (group 45), range 0, single-target, targets=self
+        Swiftcast = 7561, //Lv18 WHM/BLM/SMN/SCH/AST/RDM/BLU/SGE, instant, 60.0s CD (group 44), range 0, single-target, targets=self
+        ArmsLength = 7548, //Lv32 PLD/MNK/WAR/DRG/BRD/NIN/MCH/DRK/SAM/GNB/DNC/RPR, instant, 120.0s CD (group 48), range 0, single-target, targets=self
+        Surecast = 7559, //Lv44 WHM/BLM/SMN/SCH/AST/RDM/BLU/SGE, instant, 120.0s CD (group 48), range 0, single-target, targets=self
 
         //Misc
         Resurrection = 173, //Lv12 SMN/SCH, 8.0s cast, GCD, range 30, single-target, targets=party/alliance/friendly
@@ -87,12 +86,9 @@ internal class All
     /// <param name="MPThreshold">Player MP less than Threshold check</param>
     /// <param name="weave">Spell Weave check by default</param>
     /// <returns></returns>
-    public static bool CanUseLucid(uint actionID, int MPThreshold, bool weave = true)
-    {
-        return CustomComboFunctions.ActionReady(LucidDreaming)
+    public static bool CanUseLucid(uint actionID, int MPThreshold, bool weave = true) => CustomComboFunctions.ActionReady(LucidDreaming)
                && CustomComboFunctions.LocalPlayer.CurrentMp <= MPThreshold
                && (!weave || CustomComboFunctions.CanSpellWeave());
-    }
 
     public static class Buffs
     {
@@ -285,4 +281,447 @@ internal class All
                 ? HeadGraze
                 : actionID;
     }
+    #region KB QOL
+
+    // Dynamic knockback depending on the current class
+    internal class ALL_Dynamic_Knockback_Immunity : CustomCombo
+    {
+        internal static readonly List<int> ArmsLengthJobs =
+            [
+                WAR.JobID, DRK.JobID, PLD.JobID, GNB.JobID, MNK.JobID, DRG.JobID,
+                NIN.JobID, SAM.JobID, RPR.JobID, DNC.JobID, MCH.JobID, BRD.JobID, VPR.JobID
+            ];
+
+        internal static readonly List<int> SurecastJobs =
+            [
+                BLM.JobID, SMN.JobID, RDM.JobID, BLU.JobID, WHM.JobID, SCH.JobID,
+                AST.JobID, SGE.JobID, PCT.JobID
+            ];
+
+        protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.ALL_Dynamic_Knockback_Immunity;
+
+        protected override uint Invoke(uint actionID)
+        {
+            if (actionID is ArmsLength or Surecast)
+            {
+                int playerJobId = (int) LocalPlayer.ClassJob.RowId;
+
+                if (ArmsLengthJobs.Contains(playerJobId))
+                {
+                    return ArmsLength;
+                }
+
+                if (SurecastJobs.Contains(playerJobId))
+                {
+                    return Surecast;
+                }
+            }
+            return actionID;
+        }
+    }
+
+    #endregion
+
+    #region POTIONS
+
+    #region POT TRIGGERS
+    //Triggers - TODO COMPLETE AND OPTIMIZE THE LIST
+    public static readonly HashSet<uint> OpenerSkills =
+          [   
+              //---------------------Tanks-------------------------
+
+              // WAR
+              CustomComboFunctions.OriginalHook(WAR.StormsEye),
+              // DRK
+              CustomComboFunctions.OriginalHook(DRK.Unmend),
+              CustomComboFunctions.OriginalHook(DRK.HardSlash),
+              CustomComboFunctions.OriginalHook(DRK.SyphonStrike),
+              CustomComboFunctions.OriginalHook(DRK.Souleater),
+              // PLD
+              CustomComboFunctions.OriginalHook(PLD.RiotBlade),
+              // GNB
+              CustomComboFunctions.OriginalHook(GNB.KeenEdge),
+              CustomComboFunctions.OriginalHook(GNB.BrutalShell),
+
+              //---------------------Melees-------------------------
+
+              // MNK
+              CustomComboFunctions.OriginalHook(MNK.DragonKick),
+              CustomComboFunctions.OriginalHook(MNK.TwinSnakes),
+              // DRG
+              CustomComboFunctions.OriginalHook(DRG.SpiralBlow),
+              // NIN
+              CustomComboFunctions.OriginalHook(NIN.AeolianEdge),
+              CustomComboFunctions.OriginalHook(NIN.GustSlash),
+              // RPR
+              CustomComboFunctions.OriginalHook(RPR.ShadowOfDeath),
+              CustomComboFunctions.OriginalHook(RPR.SoulSlice),
+              // VPR
+              CustomComboFunctions.OriginalHook(VPR.Vicewinder),
+              // SAM
+              CustomComboFunctions.OriginalHook(SAM.Gekko),
+
+              //---------------------PRanged-------------------------
+
+              //BRD
+              CustomComboFunctions.OriginalHook(BRD.CausticBite),
+              //MCH
+              CustomComboFunctions.OriginalHook(MCH.Reassemble),
+              CustomComboFunctions.OriginalHook(MCH.AirAnchor),
+              CustomComboFunctions.OriginalHook(MCH.Drill),
+              CustomComboFunctions.OriginalHook(MCH.SplitShot),
+              //DNC
+              CustomComboFunctions.OriginalHook(DNC.Cascade),
+              CustomComboFunctions.OriginalHook(DNC.ReverseCascade),
+              CustomComboFunctions.OriginalHook(DNC.Fountain),
+              CustomComboFunctions.OriginalHook(DNC.Fountainfall),
+
+              //---------------------Casters-------------------------
+
+              //BLM
+              CustomComboFunctions.OriginalHook(BLM.Fire4),
+              //SMN
+              CustomComboFunctions.OriginalHook(SMN.SummonSolarBahamut),
+              CustomComboFunctions.OriginalHook(SMN.UmbralImpulse),
+              CustomComboFunctions.OriginalHook(SMN.SummonBahamut), //lvl90
+              CustomComboFunctions.OriginalHook(SMN.AstralImpulse),
+              //PCT
+              CustomComboFunctions.OriginalHook(PCT.RainbowDrip),
+              CustomComboFunctions.OriginalHook(PCT.HolyInWhite),
+              CustomComboFunctions.OriginalHook(PCT.CreatureMotif),
+              CustomComboFunctions.OriginalHook(PCT.WingMotif),      
+              //RDM
+              CustomComboFunctions.OriginalHook(RDM.Jolt),
+              CustomComboFunctions.OriginalHook(RDM.Verthunder),
+              CustomComboFunctions.OriginalHook(RDM.Verthunder3),
+              //BLU
+              CustomComboFunctions.OriginalHook(BLU.RoseOfDestruction),
+              CustomComboFunctions.OriginalHook(BLU.Tingle),
+
+              //---------------------Healers-------------------------
+
+              //AST
+              CustomComboFunctions.OriginalHook(AST.Malefic),
+              //WHM
+              CustomComboFunctions.OriginalHook(WHM.Stone1),
+              CustomComboFunctions.OriginalHook(WHM.Glare1),
+              //SCH
+              CustomComboFunctions.OriginalHook(SCH.Ruin),
+              //SGE
+              CustomComboFunctions.OriginalHook(SGE.Dosis),
+              CustomComboFunctions.OriginalHook(SGE.Dosis3),
+
+          ];
+
+    public static readonly HashSet<uint> RotationSkills =
+          [   
+              //---------------------Tanks-------------------------
+
+              // WAR
+              CustomComboFunctions.OriginalHook(WAR.StormsEye),
+              CustomComboFunctions.OriginalHook(WAR.Maim),
+              CustomComboFunctions.OriginalHook(WAR.HeavySwing),
+              CustomComboFunctions.OriginalHook(WAR.StormsPath),
+              CustomComboFunctions.OriginalHook(WAR.FellCleave),
+              // DRK
+              CustomComboFunctions.OriginalHook(DRK.Unmend),
+              CustomComboFunctions.OriginalHook(DRK.HardSlash),
+              CustomComboFunctions.OriginalHook(DRK.SyphonStrike),
+              CustomComboFunctions.OriginalHook(DRK.Souleater),
+              // PLD
+              CustomComboFunctions.OriginalHook(PLD.RiotBlade),
+              CustomComboFunctions.OriginalHook(PLD.FastBlade),
+              CustomComboFunctions.OriginalHook(PLD.RoyalAuthority),
+              CustomComboFunctions.OriginalHook(PLD.Atonement),
+              // GNB
+              CustomComboFunctions.OriginalHook(GNB.BrutalShell),
+              CustomComboFunctions.OriginalHook(GNB.KeenEdge),
+              CustomComboFunctions.OriginalHook(GNB.SolidBarrel),
+
+              //---------------------Melees-------------------------
+
+              // MNK
+              CustomComboFunctions.OriginalHook(MNK.DragonKick),
+              CustomComboFunctions.OriginalHook(MNK.TwinSnakes),
+              CustomComboFunctions.OriginalHook(MNK.Demolish),
+              CustomComboFunctions.OriginalHook(MNK.LeapingOpo),
+              // DRG
+              CustomComboFunctions.OriginalHook(DRG.TrueThrust),
+              CustomComboFunctions.OriginalHook(DRG.SpiralBlow),
+              CustomComboFunctions.OriginalHook(DRG.ChaosThrust),
+              CustomComboFunctions.OriginalHook(DRG.WheelingThrust),
+              CustomComboFunctions.OriginalHook(DRG.Drakesbane),
+              CustomComboFunctions.OriginalHook(DRG.RaidenThrust),
+              // NIN
+              CustomComboFunctions.OriginalHook(NIN.AeolianEdge),
+              CustomComboFunctions.OriginalHook(NIN.GustSlash),
+              CustomComboFunctions.OriginalHook(NIN.ArmorCrush),
+              // RPR
+              CustomComboFunctions.OriginalHook(RPR.ShadowOfDeath),
+              CustomComboFunctions.OriginalHook(RPR.SoulSlice),
+              CustomComboFunctions.OriginalHook(RPR.Slice),
+              CustomComboFunctions.OriginalHook(RPR.InfernalSlice),
+              CustomComboFunctions.OriginalHook(RPR.WaxingSlice),
+              // VPR
+              CustomComboFunctions.OriginalHook(VPR.SteelFangs),
+              CustomComboFunctions.OriginalHook(VPR.Vicewinder),
+              CustomComboFunctions.OriginalHook(VPR.ReavingFangs),
+              CustomComboFunctions.OriginalHook(VPR.HuntersCoil),
+              CustomComboFunctions.OriginalHook(VPR.SwiftskinsCoil),
+              // SAM
+              CustomComboFunctions.OriginalHook(SAM.Gekko),
+              CustomComboFunctions.OriginalHook(SAM.Hakaze),
+              CustomComboFunctions.OriginalHook(SAM.Kasha),
+              CustomComboFunctions.OriginalHook(SAM.Yukikaze),
+
+              //---------------------pRanged-------------------------
+
+              //BRD
+              CustomComboFunctions.OriginalHook(BRD.Stormbite),
+              CustomComboFunctions.OriginalHook(BRD.CausticBite),
+              CustomComboFunctions.OriginalHook(BRD.BurstShot),
+              CustomComboFunctions.OriginalHook(BRD.RefulgentArrow),
+              //MCH
+              CustomComboFunctions.OriginalHook(MCH.SlugShot),
+              CustomComboFunctions.OriginalHook(MCH.SplitShot),
+              CustomComboFunctions.OriginalHook(MCH.CleanShot),
+              CustomComboFunctions.OriginalHook(MCH.Drill),
+              CustomComboFunctions.OriginalHook(MCH.Chainsaw),
+              CustomComboFunctions.OriginalHook(MCH.AirAnchor),
+              //DNC
+              CustomComboFunctions.OriginalHook(DNC.Cascade),
+              CustomComboFunctions.OriginalHook(DNC.Fountain),
+              CustomComboFunctions.OriginalHook(DNC.Cascade),
+              CustomComboFunctions.OriginalHook(DNC.ReverseCascade),
+              CustomComboFunctions.OriginalHook(DNC.Windmill),
+              CustomComboFunctions.OriginalHook(DNC.RisingWindmill),
+              CustomComboFunctions.OriginalHook(DNC.Bloodshower),
+              CustomComboFunctions.OriginalHook(DNC.Bladeshower),
+
+              //---------------------Casters-------------------------
+
+              //BLM
+              CustomComboFunctions.OriginalHook(BLM.Fire3),
+              CustomComboFunctions.OriginalHook(BLM.Fire4),
+              CustomComboFunctions.OriginalHook(BLM.Blizzard),
+              CustomComboFunctions.OriginalHook(BLM.Blizzard4),
+              //SMN
+              CustomComboFunctions.OriginalHook(SMN.SummonBahamut),
+              CustomComboFunctions.OriginalHook(SMN.Ruin),
+              CustomComboFunctions.OriginalHook(SMN.AstralImpulse),
+              CustomComboFunctions.OriginalHook(SMN.Ruin4),
+              CustomComboFunctions.OriginalHook(SMN.Ruin3),
+              CustomComboFunctions.OriginalHook(SMN.RubyRuin3),
+              CustomComboFunctions.OriginalHook(SMN.RubyRuin1),
+              CustomComboFunctions.OriginalHook(SMN.TopazRuin3),
+              CustomComboFunctions.OriginalHook(SMN.TopazRuin1),
+              //PCT
+              CustomComboFunctions.OriginalHook(PCT.RainbowDrip),
+              CustomComboFunctions.OriginalHook(PCT.FireInRed),
+              CustomComboFunctions.OriginalHook(PCT.CreatureMotif),
+              CustomComboFunctions.OriginalHook(PCT.WeaponMotif),
+              CustomComboFunctions.OriginalHook(PCT.StarrySkyMotif),
+              //RDM
+              CustomComboFunctions.OriginalHook(RDM.Jolt),
+              CustomComboFunctions.OriginalHook(RDM.Verthunder),
+              CustomComboFunctions.OriginalHook(RDM.Veraero),
+              //BLU
+              CustomComboFunctions.OriginalHook(BLU.RoseOfDestruction),
+
+              //---------------------Healers-------------------------
+
+              //AST
+              CustomComboFunctions.OriginalHook(AST.Malefic),
+              //WHM
+              CustomComboFunctions.OriginalHook(WHM.Stone1),
+              //SCH
+              CustomComboFunctions.OriginalHook(SCH.Ruin),
+              //SGE
+              CustomComboFunctions.OriginalHook(SGE.Dosis)
+
+          ];
+
+    private static readonly float[] DefaultPotionTimes = { 365, 710, 1080 };
+    private static readonly float[] AllowUnbuffedPotionTimes = { 365, 710, 980, 1080 };
+
+    public static float[] GetPotionTimes()
+    {
+        if (CustomComboFunctions.IsEnabled(CustomComboPreset.PotionCustomTime))
+        {
+            return new float[]
+            {
+                    Config.All_Custom_Potion_Time1,
+                    Config.All_Custom_Potion_Time2,
+                    Config.All_Custom_Potion_Time3,
+                    Config.All_Custom_Potion_Time4,
+                    Config.All_Custom_Potion_Time5
+            }.Where(time => time > 0).ToArray();
+        }
+        else if (CustomComboFunctions.IsEnabled(CustomComboPreset.PotionAllowUnbuffed))
+        {
+            return AllowUnbuffedPotionTimes;
+        }
+
+        return DefaultPotionTimes;
+    }
+
+    // Helper method to check if in opener phase
+    public static bool IsInOpenerPhase(float currentTime, int potionStatus) => currentTime <= 15 && potionStatus == 0 &&
+               OpenerSkills.Any(action => CustomComboFunctions.CanWeave() && (CustomComboFunctions.WasLastWeaponskill(action) || CustomComboFunctions.WasLastSpell(action)));
+
+    // Helper method to check if we are in a valid potion window
+    public static bool IsInPotionWindow(float currentTime, float[] potionTimes) => potionTimes.Any(time => currentTime >= time && currentTime <= time + 30);
+
+    // Helper method to determine if rotation potion should be used
+    public static bool ShouldUseRotationPotion() => RotationSkills.Any(CustomComboFunctions.CanWeave());
+
+    #endregion
+
+    #region STR POTION
+
+    internal class ALL_Strength_Potion : CustomCombo
+    {
+        protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.StrengthPotion;
+        protected static uint[] ValidJobIds => [21, 19, 32, 37, 20, 39];
+        protected override uint Invoke(uint actionID)
+        {
+            uint strengthPotion = (uint) Service.Configuration.StrengthPotion;
+            float currentTime = (float) CombatEngageDuration().TotalSeconds;
+            int potionStatus = (int) GetItemStatus(strengthPotion);
+
+            // Retrieve potion times only once
+            float[] potionTimes = GetPotionTimes();
+
+            // Determine if we are in an opener phase and potion window
+            bool isInOpenerPhase = IsInOpenerPhase(currentTime, potionStatus) && ValidJobIds.Contains(LocalPlayer.ClassJob.RowId);
+            bool isInPotionWindow = IsInPotionWindow(currentTime, potionTimes);
+            bool shouldUseRotationPotion = isInPotionWindow && potionStatus == 0 && ShouldUseRotationPotion() && ValidJobIds.Contains(LocalPlayer.ClassJob.RowId);
+
+            // Check combat status and potion status to decide on early exit
+            if (!InCombat() && potionStatus != 0)
+            {
+                return actionID;
+            }
+
+            // Use the potion if we meet the conditions
+            if (isInOpenerPhase || shouldUseRotationPotion)
+            {
+                _ = UsePotion(strengthPotion);
+            }
+
+            return actionID;
+        }
+    }
+
+    #endregion
+
+    #region DEX POTION
+    // Dex Potion
+    internal class ALL_Dexterity_Potion : CustomCombo
+    {
+        protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.DexterityPotion;
+        protected static uint[] ValidJobIds => [22, 30, 41, 5, 31, 38];
+        protected override uint Invoke(uint actionID)
+        {
+            uint dexterityPotion = (uint) Service.Configuration.DexterityPotion;
+            float currentTime = (float) CombatEngageDuration().TotalSeconds;
+            int potionStatus = (int) GetItemStatus(dexterityPotion);
+
+            // Retrieve potion times only once
+            float[] potionTimes = GetPotionTimes();
+
+            // Determine if we are in an opener phase and potion window
+            bool isInOpenerPhase = IsInOpenerPhase(currentTime, potionStatus) && ValidJobIds.Contains(LocalPlayer.ClassJob.RowId);
+            bool isInPotionWindow = IsInPotionWindow(currentTime, potionTimes);
+            bool shouldUseRotationPotion = isInPotionWindow && potionStatus == 0 && ShouldUseRotationPotion() && ValidJobIds.Contains(LocalPlayer.ClassJob.RowId);
+
+            // Check combat status and potion status to decide on early exit
+            if (!InCombat() && potionStatus != 0)
+            {
+                return actionID;
+            }
+
+            // Use the potion if we meet the conditions
+            if (isInOpenerPhase || shouldUseRotationPotion)
+            {
+                _ = UsePotion(dexterityPotion);
+            }
+
+            return actionID;
+        }
+    }
+    #endregion
+
+    #region INT POTION
+    internal class ALL_Intelligence_Potion : CustomCombo
+    {
+        protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.IntelligencePotion;
+        protected static uint[] ValidJobIds => [7, 27, 35, 36, 42];
+        protected override uint Invoke(uint actionID)
+        {
+            uint intPotion = (uint) Service.Configuration.InteligencePotion;
+            float currentTime = (float) CombatEngageDuration().TotalSeconds;
+            int potionStatus = (int) GetItemStatus(intPotion);
+
+            // Retrieve potion times only once
+            float[] potionTimes = GetPotionTimes();
+
+            // Determine if we are in an opener phase and potion window
+            bool isInOpenerPhase = IsInOpenerPhase(currentTime, potionStatus) && ValidJobIds.Contains(LocalPlayer.ClassJob.RowId);
+            bool isInPotionWindow = IsInPotionWindow(currentTime, potionTimes);
+            bool shouldUseRotationPotion = isInPotionWindow && potionStatus == 0 && ShouldUseRotationPotion() && ValidJobIds.Contains(LocalPlayer.ClassJob.RowId);
+
+            // Check combat status and potion status to decide on early exit
+            if (!InCombat() && potionStatus != 0)
+            {
+                return actionID;
+            }
+
+            // Use the potion if we meet the conditions
+            if (isInOpenerPhase || shouldUseRotationPotion)
+            {
+                _ = UsePotion(intPotion);
+            }
+
+            return actionID;
+        }
+    }
+    #endregion
+
+    #region MND POTION
+    internal class ALL_Mind_Potion : CustomCombo
+    {
+        protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.MindPotion;
+        protected static uint[] ValidJobIds => [24, 28, 40, 33];
+        protected override uint Invoke(uint actionID)
+        {
+            uint mindPotion = (uint) Service.Configuration.MindPotion;
+            float currentTime = (float) CombatEngageDuration().TotalSeconds;
+            int potionStatus = (int) GetItemStatus(mindPotion);
+
+            // Retrieve potion times only once
+            float[] potionTimes = GetPotionTimes();
+
+            // Determine if we are in an opener phase and potion window
+            bool isInOpenerPhase = IsInOpenerPhase(currentTime, potionStatus) && ValidJobIds.Contains(LocalPlayer.ClassJob.RowId);
+            bool isInPotionWindow = IsInPotionWindow(currentTime, potionTimes);
+            bool shouldUseRotationPotion = isInPotionWindow && potionStatus == 0 && ShouldUseRotationPotion();
+
+            // Check combat status and potion status to decide on early exit
+            if (!InCombat() && potionStatus != 0)
+            {
+                return actionID;
+            }
+
+            // Use the potion if we meet the conditions
+            if (isInOpenerPhase || shouldUseRotationPotion)
+            {
+                _ = UsePotion(mindPotion);
+            }
+
+            return actionID;
+        }
+    }
+    #endregion
+    #endregion
 }

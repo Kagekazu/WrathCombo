@@ -14,6 +14,7 @@ namespace WrathCombo.Core
         private static HashSet<CustomComboPreset>? VariantCombos;
         private static HashSet<CustomComboPreset>? BozjaCombos;
         private static HashSet<CustomComboPreset>? EurekaCombos;
+        private static HashSet<CustomComboPreset>? PotionCombos;
         private static Dictionary<CustomComboPreset, CustomComboPreset[]>? ConflictingCombos;
         private static Dictionary<CustomComboPreset, CustomComboPreset?>? ParentCombos;  // child: parent
 
@@ -36,6 +37,10 @@ namespace WrathCombo.Core
                 .Where(preset => preset.GetAttribute<EurekaAttribute>() != default)
                 .ToHashSet();
 
+            PotionCombos = Enum.GetValues<CustomComboPreset>()
+                .Where(preset => preset.GetAttribute<PotionAttribute>() != default)
+                .ToHashSet();
+
             // Conflicting combos
             ConflictingCombos = Enum.GetValues<CustomComboPreset>()
                 .ToDictionary(
@@ -48,7 +53,6 @@ namespace WrathCombo.Core
                     preset => preset,
                     preset => preset.GetAttribute<ParentComboAttribute>()?.ParentPreset);
         }
-
 
         /// <summary> Gets a value indicating whether a preset is enabled. </summary>
         /// <param name="preset"> Preset to check. </param>
@@ -74,6 +78,11 @@ namespace WrathCombo.Core
         /// <param name="preset"> Preset to check. </param>
         /// <returns> The boolean representation. </returns>
         public static bool IsEureka(CustomComboPreset preset) => EurekaCombos.Contains(preset);
+
+        /// <summary> Gets a value indicating whether a preset is secret. </summary>
+        /// <param name="preset"> Preset to check. </param>
+        /// <returns> The boolean representation. </returns>
+        public static bool IsPotion(CustomComboPreset preset) => PotionCombos.Contains(preset);
 
         /// <summary> Gets the parent combo preset if it exists, or null. </summary>
         /// <param name="preset"> Preset to check. </param>

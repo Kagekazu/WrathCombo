@@ -8,6 +8,7 @@ using ImGuiNET;
 using System;
 using System.Numerics;
 using WrathCombo.Combos;
+using WrathCombo.Combos.PvE;
 using WrathCombo.Combos.PvP;
 using WrathCombo.Core;
 using WrathCombo.CustomComboNS.Functions;
@@ -1504,6 +1505,62 @@ namespace WrathCombo.Window.Functions
             double sliderAsDouble = Convert.ToDouble(sliderIncrement);
             return ((int)Math.Round(i / sliderAsDouble)) * (int)sliderIncrement;
         }
+
+        public static void DrawInputBoxInt(string config, string inputDescription, float itemWidth = 150, bool hasAdditionalChoice = false, string additionalChoiceCondition = "")
+        {
+            // Retrieve the current value
+            int output = PluginConfiguration.GetCustomIntValue(config, 0);
+            // Render the input box
+            InfoBox box = new()
+            {
+                Color = Colors.White,
+                BorderThickness = 1f,
+                CurveRadius = 3f,
+                AutoResize = true,
+                HasMaxWidth = true,
+                IsSubBox = true,
+                ContentsAction = () =>
+                {
+                    bool inputChanged = false;
+                    Vector2 currentPos = ImGui.GetCursorPos();
+                    ImGui.SetCursorPosX(currentPos.X + itemWidth);
+                    ImGui.PushTextWrapPos(ImGui.GetContentRegionMax().X - 35f);
+                    ImGui.PushStyleColor(ImGuiCol.Text, ImGuiColors.DalamudWhite);
+                    ImGui.Text(inputDescription);
+                    ImGui.PopStyleColor();
+                    ImGui.PopTextWrapPos();
+                    if (hasAdditionalChoice)
+                    {
+                        ImGui.SameLine();
+                        ImGui.PushStyleColor(ImGuiCol.Text, ImGuiColors.HealerGreen);
+                        ImGui.PushFont(UiBuilder.IconFont);
+                        ImGui.Dummy(new Vector2(5, 0));
+                        ImGui.SameLine();
+                        ImGui.TextWrapped($"{FontAwesomeIcon.Search.ToIconString()}");
+                        ImGui.PopFont();
+                        ImGui.PopStyleColor();
+                        if (ImGui.IsItemHovered())
+                        {
+                            ImGui.BeginTooltip();
+                            ImGui.TextUnformatted($"This setting has additional options depending on its value.{(string.IsNullOrEmpty(additionalChoiceCondition) ? "" : $"\nCondition: {additionalChoiceCondition}")}");
+                            ImGui.EndTooltip();
+                        }
+                    }
+                    ImGui.SameLine();
+                    ImGui.SetCursorPosX(currentPos.X);
+                    ImGui.PushItemWidth(itemWidth);
+                    inputChanged |= ImGui.InputInt($"###{config}", ref output);
+                    if (inputChanged)
+                    {
+                        // Save the updated value
+                        PluginConfiguration.SetCustomIntValue(config, output);
+                        Service.Configuration.Save();
+                    }
+                }
+            };
+            box.Draw();
+            ImGui.Spacing();
+        }
     }
 
     public static class UserConfigItems
@@ -1515,33 +1572,16 @@ namespace WrathCombo.Window.Functions
         {
             if (!enabled) return;
 
-            // ====================================================================================
-            // ====================================================================================
-            // ====================================================================================
-            // ====================================================================================
-            // ====================================================================================
-            // ====================================================================================
-            // ====================================================================================
-            // ====================================================================================
-            // ====================================================================================
-            // ====================================================================================
-            // ====================================================================================
-            // ====================================================================================
-            // ====================================================================================
-            // ====================================================================================
-            // ====================================================================================
-            // ====================================================================================
-            // ====================================================================================
-            // ====================================================================================
-            // ====================================================================================
-            // ====================================================================================
-            // ====================================================================================
-            // ====================================================================================
-            // ====================================================================================
-            // ====================================================================================
-            // ====================================================================================
-            // ====================================================================================
-            // ====================================================================================
+            #region Misc
+            if (preset == CustomComboPreset.PotionCustomTime)
+            {
+                UserConfig.DrawInputBoxInt(ALL.Config.All_Custom_Potion_Time1, "1st Potion Window after Opener in Seconds");
+                UserConfig.DrawInputBoxInt(ALL.Config.All_Custom_Potion_Time2, "2nd Potion Window after Opener in Seconds");
+                UserConfig.DrawInputBoxInt(ALL.Config.All_Custom_Potion_Time3, "3rd Potion Window after Opener in Seconds");
+                UserConfig.DrawInputBoxInt(ALL.Config.All_Custom_Potion_Time4, "4th Potion Window after Opener in Seconds");
+                UserConfig.DrawInputBoxInt(ALL.Config.All_Custom_Potion_Time5, "5th Potion Window after Opener in Seconds");
+            }
+            #endregion
             #region PvP VALUES
 
             IPlayerCharacter? pc = Svc.ClientState.LocalPlayer;

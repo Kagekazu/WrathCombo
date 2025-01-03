@@ -19,6 +19,8 @@ namespace WrathCombo.CustomComboNS.Functions
         /// <param name="partySize"> The minimum amount of party members required. </param>
         public static bool IsInParty(int partySize = 2) => GetPartyMembers().Count >= partySize;
 
+        public static bool IsInRaid() => (Svc.Party.Length > 4);
+
         /// <summary> Gets the party list </summary>
         /// <returns> Current party list. </returns>
         public unsafe static List<IBattleChara> GetPartyMembers()

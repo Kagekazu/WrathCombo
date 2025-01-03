@@ -35,6 +35,7 @@ namespace WrathCombo.Window.Functions
             public VariantParentAttribute? VariantParent;
             public BozjaParentAttribute? BozjaParent;
             public EurekaParentAttribute? EurekaParent;
+            public PotionParentAttribute? PotionParent;
             public HoverInfoAttribute? HoverInfo;
             public ReplaceSkillAttribute? ReplaceSkill;
             public CustomComboInfoAttribute? CustomComboInfo;
@@ -51,6 +52,7 @@ namespace WrathCombo.Window.Functions
                 VariantParent = preset.GetAttribute<VariantParentAttribute>();
                 BozjaParent = preset.GetAttribute<BozjaParentAttribute>();
                 EurekaParent = preset.GetAttribute<EurekaParentAttribute>();
+                PotionParent = preset.GetAttribute<PotionParentAttribute>();
                 HoverInfo = preset.GetAttribute<HoverInfoAttribute>();
                 ReplaceSkill = preset.GetAttribute<ReplaceSkillAttribute>();
                 CustomComboInfo = preset.GetAttribute<CustomComboInfoAttribute>();
@@ -77,6 +79,7 @@ namespace WrathCombo.Window.Functions
             var variantParents = Attributes[preset].VariantParent;
             var bozjaParents = Attributes[preset].BozjaParent;
             var eurekaParents = Attributes[preset].EurekaParent;
+            var potionParents = Attributes[preset].PotionParent;
             var auto = Attributes[preset].AutoAction;
 
             ImGui.Spacing();
@@ -283,6 +286,31 @@ namespace WrathCombo.Window.Functions
                 }
                 ImGui.PopStyleColor();
             }
+
+            if (potionParents is not null)
+            {
+                ImGui.PushStyleColor(ImGuiCol.Text, ImGuiColors.HealerGreen);
+                ImGui.TextWrapped($"Part of normal combo{(potionParents.ParentPresets.Length > 1 ? "s" : "")}:");
+                StringBuilder builder = new();
+                foreach (var par in potionParents.ParentPresets)
+                {
+                    builder.Insert(0, $"{(Attributes.ContainsKey(par) ? Attributes[par].CustomComboInfo.Name : par.GetAttribute<CustomComboInfoAttribute>().Name)}");
+                    var par2 = par;
+                    while (PresetStorage.GetParent(par2) != null)
+                    {
+                        var subpar = PresetStorage.GetParent(par2);
+                        if (subpar != null)
+                        {
+                            builder.Insert(0, $"{(Attributes.ContainsKey(subpar.Value) ? Attributes[subpar.Value].CustomComboInfo.Name : subpar?.GetAttribute<CustomComboInfoAttribute>().Name)} -> ");
+                            par2 = subpar!.Value;
+                        }
+                    }
+                    ImGui.TextWrapped($"- {builder}");
+                    builder.Clear();
+                }
+                ImGui.PopStyleColor();
+            }
+
             if (enabled)
             {
                 switch (info.JobID)
