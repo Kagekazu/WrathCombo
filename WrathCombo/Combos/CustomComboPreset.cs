@@ -4701,26 +4701,16 @@ public enum CustomComboPreset
     SGE_AoE_Heal = 14026,
 
     [ParentCombo(SGE_AoE_Heal)]
+    [CustomComboInfo("Kerachole Option", "Adds Kerachole.", SGE.JobID)]
+    SGE_AoE_Heal_Kerachole = 14035,
+
+    [ParentCombo(SGE_AoE_Heal)]
+    [CustomComboInfo("Ixochole Option", "Adds Ixochole.", SGE.JobID)]
+    SGE_AoE_Heal_Ixochole = 14033,
+
+    [ParentCombo(SGE_AoE_Heal)]
     [CustomComboInfo("Physis Option", "Adds Physis.", SGE.JobID)]
     SGE_AoE_Heal_Physis = 14027,
-
-    [ParentCombo(SGE_AoE_Heal)]
-    [CustomComboInfo("Philosophia Option", "Adds Philosophia.", SGE.JobID)]
-    SGE_AoE_Heal_Philosophia = 14050,
-
-    [ParentCombo(SGE_AoE_Heal)]
-    [CustomComboInfo("Pneuma Option", "Adds Pneuma.", SGE.JobID)]
-    SGE_AoE_Heal_Pneuma = 14058,
-
-    [ParentCombo(SGE_AoE_Heal)]
-    [CustomComboInfo("Eukrasian Prognosis Option",
-        "Prognosis becomes Eukrasian Prognosis if the shield is not applied.", SGE.JobID)]
-    SGE_AoE_Heal_EPrognosis = 14028,
-
-    [ParentCombo(SGE_AoE_Heal_EPrognosis)]
-    [CustomComboInfo("Ignore Shield Check",
-        "Warning, will force the use of Eukrasia Prognosis, and normal Prognosis will be unavailable.", SGE.JobID)]
-    SGE_AoE_Heal_EPrognosis_IgnoreShield = 14029,
 
     [ParentCombo(SGE_AoE_Heal)]
     [CustomComboInfo("Holos Option", "Adds Holos.", SGE.JobID)]
@@ -4735,12 +4725,26 @@ public enum CustomComboPreset
     SGE_AoE_Heal_Pepsis = 14032,
 
     [ParentCombo(SGE_AoE_Heal)]
-    [CustomComboInfo("Ixochole Option", "Adds Ixochole.", SGE.JobID)]
-    SGE_AoE_Heal_Ixochole = 14033,
+    [CustomComboInfo("Philosophia Option", "Adds Philosophia.", SGE.JobID)]
+    SGE_AoE_Heal_Philosophia = 14050,
 
     [ParentCombo(SGE_AoE_Heal)]
-    [CustomComboInfo("Kerachole Option", "Adds Kerachole.", SGE.JobID)]
-    SGE_AoE_Heal_Kerachole = 14035,
+    [CustomComboInfo("Zoe Option", "Adds Zoe.", SGE.JobID)]
+    SGE_AoE_Heal_Zoe = 14058,
+
+        [ParentCombo(SGE_AoE_Heal_Zoe)]
+        [CustomComboInfo("Pneuma Option", "Chain to Pneuma After.", SGE.JobID)]
+        SGE_AoE_Heal_ZoePneuma = 14060,
+
+    [ParentCombo(SGE_AoE_Heal)]
+    [CustomComboInfo("Eukrasian Prognosis Option",
+        "Prognosis becomes Eukrasian Prognosis if the shield is not applied.", SGE.JobID)]
+    SGE_AoE_Heal_EPrognosis = 14028,
+
+    [ParentCombo(SGE_AoE_Heal_EPrognosis)]
+    [CustomComboInfo("Ignore Shield Check",
+        "Warning, will force the use of Eukrasia Prognosis, and normal Prognosis will be unavailable.", SGE.JobID)]
+    SGE_AoE_Heal_EPrognosis_IgnoreShield = 14029,
 
     [ParentCombo(SGE_AoE_Heal)]
     [CustomComboInfo("Rhizomata Option", "Adds Rhizomata when Addersgall is 0.", SGE.JobID)]
@@ -4821,7 +4825,7 @@ public enum CustomComboPreset
 
     #endregion
 
-    // Last used number = 14058
+    // Last used number = 14060
 
     #endregion
 

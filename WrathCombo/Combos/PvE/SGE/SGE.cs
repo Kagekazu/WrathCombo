@@ -1,7 +1,6 @@
 using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Game.ClientState.Statuses;
 using System;
-using System.Linq;
 using WrathCombo.Combos.PvE.Content;
 using WrathCombo.CustomComboNS;
 
@@ -399,9 +398,10 @@ internal partial class SGE
                 FindEffect(Buffs.Kardion, healTarget, LocalPlayer?.GameObjectId) is null)
                 return Kardia;
 
-            foreach (int prio in Config.SGE_ST_Heals_Priority.Items.OrderBy(x => x))
+            for (int i = 0; i < Config.SGE_ST_Heals_Priority.Count; i++)
             {
-                int index = Config.SGE_ST_Heals_Priority.IndexOf(prio);
+
+                int index = Config.SGE_ST_Heals_Priority.IndexOf(i + 1);
                 int config = GetMatchingConfigST(index, OptionalTarget, out uint spell, out bool enabled);
 
                 if (enabled)
@@ -437,6 +437,12 @@ internal partial class SGE
             if (actionID is not Prognosis)
                 return actionID;
 
+            if (HasEffect(Buffs.Eukrasia))
+                return EukrasianPrognosis;
+
+            //Zoe -> Pneuma like Eukrasia 
+            if (IsEnabled(CustomComboPreset.SGE_AoE_Heal_ZoePneuma) && HasEffect(Buffs.Zoe)) return Pneuma;
+
             if (IsEnabled(CustomComboPreset.SGE_AoE_Heal_EPrognosis) && HasEffect(Buffs.Eukrasia))
                 return OriginalHook(Prognosis);
 
@@ -444,14 +450,17 @@ internal partial class SGE
                 !Gauge.HasAddersgall())
                 return Rhizomata;
 
-            foreach (int prio in Config.SGE_AoE_Heals_Priority.Items.OrderBy(x => x))
+            for (int i = 0; i < Config.SGE_AoE_Heals_Priority.Count; i++)
             {
-                int index = Config.SGE_AoE_Heals_Priority.IndexOf(prio);
+                int index = Config.SGE_AoE_Heals_Priority.IndexOf(i + 1);
                 int config = GetMatchingConfigAoE(index, out uint spell, out bool enabled);
 
                 if (enabled)
-                    if (ActionReady(spell))
+                {
+                    if (GetPartyAvgHPPercent() <= config &&
+                        ActionReady(spell))
                         return spell;
+                }
             }
 
             if (IsEnabled(CustomComboPreset.SGE_AoE_Heal_EPrognosis) && LevelChecked(Eukrasia) &&
