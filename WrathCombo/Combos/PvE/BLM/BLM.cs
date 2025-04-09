@@ -629,4 +629,21 @@ internal partial class BLM : CasterJob
                 ? FlareStar
                 : actionID;
     }
+    internal class BLM_Fire_4to3 : CustomCombo
+    {
+        protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.BLM_Fire_4to3;
+        protected override uint Invoke(uint actionID) =>
+            actionID is Fire4 && !(Gauge.InAstralFire && LevelChecked(Fire4))
+                ? Fire3
+                : actionID;
+    }
+    
+    internal class BLM_Blizzard_4toDespair : CustomCombo
+    {
+        protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.BLM_Blizzard_4toDespair;
+        protected override uint Invoke(uint actionID) =>
+            actionID is Blizzard4 && Gauge.InAstralFire && LevelChecked(Despair)
+                ? Despair
+                : actionID;
+    }
 }
