@@ -790,7 +790,7 @@ internal partial class SAM : MeleeJob
                 Gauge.Kaeshi == Kaeshi.Namikiri))
                 return OriginalHook(OgiNamikiri);
 
-            if (IsEnabled(CustomComboPreset.SAM_Iaijutsu_TsubameGaeshi) && (
+            if (IsEnabled(CustomComboPreset.SAM_Iaijutsu_TsubameGaeshi) && !(SenCount is 1) && (
                 LevelChecked(TsubameGaeshi) &&
                 (HasEffect(Buffs.TsubameReady) || HasEffect(Buffs.KaeshiGokenReady)) ||
                 LevelChecked(TendoKaeshiSetsugekka) && (HasEffect(Buffs.TendoKaeshiSetsugekkaReady) ||
