@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using WrathCombo.CustomComboNS;
 using WrathCombo.CustomComboNS.Functions;
+using WrathCombo.Data;
 using static WrathCombo.Combos.PvE.SAM.Config;
 using static WrathCombo.CustomComboNS.Functions.CustomComboFunctions;
 using static WrathCombo.Data.ActionWatching;
@@ -23,6 +24,9 @@ internal partial class SAM
     internal static bool EnhancedSenei => TraitLevelChecked(Traits.EnhancedHissatsu);
 
     internal static int SenCount => GetSenCount();
+
+    internal static bool M6SReady => !HiddenFeaturesData.IsEnabledWIth(CustomComboPreset.SAM_Hid_M6SHoldSquirrelBurst, () => 
+        HiddenFeaturesData.Targeting.R6SSquirrel && CombatEngageDuration().TotalSeconds < 275);
 
     //TODO Rework
     //Meikyo

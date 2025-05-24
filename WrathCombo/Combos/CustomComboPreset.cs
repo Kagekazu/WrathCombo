@@ -5411,10 +5411,24 @@ public enum CustomComboPreset
     SAM_SeneiGuren = 15215,
 
     #endregion
+    
+    #region Hidden Features
+
+    [CustomComboInfo("Hidden Options", "Collection of cheeky or encounter-specific extra options only available to those in the know.\nDo not expect these options to be maintained, or even kept, after they are no longer Current.", SAM.JobID)]
+    [Hidden]
+    SAM_Hidden = 15300,
+
+    [ParentCombo(SAM_Hidden)]
+    [CustomComboInfo("M6S: Hold Burst on Squirrels", "When you're targeting Squirrels in M6S add phase, hold burst.\n(until about the time the first manta is dying)", SAM.JobID)]
+    [Hidden]
+    SAM_Hid_M6SHoldSquirrelBurst = 15301,
+    
+    #endregion
 
     // Last Value ST = 15023
     // Last Value AoE = 15113
     // Last Value Misc = 15253
+    // Last Value Hidden = 15301
 
     #endregion
 
