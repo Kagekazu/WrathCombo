@@ -5389,15 +5389,13 @@ public enum CustomComboPreset
     [Variant]
     [VariantParent(SAM_ST_AdvancedMode, SAM_AoE_AdvancedMode)]
     [CustomComboInfo("Cure Option", "Use Variant Cure when HP is below set threshold.", SAM.JobID)]
-    SAM_Variant_Cure = 15300,
+    SAM_Variant_Cure = 15254,
 
     [Variant]
     [VariantParent(SAM_ST_AdvancedMode, SAM_AoE_AdvancedMode)]
     [CustomComboInfo("Rampart Option", "Use Variant Rampart on cooldown.", SAM.JobID)]
-    SAM_Variant_Rampart = 15301,
-
-    // Last value = 15301
-
+    SAM_Variant_Rampart = 15255,
+    
     #endregion
 
     #region Other
@@ -5427,7 +5425,7 @@ public enum CustomComboPreset
 
     // Last Value ST = 15023
     // Last Value AoE = 15113
-    // Last Value Misc = 15253
+    // Last Value Misc = 15255
     // Last Value Hidden = 15301
 
     #endregion
