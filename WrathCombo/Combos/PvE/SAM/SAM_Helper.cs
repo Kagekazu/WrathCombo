@@ -25,7 +25,7 @@ internal partial class SAM
 
     internal static int SenCount => GetSenCount();
 
-    internal static bool M6SReady => !HiddenFeaturesData.IsEnabledWIth(CustomComboPreset.SAM_Hid_M6SHoldSquirrelBurst, () => 
+    internal static bool M6SReady => !HiddenFeaturesData.IsEnabledWith(CustomComboPreset.SAM_Hid_M6SHoldSquirrelBurst, () =>
         HiddenFeaturesData.Targeting.R6SSquirrel && CombatEngageDuration().TotalSeconds < 275);
 
     //TODO Rework
