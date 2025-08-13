@@ -771,17 +771,34 @@ internal partial class BLM : Caster
     internal class BLM_Blizzard4toDespair : CustomCombo
     {
         protected internal override Preset Preset => Preset.BLM_Blizzard4toDespair;
+
         protected override uint Invoke(uint actionID)
         {
-            if (actionID is not (Blizzard3 or Blizzard4))
-                return actionID;
+            // Only transform the spell chosen in config, not both
+            if (BLM_B4toDespair == 0)
+            {
+                if (actionID is not Blizzard4)
+                    return actionID;
 
-            return BLM_B4toDespair == 0 && FirePhase && LevelChecked(Despair) && CurMp >= 800 ||
-                   BLM_B4toDespair == 1 && FirePhase && LevelChecked(Despair) && CurMp >= 800
-                ? Despair
-                : actionID;
+                return FirePhase && LevelChecked(Despair) && CurMp >= 800
+                    ? Despair
+                    : actionID;
+            }
+
+            if (BLM_B4toDespair == 1)
+            {
+                if (actionID is not Blizzard3)
+                    return actionID;
+
+                return FirePhase && LevelChecked(Despair) && CurMp >= 800
+                    ? Despair
+                    : actionID;
+            }
+
+            return actionID;
         }
     }
+
 
     internal class BLM_Fire1Despair : CustomCombo
     {
