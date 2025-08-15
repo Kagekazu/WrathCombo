@@ -1,6 +1,8 @@
+using ECommons.ExcelServices;
 using System;
 using System.Runtime.CompilerServices;
 using WrathCombo.CustomComboNS.Functions;
+using WrathCombo.Extensions;
 
 namespace WrathCombo.Attributes;
 
@@ -15,11 +17,15 @@ internal class CustomComboInfoAttribute : Attribute
     /// <param name="order"> Display order. </param>
     //// <param name="memeName"> Display meme name </param>
     //// <param name="memeDescription"> Meme description. </param>
-    internal CustomComboInfoAttribute(string name, string description, byte jobID, [CallerLineNumber] int order = 0)
+    internal CustomComboInfoAttribute(string name, string description, Job job, [CallerLineNumber] int order = 0)
     {
         Name = name;
         Description = description;
-        JobID = jobID;
+        JobID = job switch
+        {
+            Job.BTN or Job.MIN or Job.FSH => Job.MIN,
+            _ => job
+        };
         Order = order;
     }
 
@@ -30,20 +36,20 @@ internal class CustomComboInfoAttribute : Attribute
     public string Description { get; }
 
     /// <summary> Gets the job ID. </summary>
-    public uint JobID { get; }
+    public Job JobID { get; }
 
     /// <summary> Gets the display order. </summary>
     public int Order { get; }
 
     /// <summary> Gets the job role. </summary>
-    public int Role => CustomComboFunctions.JobIDs.JobIDToRole(JobID);
+    public JobRole Role => RoleAttribute.GetRoleFromJob(JobID);
 
     /// <summary> Gets the job category. </summary>
-    public uint ClassJobCategory => CustomComboFunctions.JobIDs.JobIDToClassJobCategory(JobID);
+    //public uint ClassJobCategory => CustomComboFunctions.JobIDs.JobIDToClassJobCategory(JobID);
 
     /// <summary> Gets the job name. </summary>
-    public string JobName => CustomComboFunctions.JobIDs.JobIDToName(JobID);
+    public string JobName => JobID.Name();
 
     /// <summary> Gets the job shorthand. </summary>
-    public string JobShorthand => CustomComboFunctions.JobIDs.JobIDToShorthand(JobID);
+    public string JobShorthand => JobID.Shorthand();
 }
