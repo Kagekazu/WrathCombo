@@ -2874,12 +2874,12 @@ public enum Preset
     #region Basic Combo
 
     [ReplaceSkill(DRG.FullThrust, DRG.HeavensThrust)]
-    [CustomComboInfo("Full / Heavens Thrust Combo", "Replace Full Thrust/Heavens' Thrust with the basic combo chain.", DRG.JobID)]
+    [CustomComboInfo("Full / Heavens Thrust Combo", "Replace Full Thrust/Heavens' Thrust with the basic combo chain.", Job.DRG)]
     [BasicCombo]
     DRG_HeavensThrust = 6304,
 
     [ReplaceSkill(DRG.ChaosThrust, DRG.ChaoticSpring)]
-    [CustomComboInfo("Chaos / Chaotic Combo", "Replace Chaos Thrust / Chaotic Spring with the basic combo chain.", DRG.JobID)]
+    [CustomComboInfo("Chaos / Chaotic Combo", "Replace Chaos Thrust / Chaotic Spring with the basic combo chain.", Job.DRG)]
     [BasicCombo]
     DRG_ChaoticSpring = 6305,
     
@@ -3772,7 +3772,7 @@ public enum Preset
     MCH_Overdrive = 8002,
 
     [ReplaceSkill(MCH.HotShot)]
-    [CustomComboInfo("Big Hitter Feature", "Replace Hot Shot, Drill, Air Anchor, Chainsaw and Excavator depending on which is on cooldown.", MCH.JobID)]
+    [CustomComboInfo("Big Hitter Feature", "Replace Hot Shot, Drill, Air Anchor, Chainsaw and Excavator depending on which is on cooldown.", Job.MCH)]
     MCH_HotShotDrillChainsawExcavator = 8004,
 
     [ReplaceSkill(MCH.GaussRound, MCH.Ricochet, MCH.CheckMate, MCH.DoubleCheck)]
@@ -8191,13 +8191,13 @@ public enum Preset
     
     [ParentCombo(WHM_Retargets)]
     [ReplaceSkill(WHM.Cure, WHM.Cure2)]
-    [CustomComboInfo("Cure Option", "Retargets Cure and Cure II to the heal stack (even from the Cure II Sync Feature above).", WHM.JobID)]
+    [CustomComboInfo("Cure Option", "Retargets Cure and Cure II to the heal stack (even from the Cure II Sync Feature above).", Job.WHM)]
     [Retargeted(WHM.Cure, WHM.Cure2)]
     WHM_Re_Cure = 19038,
     
     [ParentCombo(WHM_Retargets)]
     [ReplaceSkill(WHM.AfflatusSolace)]
-    [CustomComboInfo("Afflatus Solace Option", "Retargets Afflatus Solace to the heal stack (even from the Solace into Misery Feature above).", WHM.JobID)]
+    [CustomComboInfo("Afflatus Solace Option", "Retargets Afflatus Solace to the heal stack (even from the Solace into Misery Feature above).", Job.WHM)]
     [Retargeted(WHM.AfflatusSolace)]
     WHM_Re_Solace = 19039,
     
