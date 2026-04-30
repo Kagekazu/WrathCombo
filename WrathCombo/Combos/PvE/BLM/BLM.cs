@@ -621,7 +621,7 @@ internal partial class BLM : Caster
             if (IcePhase)
             {
                 if (HasMaxUmbralHeartStacks ||
-                    MP.Cur >= 5000 && LevelChecked(Flare) ||
+                    MP.Cur >= 5000 && LevelChecked(Flare) && !TraitLevelChecked(Traits.UmbralHeart)||
                     MP.Full && !LevelChecked(Flare))
                 {
                     if (IsEnabled(Preset.BLM_AoE_Transpose) &&
