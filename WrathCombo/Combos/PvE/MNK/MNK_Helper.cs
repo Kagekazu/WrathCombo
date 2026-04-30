@@ -131,7 +131,8 @@ internal partial class MNK
         {
             case false when HasStatusEffect(Buffs.PerfectBalance):
             {
-                    #region Open Lunar
+                   
+                #region Open Lunar
 
                 if (!LunarNadi || BothNadisOpen || !SolarNadi && !LunarNadi)
                 {
@@ -147,9 +148,10 @@ internal partial class MNK
                     }
                 }
 
-                    #endregion
+                   
+                #endregion
 
-                    #region Open Solar
+                #region Open Solar
 
                 if (!SolarNadi && LunarNadi)
                 {
@@ -203,7 +205,7 @@ internal partial class MNK
 
             case true when HasStatusEffect(Buffs.PerfectBalance):
             {
-                    #region Open Lunar
+                #region Open Lunar
 
                 if (!LunarNadi || BothNadisOpen || !SolarNadi && !LunarNadi)
                 {
@@ -220,9 +222,9 @@ internal partial class MNK
                     }
                 }
 
-                    #endregion
+                #endregion
 
-                    #region Open Solar
+                #region Open Solar
 
                 if (!SolarNadi && LunarNadi)
                 {
@@ -245,7 +247,7 @@ internal partial class MNK
                     }
                 }
 
-                    #endregion
+                #endregion
 
                 break;
             }
