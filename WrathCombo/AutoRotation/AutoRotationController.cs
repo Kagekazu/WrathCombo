@@ -83,6 +83,7 @@ internal unsafe class AutoRotationController
                 {
                     pauseWarningFound = true;
                     UnpauseSeconds = 20;
+                    Svc.Targets.Target = null; //Stop auto-attacks
                 }
             break;
             default:
