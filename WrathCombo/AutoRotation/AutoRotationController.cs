@@ -64,6 +64,7 @@ internal unsafe class AutoRotationController
 
     private void StatusChanged(uint statusId, bool onPlayer)
     {
+        Svc.Log.Verbose($"[AutoRotStatusCheck] {((ushort)statusId).StatusName()} {(onPlayer ? "Gained" : "Lost")}");
         if (statusId == 5191 && !onPlayer)
             Paused = false;
     }
