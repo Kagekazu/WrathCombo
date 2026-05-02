@@ -11,7 +11,12 @@ internal partial class RDM
     internal static class Config
     {
         #region Options
-        public static UserBool RDM_ST_ThunderAero_Pull = new("RDM_ST_ThunderAero_Pull", true);
+        public static UserBool RDM_ST_ThunderAero_Pull = new("RDM_ST_ThunderAero_Pull", true),
+            RDM_VerAero_Dynamic = new("RDM_VerAero_Dynamic", true),
+            RDM_VerThunder_Dynamic = new("RDM_VerThunder_Dynamic", true),
+            RDM_VerAero2_Dynamic = new("RDM_VerAero2_Dynamic", true),
+            RDM_VerThunder2_Dynamic = new("RDM_VerThunder2_Dynamic", true);
+
 
         public static UserInt
             RDM_ST_Lucid_Threshold = new("RDM_LucidDreaming_Threshold", 6500),
@@ -274,6 +279,8 @@ internal partial class RDM
                     DrawHorizontalMultiChoice(RDM_VerAero_Options, Verstone.ActionName(), FormatAndCache(Generics.Add0, Verstone.ActionName()), 4, 1);
                     DrawHorizontalMultiChoice(RDM_VerAero_Options, $"{Scorch.ActionName()}/{Resolution.ActionName()}", FormatAndCache(RDM_Config.Add0_1Finishers, Scorch.ActionName(), Resolution.ActionName()), 4, 2);
                     DrawHorizontalMultiChoice(RDM_VerAero_Options, Jolt.ActionName(), FormatAndCache(Generics.Add0, Jolt.ActionName()), 4, 3);
+                    if (RDM_VerAero_Options[0])
+                        DrawAdditionalBoolChoice(RDM_VerAero_Dynamic, FormatAndCache(RDM_Config.DynamicallySwitchTo0, Verflare.ActionName()), FormatAndCache(RDM_Config.SwitchToBlack, Verflare.ActionName()));
                     break;
 
                 case Preset.RDM_VerThunder:
@@ -281,18 +288,24 @@ internal partial class RDM
                     DrawHorizontalMultiChoice(RDM_VerThunder_Options, Verfire.ActionName(), FormatAndCache(Generics.Add0, Verfire.ActionName()), 4, 1);
                     DrawHorizontalMultiChoice(RDM_VerThunder_Options, $"{Scorch.ActionName()}/{Resolution.ActionName()}", FormatAndCache(RDM_Config.Add0_1Finishers, Scorch.ActionName(), Resolution.ActionName()), 4, 2);
                     DrawHorizontalMultiChoice(RDM_VerThunder_Options, Jolt.ActionName(), FormatAndCache(Generics.Add0, Jolt.ActionName()), 4, 3);
+                    if (RDM_VerThunder_Options[0])
+                        DrawAdditionalBoolChoice(RDM_VerThunder_Dynamic, FormatAndCache(RDM_Config.DynamicallySwitchTo0, Verholy.ActionName()), FormatAndCache(RDM_Config.SwitchToWhite, Verholy.ActionName()));
                     break;
 
                 case Preset.RDM_VerAero2:
                     DrawHorizontalMultiChoice(RDM_VerAero2_Options, Verholy.ActionName(), FormatAndCache(Generics.Add0, Verholy.ActionName()), 3, 0);
                     DrawHorizontalMultiChoice(RDM_VerAero2_Options, $"{Scorch.ActionName()}/{Resolution.ActionName()}", FormatAndCache(RDM_Config.Add0_1Finishers, Scorch.ActionName(), Resolution.ActionName()), 3, 1);
                     DrawHorizontalMultiChoice(RDM_VerAero2_Options, Impact.ActionName(), FormatAndCache(Generics.Add0, Impact.ActionName()), 3, 2);
+                    if (RDM_VerAero2_Options[0])
+                        DrawAdditionalBoolChoice(RDM_VerAero2_Dynamic, FormatAndCache(RDM_Config.DynamicallySwitchTo0, Verflare.ActionName()), FormatAndCache(RDM_Config.SwitchToBlack, Verflare.ActionName()));
                     break;
 
                 case Preset.RDM_VerThunder2:
                     DrawHorizontalMultiChoice(RDM_VerThunder2_Options, Verflare.ActionName(), FormatAndCache(Generics.Add0, Verflare.ActionName()), 3, 0);
                     DrawHorizontalMultiChoice(RDM_VerThunder2_Options, $"{Scorch.ActionName()}/{Resolution.ActionName()}", FormatAndCache(RDM_Config.Add0_1Finishers, Scorch.ActionName(), Resolution.ActionName()), 3, 1);
                     DrawHorizontalMultiChoice(RDM_VerThunder2_Options, Impact.ActionName(), FormatAndCache(Generics.Add0, Impact.ActionName()), 3, 2);
+                    if (RDM_VerThunder2_Options[0])
+                        DrawAdditionalBoolChoice(RDM_VerThunder2_Dynamic, FormatAndCache(RDM_Config.DynamicallySwitchTo0, Verholy.ActionName()), FormatAndCache(RDM_Config.SwitchToWhite, Verholy.ActionName()));
                     break;
                     #endregion
             }

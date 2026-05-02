@@ -121,4 +121,13 @@
   <data name="AutoRotationWarning1" xml:space="preserve">
     <value>WARNING: {0} IS NOT ENABLED.</value>
   </data>
+  <data name="DynamicallySwitchTo0" xml:space="preserve">
+	  <value>Dynamically switch to {0}</value>
+  </data>
+  <data name="SwitchToBlack" xml:space="preserve">
+	  <value>Switches to {0} if black mana is lower.</value>
+  </data>
+  <data name="SwitchToWhite" xml:space="preserve">
+	  <value>Switches to {0} if white mana is lower.</value>
+  </data>
 </root>

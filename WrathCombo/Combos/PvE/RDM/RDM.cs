@@ -565,7 +565,12 @@ internal partial class RDM : Caster
             }
 
             if (RDM_VerAero_Options[0] && ActionReady(Verholy))
+            {
+                if (RDM_VerAero_Dynamic)
+                    return UseHolyFlare(actionID);
+
                 return Verholy;
+            }
 
             if (RDM_VerAero_Options[1] && CanVerStone && !HasDualcast && !HasSwiftcast)
                 return Verstone;
@@ -596,8 +601,13 @@ internal partial class RDM : Caster
                     return Resolution;
             }
 
-            if (RDM_VerAero_Options[0] && ActionReady(Verflare))
+            if (RDM_VerThunder_Options[0] && ActionReady(Verflare))
+            {
+                if (RDM_VerThunder_Dynamic)
+                    return UseHolyFlare(actionID);
+
                 return Verflare;
+            }
 
             if (RDM_VerThunder_Options[1] && CanVerFire && !HasDualcast && !HasSwiftcast)
                 return Verfire;
@@ -620,7 +630,12 @@ internal partial class RDM : Caster
                 return actionID;
 
             if (RDM_VerAero2_Options[0] && ActionReady(Verholy))
+            {
+                if (RDM_VerAero2_Dynamic)
+                    return UseHolyFlare(actionID);
+
                 return Verholy;
+            }
 
             if (RDM_VerAero2_Options[1])
             {
@@ -649,7 +664,12 @@ internal partial class RDM : Caster
                 return actionID;
 
             if (RDM_VerThunder2_Options[0] && ActionReady(Verflare))
+            {
+                if (RDM_VerThunder2_Dynamic)
+                    return UseHolyFlare(actionID);
+
                 return Verflare;
+            }
 
             if (RDM_VerThunder2_Options[1] && ComboAction is Scorch or Verholy or Verflare)
             {
