@@ -10142,7 +10142,7 @@ namespace WrathCombo.Resources.Localization.Presets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Locks out Aurora if your current target if they currently have the status active..
+        ///   Looks up a localized string similar to Blocks Aurora if your current target already has the status active..
         /// </summary>
         internal static string GNB_Aurora_Features_Lockout_Desc {
             get {

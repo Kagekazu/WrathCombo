@@ -3614,7 +3614,7 @@ This feature is ideal for any fresh newcomers to the job.</value>
     <value>Aurora Features</value>
   </data>
   <data name="GNB_Aurora_Features_Lockout_Desc" xml:space="preserve">
-    <value>Locks out Aurora if your current target if they currently have the status active.</value>
+    <value>Blocks Aurora if your current target already has the status active.</value>
   </data>
   <data name="GNB_Aurora_Features_Lockout_Name" xml:space="preserve">
     <value>Overwrite Prevention</value>
