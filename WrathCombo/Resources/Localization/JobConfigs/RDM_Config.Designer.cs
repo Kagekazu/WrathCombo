@@ -59,5 +59,77 @@ namespace WrathCombo.Resources.Localization.JobConfigs {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add {0}/{1} Finishers.
+        /// </summary>
+        internal static string Add0_1Finishers {
+            get {
+                return ResourceManager.GetString("Add0/1Finishers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to WARNING: {0} IS NOT ENABLED..
+        /// </summary>
+        internal static string AutoRotationWarning1 {
+            get {
+                return ResourceManager.GetString("AutoRotationWarning1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to AUTO ROTATION WILL NOT START THE MELEE COMBO AUTOMATICALLY.
+        /// </summary>
+        internal static string AutoRotationWarning2 {
+            get {
+                return ResourceManager.GetString("AutoRotationWarning2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pull with {0}/{1}.
+        /// </summary>
+        internal static string PullWith0_1 {
+            get {
+                return ResourceManager.GetString("PullWith0/1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Gap-Closing Adjusted Standard Opener.
+        /// </summary>
+        internal static string RDMGapCloserOpener {
+            get {
+                return ResourceManager.GetString("RDMGapCloserOpener", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Opener Failure Timeout (in Settings Tab) Must be set to 5+ seconds for opener to function due to long initial spell cast..
+        /// </summary>
+        internal static string RDMOpenerTimeoutWarning {
+            get {
+                return ResourceManager.GetString("RDMOpenerTimeoutWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Opener Failure Timeout (in Settings Tab) Must be set to 5+ seconds for opener to function due to long initial spell cast..
+        /// </summary>
+        internal static string RDMOpenerWarning {
+            get {
+                return ResourceManager.GetString("RDMOpenerWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Starts with {0}/{1} if out of combat..
+        /// </summary>
+        internal static string StartsWith0_1 {
+            get {
+                return ResourceManager.GetString("StartsWith0/1", resourceCulture);
+            }
+        }
     }
 }
