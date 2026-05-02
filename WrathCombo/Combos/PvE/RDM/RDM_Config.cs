@@ -76,7 +76,7 @@ internal partial class RDM
                     break;
 
                 case Preset.RDM_ST_ThunderAero:
-                    DrawAdditionalBoolChoice(RDM_ST_ThunderAero_Pull, string.Format(RDM_Config.PullWith0_1, Verthunder.ActionName(), Veraero.ActionName()), string.Format(RDM_Config.StartsWith0_1, Verthunder.ActionName(), Veraero.ActionName()));
+                    DrawAdditionalBoolChoice(RDM_ST_ThunderAero_Pull, FormatAndCache(RDM_Config.PullWith0_1, Verthunder.ActionName(), Veraero.ActionName()), FormatAndCache(RDM_Config.StartsWith0_1, Verthunder.ActionName(), Veraero.ActionName()));
                     break;
 
                 case Preset.RDM_ST_VerCure:
@@ -85,7 +85,7 @@ internal partial class RDM
 
                 case Preset.RDM_ST_Embolden:
                     DrawSliderInt(0, 100, RDM_ST_Embolden_Threshold,
-                        string.Format(Generics.StopUsing0WhenBelowTargetHPPercentage, Embolden.ActionName()));
+                        FormatAndCache(Generics.StopUsing0WhenBelowTargetHPPercentage, Embolden.ActionName()));
                     ImGui.Indent();
                     ImGui.TextColored(ImGuiColors.DalamudYellow, Generics.EnemyTypeCheck);
                     DrawHorizontalRadioButton(RDM_ST_Embolden_SubOption,
@@ -97,7 +97,7 @@ internal partial class RDM
 
                 case Preset.RDM_ST_Manafication:
                     DrawSliderInt(0, 100, RDM_ST_Manafication_Threshold,
-                        string.Format(Generics.StopUsing0WhenBelowTargetHPPercentage, Manafication.ActionName()));
+                        FormatAndCache(Generics.StopUsing0WhenBelowTargetHPPercentage, Manafication.ActionName()));
                     ImGui.Indent();
                     ImGui.TextColored(ImGuiColors.DalamudYellow, Generics.EnemyTypeCheck);
                     DrawHorizontalRadioButton(RDM_ST_Manafication_SubOption,
@@ -152,7 +152,7 @@ internal partial class RDM
 
                 case Preset.RDM_AoE_Embolden:
                     DrawSliderInt(0, 100, RDM_AoE_Embolden_Threshold,
-                        string.Format(Generics.StopUsing0WhenBelowTargetHPPercentage, Embolden.ActionName()));
+                        FormatAndCache(Generics.StopUsing0WhenBelowTargetHPPercentage, Embolden.ActionName()));
                     ImGui.Indent();
                     ImGui.TextColored(ImGuiColors.DalamudYellow, Generics.EnemyTypeCheck);
                     DrawHorizontalRadioButton(RDM_AoE_Embolden_SubOption,
@@ -164,7 +164,7 @@ internal partial class RDM
 
                 case Preset.RDM_AoE_Manafication:
                     DrawSliderInt(0, 100, RDM_AoE_Manafication_Threshold,
-                       string.Format(Generics.StopUsing0WhenBelowTargetHPPercentage, Manafication.ActionName()));
+                       FormatAndCache(Generics.StopUsing0WhenBelowTargetHPPercentage, Manafication.ActionName()));
                     ImGui.Indent();
                     ImGui.TextColored(ImGuiColors.DalamudYellow, Generics.EnemyTypeCheck);
                     DrawHorizontalRadioButton(RDM_AoE_Manafication_SubOption,
