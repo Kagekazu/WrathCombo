@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -118,391 +118,378 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="_0Option" xml:space="preserve">
-    <value>{0} Option</value>
+    <value>{0} 选项</value>
   </data>
   <data name="Action_Priority" xml:space="preserve">
-    <value>{0} Priority: </value>
+    <value>{0} 优先级:</value>
   </data>
   <data name="Action_Threshold" xml:space="preserve">
-    <value>{0} Threshold</value>
+    <value>{0} 阈值</value>
   </data>
   <data name="Add0" xml:space="preserve">
-    <value>Add {0}</value>
+    <value>添加 {0}</value>
   </data>
   <data name="Add0Combo" xml:space="preserve">
-    <value>Add {0} Combo</value>
+    <value>添加 {0} 连击</value>
   </data>
   <data name="Add0ComboWhenApplicable" xml:space="preserve">
-    <value>Adds {0} combo when applicable.</value>
+    <value>当适用时添加 {0} 连击。</value>
   </data>
   <data name="Add0Or1" xml:space="preserve">
-    <value>Add {0} / {1}.</value>
+    <value>添加 {0} / {1}。</value>
   </data>
   <data name="Add0ToTheRotation" xml:space="preserve">
-    <value>Add {0} to the rotation.</value>
+    <value>将 {0} 添加到循环中。</value>
   </data>
   <data name="Add0WhenAverageHpPercentofPartyIsAtOrBelow" xml:space="preserve">
-    <value>Add {0} when average HP% of the party is at or below.</value>
+    <value>当队伍平均HP%低于或等于指定值时，添加 {0}</value>
   </data>
   <data name="AddFieldMouseoverTargetting" xml:space="preserve">
-    <value>Adds Field mouseover targetting.</value>
+    <value>添加野外鼠标悬停目标选择</value>
   </data>
   <data name="Adds0To1" xml:space="preserve">
-    <value>Adds {0} to {1}.</value>
+    <value>将 {0} 添加到 {1}。</value>
   </data>
   <data name="AllContent" xml:space="preserve">
-    <value>All Content</value>
+    <value>全部内容</value>
   </data>
   <data name="AllContentDescription" xml:space="preserve">
-    <value>Applies to all content in the game.</value>
+    <value>适用于游戏中的所有内容。</value>
   </data>
   <data name="AllEnemies" xml:space="preserve">
-    <value>All Enemies</value>
+    <value>所有敌人</value>
   </data>
   <data name="AllHealerRetargetting" xml:space="preserve">
-    <value>UI Mouseover &gt; Field Mouseover &gt; Focus Target &gt; Soft Target &gt; Hard Target</value>
+    <value>UI鼠标悬停 &gt; 野外鼠标悬停 &gt; 焦点目标 &gt; 软目标 &gt; 硬目标</value>
   </data>
   <data name="AllyHardTarget" xml:space="preserve">
-    <value>Ally Hard Target</value>
+    <value>友方硬目标</value>
   </data>
   <data name="Always" xml:space="preserve">
-    <value>Always</value>
+    <value>总是</value>
   </data>
   <data name="AnyMovement" xml:space="preserve">
-    <value>Any Movement</value>
+    <value>移动时</value>
   </data>
   <data name="ApplyOnlyTo0" xml:space="preserve">
-    <value>Applies options to {0} only.</value>
+    <value>仅对 {0} 应用选项。</value>
   </data>
   <data name="ApplyToAll0" xml:space="preserve">
-    <value>Applies options to all of these:
+    <value>将选项应用于所有这些：
 {0}</value>
   </data>
   <data name="BossEncounterNonBossHpPercent" xml:space="preserve">
-    <value>Boss Encounter Non Bosses. Stop using at Enemy HP %.</value>
+    <value>首领战中的非首领敌人。在敌人 HP% 低于此值时停止使用。</value>
   </data>
   <data name="BossOnlyContent" xml:space="preserve">
-    <value>Boss Only Content</value>
+    <value>仅限首领战</value>
   </data>
   <data name="BossOnlyDescription" xml:space="preserve">
-    <value>Only applies in instances where you directly fight a boss. Excludes many A Realm Reborn &amp; Heavensward raids that include trash.</value>
+    <value>仅适用于直接与首领战斗的场景。排除包含小怪的「重生之境」与「苍穹之禁城」的多个团队副本。</value>
   </data>
   <data name="BossOnlyHpPercent" xml:space="preserve">
-    <value>Bosses Only. Stop using at Enemy HP %.</value>
+    <value>仅首领。在敌人 HP% 低于此值时停止使用。</value>
   </data>
   <data name="BurstOption" xml:space="preserve">
-    <value>BurstOption</value>
+    <value>爆发选项</value>
   </data>
   <data name="Change0Or1" xml:space="preserve">
-    <value>Change {0} / {1}</value>
+    <value>更改 {0} / {1}</value>
   </data>
   <data name="ChargePool" xml:space="preserve">
-    <value>How many charges to retain for manual use. Set to 0 to disable this check.</value>
+    <value>手动使用保留的充能次数。设置为0以禁用此检查。</value>
   </data>
   <data name="DelayMit" xml:space="preserve">
-    <value>How long to delay after detecting incoming tankbuster to use {0}. Set to 0 to disable this check.</value>
+    <value>检测到死刑后，延迟多长时间使用 {0}。设为 0 以禁用此检查。</value>
   </data>
   <data name="DisableRangeCheck" xml:space="preserve">
-    <value>Disable range check</value>
+    <value>禁用距离检查</value>
   </data>
   <data name="DisablesTheUseOfMitigations" xml:space="preserve">
-    <value>Disables the use of mitigations.</value>
+    <value>禁用减伤技能的使用</value>
   </data>
   <data name="DontUse0" xml:space="preserve">
-    <value>Don't Use {0}</value>
+    <value>不要使用 {0}</value>
   </data>
   <data name="DoTSecondsRemainingZeroDisable" xml:space="preserve">
-    <value>Seconds remaining before reapplying the DoT. Set to Zero to disable this check.</value>
+    <value>重新施加 DoT 前的剩余秒数。设置为 0 以禁用此检查。</value>
   </data>
   <data name="EnablesTheUseOfMitigations" xml:space="preserve">
-    <value>Enables the use of mitigations.</value>
+    <value>启用减伤技能的使用</value>
   </data>
   <data name="EnemyHardTarget" xml:space="preserve">
-    <value>Enemy Hard Target</value>
+    <value>敌人硬目标</value>
   </data>
   <data name="EnemyTypeCheck" xml:space="preserve">
-    <value>Select what kind of enemies the HP check should be applied to:</value>
+    <value>选择 HP 检查应应用于哪种类型的敌人：</value>
   </data>
   <data name="Exclude0" xml:space="preserve">
-    <value>Exclude {0}</value>
+    <value>排除 {0}</value>
   </data>
   <data name="ExcludeAdvancedMitigations" xml:space="preserve">
-    <value>Exclude Advanced Mitigations</value>
+    <value>排除高级减伤</value>
   </data>
   <data name="ExcludeSimpleMitigations" xml:space="preserve">
-    <value>Exclude Simple Mitigations</value>
+    <value>排除简易减伤</value>
   </data>
   <data name="FieldMouseover" xml:space="preserve">
-    <value>Field Mouseover</value>
+    <value>场地鼠标悬停</value>
   </data>
   <data name="FocusTarget" xml:space="preserve">
-    <value>Focus Target</value>
+    <value>焦点目标</value>
   </data>
   <data name="Hold0For1" xml:space="preserve">
-    <value>Hold {0} for {1}</value>
+    <value>为 {1} 保留 {0}</value>
   </data>
   <data name="HowManyChargesForMovement" xml:space="preserve">
-    <value>How many charges to save for movement?</value>
+    <value>为移动保留的充能次数</value>
   </data>
   <data name="HowManyChargesToKeepReady" xml:space="preserve">
-    <value> How many charges to keep ready?
-(0 = Use All)</value>
+    <value>要保留多少层充能？
+（0 = 全部使用）</value>
   </data>
   <data name="HPCheckAllContent" xml:space="preserve">
-    <value>Applies HP Check to All Content</value>
+    <value>对所有内容应用 HP 检测</value>
   </data>
   <data name="HPCheckAllEnemies" xml:space="preserve">
-    <value>Applies the HP check above to all enemies.</value>
+    <value>将上述 HP 检查应用于所有敌人。</value>
   </data>
   <data name="HPCheckNonBossEncountersOnly" xml:space="preserve">
-    <value>Applies HP check to Non-Boss Encounters only</value>
+    <value>仅对非首领敌人应用 HP 检查</value>
   </data>
   <data name="HPCheckNonBosses" xml:space="preserve">
-    <value>Only applies the HP check above to non-bosses.</value>
+    <value>仅对非首领敌人应用上述 HP 检查。</value>
   </data>
   <data name="HPPercentageFor0NotBeApplied" xml:space="preserve">
-    <value>Set a HP% Threshold for when {0} will not be automatically applied to the target.</value>
+    <value>设置一个 HP% 阈值，用于指定何时 {0} 不会自动施加到敌人上。</value>
   </data>
   <data name="HPPercentageThreshold" xml:space="preserve">
-    <value>{0} HP percentage threshold.</value>
+    <value>{0} 的 HP% 阈值</value>
   </data>
   <data name="HPPercentThresholdUseAllCharges0" xml:space="preserve">
-    <value>HP% Threshold to use all charges of {0}.</value>
+    <value>使用 {0} 所有充能的 HP% 阈值。</value>
   </data>
   <data name="Include0" xml:space="preserve">
-    <value>Include {0}</value>
+    <value>包含 {0}</value>
   </data>
   <data name="IncludeAdvancedMitigations" xml:space="preserve">
-    <value>Include Advanced Mitigations</value>
+    <value>包含高级减伤</value>
   </data>
   <data name="IncludeShields" xml:space="preserve">
-    <value>Include Shields in HP Percent Sliders</value>
+    <value>在 HP% 滑块中包括护盾</value>
   </data>
   <data name="IncludeSimpleMitigations" xml:space="preserve">
-    <value>Include Simple Mitigations</value>
+    <value>包含简易减伤</value>
   </data>
   <data name="InMeleeRange" xml:space="preserve">
-    <value>In Melee Range</value>
+    <value>近战范围内</value>
   </data>
   <data name="InRange" xml:space="preserve">
-    <value>In range</value>
+    <value>在射程内</value>
   </data>
   <data name="Job0ShieldCheck" xml:space="preserve">
-    <value>{0} Shield Check</value>
+    <value>{0} 护盾检查</value>
   </data>
   <data name="Job0ShieldCheckDesc" xml:space="preserve">
-    <value>Enable to not override an existing {0}'s shield.</value>
+    <value>启用后不覆盖已有的 {0} 的护盾。</value>
   </data>
   <data name="LucidMP" xml:space="preserve">
-    <value>Set value for your MP to be at or under for this feature to work</value>
+    <value>设置 MP 低于或等于此值时此功能生效</value>
   </data>
   <data name="MaxTargetsMultiDot" xml:space="preserve">
-    <value>Maximum number of targets to employ multi-dotting </value>
+    <value>多目标DOT的最大目标数</value>
   </data>
   <data name="MinimumGauge" xml:space="preserve">
-    <value>Minimum Gauge Required to use {0} </value>
+    <value>使用 {0} 所需的最低量表</value>
   </data>
   <data name="MovementOption" xml:space="preserve">
-    <value>Movement Option</value>
+    <value>移动选项</value>
   </data>
   <data name="MPLessOrEqual" xml:space="preserve">
-    <value>Player MP to be less than or equal to:</value>
+    <value>玩家 MP 低于或等于：</value>
   </data>
   <data name="NoMovement" xml:space="preserve">
-    <value>No Movement</value>
+    <value>不移动</value>
   </data>
   <data name="NonBossEncountersOnly" xml:space="preserve">
-    <value>Non-boss Encounters Only</value>
+    <value>仅限非首领战</value>
   </data>
   <data name="NonBosses" xml:space="preserve">
-    <value>Non-Bosses</value>
+    <value>小怪</value>
   </data>
   <data name="NonBossHpPercent" xml:space="preserve">
-    <value>Non boss encounter. Stop using at Enemy HP %.</value>
+    <value>非首领战。在敌人 HP% 低于此值时停止使用。</value>
   </data>
   <data name="NormalTargeting" xml:space="preserve">
-    <value>Normal Targeting</value>
+    <value>普通目标</value>
   </data>
   <data name="NotInBossEncounters" xml:space="preserve">
-    <value>Not In Boss Encounters</value>
+    <value>不在首领战</value>
   </data>
   <data name="On0" xml:space="preserve">
-    <value>On {0}</value>
-    <comment>Used for simple "On {Action}" strings</comment>
+    <value>在 {0} 时</value>
   </data>
   <data name="OnlyUseWhenTargetIsBoss" xml:space="preserve">
-    <value>Only use {0} when the targeted enemy is a boss.</value>
+    <value>仅在目标敌人是首领时使用 {0}</value>
   </data>
   <data name="OnlyUseWith0" xml:space="preserve">
-    <value>Only use with {0}</value>
+    <value>仅与 {0} 一同使用</value>
   </data>
   <data name="OnlyWeave" xml:space="preserve">
-    <value>Only Weave</value>
+    <value>仅插入</value>
   </data>
   <data name="PlayerHPGreaterOrEqual" xml:space="preserve">
-    <value>Player HP% to be greater than or equal to:</value>
+    <value>玩家 HP% 大于或等于：</value>
   </data>
   <data name="PlayerHPToUseAction" xml:space="preserve">
-    <value>Player HP% to use {0} at or below.  Set to 100 to disable this check</value>
+    <value>当玩家 HP% 低于或等于此值时使用 {0}。设为 100 可禁用此检查。</value>
   </data>
   <data name="PrioBuffUpkeep" xml:space="preserve">
-    <value>Prio buff upkeep</value>
+    <value>优先维持增益</value>
   </data>
   <data name="Priority" xml:space="preserve">
-    <value>Priority: </value>
+    <value>优先级：</value>
   </data>
   <data name="Replace0With1Or2" xml:space="preserve">
-    <value>Replace {0} with {1} / {2}.</value>
+    <value>将 {0} 替换为 {1} / {2}。</value>
   </data>
   <data name="Replaces0" xml:space="preserve">
-    <value>Replaces {0}</value>
+    <value>替换 {0}</value>
   </data>
   <data name="Save0ChargesForBurst" xml:space="preserve">
-    <value>Save {0} charges for burst.</value>
+    <value>为爆发保留 {0} 层充能</value>
   </data>
   <data name="SelectWhatKindOfContentThisOptionAppliesTo" xml:space="preserve">
-    <value>Select what kind of content this option applies to:</value>
+    <value>选择此选项适用的内容类型：</value>
   </data>
   <data name="SelfOnly" xml:space="preserve">
-    <value>Self Only</value>
+    <value>仅自身</value>
   </data>
   <data name="ShieldCheckPartyMemberNeedPercent" xml:space="preserve">
-    <value>Shield Check: Percentage of Party Members without shields to check for.</value>
+    <value>护盾检查：无护盾队员百分比阈值</value>
   </data>
   <data name="SoftTarget" xml:space="preserve">
-    <value>Soft Target</value>
+    <value>软目标</value>
   </data>
   <data name="StandardOpener" xml:space="preserve">
-    <value>Standard opener</value>
+    <value>标准起手循环</value>
   </data>
   <data name="StartUsingWhenBelowPartyAverageHPSetTo100ToDisableThisCheck" xml:space="preserve">
-    <value>Start using when below party average HP %. Set to 100 to disable this check</value>
+    <value>当队伍平均 HP% 低于此值时开始使用。设为 100 可禁用此检查。</value>
   </data>
   <data name="StationaryDelayCheck" xml:space="preserve">
-    <value>Stationary Delay Check (in seconds):</value>
+    <value>静止判定延迟时间（秒）：</value>
   </data>
   <data name="StationaryOnly" xml:space="preserve">
-    <value>Stationary Only</value>
+    <value>仅静止时</value>
   </data>
   <data name="StopBelowAverageEnemyHP" xml:space="preserve">
-    <value>Stop using when average health percentage of nearby enemies is below set.
-(Set to 0 to disable this check)</value>
+    <value>当附近敌人的平均 HP% 低于此值时停止使用。（设为 0 以禁用此检查）</value>
   </data>
   <data name="StopEnemyHpPercent" xml:space="preserve">
-    <value>Stop using when below Enemy HP %.
-        Set to Zero to disable this check.</value>
+    <value>当敌人 HP% 低于此值时停止使用。设为 0 以禁用此检查。</value>
   </data>
   <data name="StopFriendlyHpPercent100" xml:space="preserve">
-    <value>Start using when below HP %.
-       Set to 100 to disable this check</value>
+    <value>HP% 低于此值时开始使用。设为 100 可禁用此检查。</value>
   </data>
   <data name="StopFriendlyHpPercentZero" xml:space="preserve">
-    <value>Stop using when below HP %. Set to Zero to disable this check</value>
+    <value>当 HP 低于此值时停止使用。设为 0 可禁用此检查。</value>
   </data>
   <data name="StopSeconds" xml:space="preserve">
-    <value>Seconds remaining before reapplying (0 = Do not reapply early)</value>
+    <value>重新施加前剩余秒数（0 = 不提前重新施加）</value>
   </data>
   <data name="StopUsing0WhenBelowTargetHPPercentage" xml:space="preserve">
-    <value>Stop Using {0} When Target HP% is at or Below (Set to 0 to Disable This Check)</value>
+    <value>当目标 HP% 低于或等于 {0} 时停止使用（设为 0 以禁用此检查）</value>
   </data>
   <data name="StopUsingWhenBelowSetPercentage" xml:space="preserve">
-    <value>Stop using when below set percentage</value>
+    <value>当低于设定 HP% 停止使用</value>
   </data>
   <data name="StopUsingWhenBelowTargetHPPercent" xml:space="preserve">
-    <value>Stop Using when Target HP% is at or Below (Set to 0 to Disable This Check)</value>
+    <value>当目标 HP% 低于或等于此值时停止使用（设为 0 以禁用此检查）</value>
   </data>
   <data name="TanksOnly" xml:space="preserve">
-    <value>Tanks Only</value>
+    <value>仅坦克</value>
   </data>
   <data name="TargetHPUse0AtOrBelow" xml:space="preserve">
-    <value>Target HP% to use {0} at or below. Set to 100 to disable this check.</value>
+    <value>目标 HP% 低于或等于此值时使用 {0}。设为 100 以禁用此检查。</value>
   </data>
   <data name="TimeRemainingOn0" xml:space="preserve">
-    <value>Time Remaining on {0} to allow within
-(0 = Dismantled must not be on the target)</value>
+    <value>允许 {0} 剩余时间在以内  
+（0 = 目标身上不能有瓦解状态）</value>
   </data>
   <data name="TimeRemainingOnOthers" xml:space="preserve">
-    <value>Time Remaining on others {0} to allow within
-(0 = {0} must not be on the target)</value>
+    <value>他人身上 {0} 的剩余时间以允许使用（0 = 目标身上没有 {0} 效果时）</value>
   </data>
   <data name="TimeRemainingOnOthers3" xml:space="preserve">
-    <value>Time Remaining on others {0} / {1} / {2} to allow within
-(0 = {0} / {1} / {2} must not be on the target)</value>
+    <value>允许的其他目标上的 {0} / {1} / {2} 剩余时间 (0 = 目标上不得有 {0} / {1} / {2})</value>
   </data>
   <data name="TwoTargetDotting" xml:space="preserve">
-    <value>Two target dotting</value>
+    <value>双目标持续伤害</value>
   </data>
   <data name="TwoTargetDottingDescription" xml:space="preserve">
-    <value>Will maintain Damage over time spells on two targets if applicable.</value>
+    <value>如果可能，将对两个目标维持持续伤害技能。</value>
   </data>
   <data name="Use0" xml:space="preserve">
-    <value>Use {0}</value>
+    <value>使用 {0}</value>
   </data>
   <data name="Use0In1" xml:space="preserve">
-    <value>Use {0} in {1}</value>
+    <value>在 {1} 中使用 {0}</value>
   </data>
   <data name="Use0Or1" xml:space="preserve">
-    <value>Use {0} / {1}</value>
+    <value>使用 {0} / {1}</value>
   </data>
   <data name="Use0RegardlessOfContent" xml:space="preserve">
-    <value>Use {0} regardless of content.</value>
+    <value>无论内容如何，都使用 {0}。</value>
   </data>
   <data name="Use0When1ChargesAreAvailable" xml:space="preserve">
-    <value>Use {0} when {1} charges are available.</value>
+    <value>当 {1} 层充能可用时使用 {0}。</value>
   </data>
   <data name="Use0WhenInRangeOfEnemy" xml:space="preserve">
-    <value>Use {0} when in range of a selected enemy target.</value>
+    <value>当在选定敌人目标的射程内时，使用 {0}。</value>
   </data>
   <data name="UseActionOnlyWhileStationary" xml:space="preserve">
-    <value>Use {0} only while stationary</value>
+    <value>仅在静止时使用 {0}</value>
   </data>
   <data name="UseAlways" xml:space="preserve">
-    <value>Use always.</value>
+    <value>始终使用</value>
   </data>
   <data name="Uses0RegardlessOfAnyMovementConditions" xml:space="preserve">
-    <value>Uses {0} regardless of any movement conditions.
-NOTE: This could possibly get you killed</value>
+    <value>无视任何移动条件使用 {0} 。注意：这可能会导致你死亡。</value>
   </data>
   <data name="UsesStandardOpener" xml:space="preserve">
-    <value>Uses Standard opener</value>
+    <value>使用标准起手循环</value>
   </data>
   <data name="UseWhenDistanceFromTargetIsLessThanOrEqualTo" xml:space="preserve">
-    <value> Use when Distance from target is less than or equal to:</value>
+    <value>当与目标的距离小于或等于时使用：</value>
   </data>
   <data name="Use_0_Opener" xml:space="preserve">
-    <value>Use {0} Opener</value>
+    <value>使用 {0} 起手循环</value>
   </data>
   <data name="WillAdd_0_ToThePriorityStack" xml:space="preserve">
-    <value>Will add {0} to the priority stack</value>
+    <value>将 {0} 添加到优先级堆栈</value>
   </data>
   <data name="WillNotUseInBossEncounters" xml:space="preserve">
-    <value>Will not use in Boss encounters.</value>
+    <value>不会在首领战中使用。</value>
   </data>
   <data name="WillOnlyUseOnTanks" xml:space="preserve">
-    <value>Will only use on Tanks</value>
+    <value>仅对坦克使用</value>
   </data>
   <data name="WillOnlyWeaveThisAction" xml:space="preserve">
-    <value>Will only weave this action.</value>
+    <value>仅会在插入能力技时使用此技能。</value>
   </data>
   <data name="OnlyUse0WhenInMeleeRange" xml:space="preserve">
-    <value>Only uses {0} when in melee range.</value>
+    <value>仅在近战范围内使用 {0}。</value>
   </data>
   <data name="OnlyUse0WhenNotMoving" xml:space="preserve">
-    <value>Only uses {0} when not moving.</value>
+    <value>仅在未移动时使用 {0}。</value>
   </data>
   <data name="OnlyWithCountdown" xml:space="preserve">
-    <value>Only with countdown</value>
+    <value>仅在倒数时使用</value>
   </data>
   <data name="OnlyUseOpenerWhenCountdownActive" xml:space="preserve">
-    <value>Only use the opener when a countdown is active.</value>
+    <value>仅在倒计激活时使用起手循环。</value>
   </data>
   <data name="Action_Opener" xml:space="preserve">
-    <value>{0} Opener</value>
-  </data>
-  <data name="PlayerHPLessOrEqual" xml:space="preserve">
-    <value>Player HP% to be less than or equal to:</value>
-  </data>
-  <data name="UseWhenDistanceFromTargetIsGreaterThanOrEqualTo" xml:space="preserve">
-    <value> Use when Distance from target is greater than or equal to:</value>
+    <value>{0} 起手循环</value>
   </data>
 </root>
