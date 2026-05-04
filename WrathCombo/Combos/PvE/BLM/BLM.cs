@@ -320,9 +320,9 @@ internal partial class BLM : Caster
                 return contentAction;
 
             if (IsEnabled(Preset.BLM_ST_Manaward) && !LocalPlayer!.HasShield() &&
-                (BLM_ST_ManawardTrigger == 0 && PlayerHealthPercentageHp() <= BLM_ST_ManawardHPThreshold && GroupDamageIncoming()) ||
+                ((BLM_ST_ManawardTrigger == 0 && PlayerHealthPercentageHp() <= BLM_ST_ManawardHPThreshold && GroupDamageIncoming()) ||
                 ((BLM_ST_ManawardTrigger == 1 || (BLM_ST_ManawardTrigger == 0 && BLM_ST_ManawardSolo && !IsInParty())) && PlayerHealthPercentageHp() <= BLM_ST_ManawardHPThreshold) ||
-                (BLM_ST_ManawardTrigger == 2 && GroupDamageIncoming()))
+                (BLM_ST_ManawardTrigger == 2 && GroupDamageIncoming())))
                 return Manaward;
 
             if (CanWeave())
