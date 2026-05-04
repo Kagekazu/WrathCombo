@@ -12,7 +12,7 @@ namespace WrathCombo.Services.IPC_Subscriber;
 
 public abstract class ReusableIPC : IDisposable
 {
-    private IDalamudPlugin? _plugin;
+    private object? _plugin;
     public EzIPCDisposalToken[] DisposalTokens;
     public string PluginName;
     protected bool ReflectionNotIPC;
@@ -46,7 +46,7 @@ public abstract class ReusableIPC : IDisposable
         get
         {
             if (PluginIsLoaded)
-                return _plugin!;
+                return (IDalamudPlugin)_plugin!;
             throw new InvalidOperationException(
                 "Plugin is not loaded or does not exist. " +
                 "(This should be used after a `PluginIsLoaded` check)");
