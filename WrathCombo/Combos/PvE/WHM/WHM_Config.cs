@@ -355,9 +355,9 @@ internal partial class WHM
                     ImGui.Indent();
                     ImGui.TextColored(ImGuiColors.DalamudGrey, "Options to try to Retarget Asylum to before Self:");
                     ImGui.Unindent();
-                    DrawHorizontalMultiChoice(Generics.NonBosses,
+                    DrawHorizontalMultiChoice(WHM_AsylumOptions,
                         Generics.EnemyHardTarget, Generics.NonBosses, 3, 0);
-                    DrawHorizontalMultiChoice(Generics.NonBosses,
+                    DrawHorizontalMultiChoice(WHM_AsylumOptions,
                         Generics.AllyHardTarget, Generics.NonBosses, 3, 1);
                     break;
 
@@ -365,9 +365,9 @@ internal partial class WHM
                     ImGui.Indent();
                     ImGui.TextColored(ImGuiColors.DalamudGrey, "Options to try to Retarget Liturgy of the Bell to before Self:");
                     ImGui.Unindent();
-                    DrawHorizontalMultiChoice(Generics.NonBosses,
+                    DrawHorizontalMultiChoice(WHM_LiturgyOfTheBellOptions,
                         Generics.EnemyHardTarget, Generics.NonBosses, 2, 0);
-                    DrawHorizontalMultiChoice(Generics.NonBosses,
+                    DrawHorizontalMultiChoice(WHM_LiturgyOfTheBellOptions,
                         Generics.AllyHardTarget, Generics.NonBosses, 2, 1);
                     break;
 
