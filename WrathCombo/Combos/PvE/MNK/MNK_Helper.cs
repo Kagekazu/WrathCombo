@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using WrathCombo.CustomComboNS;
 using WrathCombo.CustomComboNS.Functions;
+using WrathCombo.API.Enum;
 using static WrathCombo.Combos.PvE.MNK.Config;
 using static WrathCombo.CustomComboNS.Functions.CustomComboFunctions;
 namespace WrathCombo.Combos.PvE;
@@ -16,6 +17,8 @@ internal partial class MNK
 
     private static uint DoBasicCombo(uint actionId, bool useTrueNorth = true)
     {
+        ReportMNKPositionalHints();
+
         int tnCharges = IsNotEnabled(Preset.MNK_ST_SimpleMode) ? MNK_ManualTN : 0;
 
         if (!LevelChecked(TrueStrike))
@@ -51,6 +54,27 @@ internal partial class MNK
         }
 
         return actionId;
+    }
+
+    private static void ReportMNKPositionalHints()
+    {
+        if (!TargetNeedsPositionals() || !HasBattleTarget() || !LevelChecked(TrueStrike))
+            return;
+
+        if (HasStatusEffect(Buffs.CoeurlForm))
+        {
+            if (CoeurlStacks is 0 && LevelChecked(Demolish))
+                ReportUpcomingPositional(PositionalDirection.Rear, Demolish, 1);
+            else if (LevelChecked(SnapPunch))
+                ReportUpcomingPositional(PositionalDirection.Flank, OriginalHook(SnapPunch), 1);
+        }
+        else if (HasStatusEffect(Buffs.RaptorForm) && LevelChecked(TrueStrike))
+        {
+            if (CoeurlStacks is 0 && LevelChecked(Demolish))
+                ReportUpcomingPositional(PositionalDirection.Rear, Demolish, 2);
+            else if (LevelChecked(SnapPunch))
+                ReportUpcomingPositional(PositionalDirection.Flank, OriginalHook(SnapPunch), 2);
+        }
     }
 
     #endregion

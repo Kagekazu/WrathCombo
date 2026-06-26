@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using WrathCombo.CustomComboNS;
 using WrathCombo.CustomComboNS.Functions;
+using WrathCombo.API.Enum;
 using static WrathCombo.Combos.PvE.RPR.Config;
 using static WrathCombo.CustomComboNS.Functions.CustomComboFunctions;
 namespace WrathCombo.Combos.PvE;
@@ -157,6 +158,31 @@ internal partial class RPR
         }
 
         return actionId;
+    }
+
+    internal static void ReportRPRPositionalHints(bool simpleMode = false)
+    {
+        if (!TargetNeedsPositionals() || !HasBattleTarget())
+            return;
+
+        if (HasStatusEffect(Buffs.EnhancedGibbet))
+            ReportUpcomingPositional(PositionalDirection.Flank, OriginalHook(Gibbet), 1);
+        else if (HasStatusEffect(Buffs.EnhancedGallows))
+            ReportUpcomingPositional(PositionalDirection.Rear, OriginalHook(Gallows), 1);
+        else if ((HasStatusEffect(Buffs.SoulReaver) || HasStatusEffect(Buffs.Executioner)) &&
+                 !HasStatusEffect(Buffs.Enshrouded) &&
+                 !HasStatusEffect(Buffs.EnhancedGibbet) &&
+                 !HasStatusEffect(Buffs.EnhancedGallows) &&
+                 LevelChecked(Gibbet))
+            ReportUpcomingPositional(PositionalDirection.Rear, OriginalHook(Gallows), 1);
+        else if (HasStatusEffect(Buffs.EnhancedVoidReaping))
+            ReportUpcomingPositional(PositionalDirection.Flank, OriginalHook(Gibbet), 1);
+        else if (HasStatusEffect(Buffs.EnhancedCrossReaping))
+            ReportUpcomingPositional(PositionalDirection.Rear, OriginalHook(Gallows), 1);
+        else if (HasStatusEffect(Buffs.Enshrouded) &&
+                 !HasStatusEffect(Buffs.EnhancedCrossReaping) &&
+                 !HasStatusEffect(Buffs.EnhancedVoidReaping))
+            ReportUpcomingPositional(PositionalDirection.Rear, OriginalHook(Gallows), 1);
     }
 
     #endregion

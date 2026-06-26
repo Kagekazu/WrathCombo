@@ -108,6 +108,8 @@ internal partial class NIN : Melee
             if (CanPhantomKamaitachi)
                 return PhantomKamaitachi;
 
+            ReportNINPositionalHints();
+
             if (ComboTimer > 1f)
             {
                 switch (ComboAction)
@@ -383,6 +385,8 @@ internal partial class NIN : Melee
 
             if (IsEnabled(Preset.NIN_ST_AdvancedMode_PhantomKamaitachi) && CanPhantomKamaitachi)
                 return PhantomKamaitachi;
+
+            ReportNINPositionalHints();
 
             if (ComboTimer > 1f)
             {

@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using WrathCombo.CustomComboNS;
 using WrathCombo.CustomComboNS.Functions;
+using WrathCombo.API.Enum;
 using static FFXIVClientStructs.FFXIV.Client.Game.ActionManager;
 using static WrathCombo.Combos.PvE.SAM.Config;
 using static WrathCombo.CustomComboNS.Functions.CustomComboFunctions;
@@ -17,6 +18,8 @@ internal partial class SAM
 
     private static uint DoBasicCombo(uint actionId, bool useTrueNorth = true, bool simpleMode = false)
     {
+        ReportSAMPositionalHints(simpleMode);
+
         int tnCharges = IsNotEnabled(Preset.SAM_ST_SimpleMode) ? SAM_ST_ManualTN : 0;
 
         if (ComboTimer > 0)
@@ -64,6 +67,34 @@ internal partial class SAM
                     : Kasha;
         }
         return actionId;
+    }
+
+    private static void ReportSAMPositionalHints(bool simpleMode)
+    {
+        if (!TargetNeedsPositionals() || !HasBattleTarget() || ComboTimer <= 0)
+            return;
+
+        if (ComboAction is Jinpu && LevelChecked(Gekko))
+            ReportUpcomingPositional(PositionalDirection.Rear, Gekko, 1);
+        else if (ComboAction is Shifu && LevelChecked(Kasha))
+            ReportUpcomingPositional(PositionalDirection.Flank, Kasha, 1);
+        else if (ComboAction is Hakaze or Gyofu)
+        {
+            if ((simpleMode || IsEnabled(Preset.SAM_ST_Gekko)) &&
+                LevelChecked(Jinpu) &&
+                (!LevelChecked(Kasha) && LevelChecked(Gekko) ||
+                 (OnTargetsRear() || OnTargetsFront()) && !HasGetsu && LevelChecked(Gekko) ||
+                 OnTargetsFlank() && HasKa && LevelChecked(Gekko) ||
+                 !HasStatusEffect(Buffs.Fugetsu)))
+                ReportUpcomingPositional(PositionalDirection.Rear, Gekko, 2);
+
+            else if ((simpleMode || IsEnabled(Preset.SAM_ST_Kasha)) &&
+                     LevelChecked(Shifu) &&
+                     ((OnTargetsFlank() || OnTargetsFront()) && !HasKa && LevelChecked(Kasha) ||
+                      OnTargetsRear() && HasGetsu && LevelChecked(Kasha) ||
+                      !HasStatusEffect(Buffs.Fuka)))
+                ReportUpcomingPositional(PositionalDirection.Flank, Kasha, 2);
+        }
     }
 
     #endregion

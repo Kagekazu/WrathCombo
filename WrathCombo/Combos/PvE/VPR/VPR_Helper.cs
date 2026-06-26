@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using WrathCombo.CustomComboNS;
 using WrathCombo.CustomComboNS.Functions;
+using WrathCombo.API.Enum;
 using static FFXIVClientStructs.FFXIV.Client.Game.ActionManager;
 using static WrathCombo.Combos.PvE.VPR.Config;
 using static WrathCombo.CustomComboNS.Functions.CustomComboFunctions;
@@ -15,6 +16,9 @@ internal partial class VPR
 
     private static uint DoBasicCombo(uint actionId, bool useTrueNorth = false, bool isAoE = false)
     {
+        if (!isAoE)
+            ReportVPRPositionalHints();
+
         switch (isAoE)
         {
             case false:
@@ -117,6 +121,41 @@ internal partial class VPR
 
                 return actionId;
             }
+        }
+    }
+
+    private static void ReportVPRPositionalHints()
+    {
+        if (!TargetNeedsPositionals() || !HasBattleTarget() || ComboTimer <= 0)
+            return;
+
+        if (ComboAction is HuntersSting or SwiftskinsSting)
+        {
+            if ((HasStatusEffect(Buffs.FlanksbaneVenom) || HasStatusEffect(Buffs.HindsbaneVenom)) &&
+                LevelChecked(HindstingStrike))
+            {
+                if (HasStatusEffect(Buffs.HindsbaneVenom))
+                    ReportUpcomingPositional(PositionalDirection.Rear, OriginalHook(ReavingFangs), 1);
+                else if (HasStatusEffect(Buffs.FlanksbaneVenom))
+                    ReportUpcomingPositional(PositionalDirection.Flank, OriginalHook(ReavingFangs), 1);
+            }
+            else if ((HasStatusEffect(Buffs.FlankstungVenom) || HasStatusEffect(Buffs.HindstungVenom)) &&
+                     LevelChecked(FlanksbaneFang))
+            {
+                if (HasStatusEffect(Buffs.HindstungVenom))
+                    ReportUpcomingPositional(PositionalDirection.Rear, OriginalHook(SteelFangs), 1);
+                else if (HasStatusEffect(Buffs.FlankstungVenom))
+                    ReportUpcomingPositional(PositionalDirection.Flank, OriginalHook(SteelFangs), 1);
+            }
+        }
+        else if (ComboAction is ReavingFangs or SteelFangs)
+        {
+            if (LevelChecked(SwiftskinsSting) &&
+                (HasHindVenom || NoSwiftscaled || NoBasicComboVenom))
+                ReportUpcomingPositional(PositionalDirection.Rear, OriginalHook(ReavingFangs), 2);
+            else if (LevelChecked(HuntersSting) &&
+                     (HasFlankVenom || NoHuntersInstinct))
+                ReportUpcomingPositional(PositionalDirection.Flank, OriginalHook(SteelFangs), 2);
         }
     }
 

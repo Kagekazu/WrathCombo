@@ -4,6 +4,7 @@ using System.Collections.Frozen;
 using System.Collections.Generic;
 using WrathCombo.CustomComboNS;
 using WrathCombo.CustomComboNS.Functions;
+using WrathCombo.API.Enum;
 using static WrathCombo.Combos.PvE.DRG.Config;
 using static WrathCombo.CustomComboNS.Functions.CustomComboFunctions;
 namespace WrathCombo.Combos.PvE;
@@ -14,6 +15,9 @@ internal partial class DRG
 
     private static uint BasicCombo(uint actionId, bool useTrueNorth = false, bool isAoE = false, bool simpleAoE = false)
     {
+        if (!isAoE)
+            ReportDRGPositionalHints();
+
         int tnCharges = IsNotEnabled(Preset.DRG_ST_SimpleMode) ? DRG_ManualTN : 0;
 
         switch (isAoE)
@@ -92,6 +96,34 @@ internal partial class DRG
         }
 
         return actionId;
+    }
+
+    private static void ReportDRGPositionalHints()
+    {
+        if (!TargetNeedsPositionals() || !HasBattleTarget())
+            return;
+
+        if (ComboTimer <= 0)
+            return;
+
+        if (ComboAction == OriginalHook(Disembowel) && LevelChecked(ChaosThrust))
+            ReportUpcomingPositional(PositionalDirection.Rear, OriginalHook(ChaosThrust), 1);
+        else if (ComboAction == OriginalHook(ChaosThrust) && LevelChecked(WheelingThrust))
+            ReportUpcomingPositional(PositionalDirection.Rear, WheelingThrust, 1);
+        else if (ComboAction == OriginalHook(FullThrust) && LevelChecked(FangAndClaw))
+            ReportUpcomingPositional(PositionalDirection.Flank, FangAndClaw, 1);
+        else if (ComboAction == OriginalHook(VorpalThrust) && LevelChecked(FullThrust) && LevelChecked(FangAndClaw))
+            ReportUpcomingPositional(PositionalDirection.Flank, FangAndClaw, 2);
+        else if (ComboAction is TrueThrust or RaidenThrust && LevelChecked(VorpalThrust))
+        {
+            var disembowelPath = LevelChecked(Disembowel) &&
+                                 (LevelChecked(ChaosThrust) && ChaosDebuff is null &&
+                                  CanApplyStatus(CurrentTarget, ChaoticList[OriginalHook(ChaosThrust)]) ||
+                                  GetStatusEffectRemainingTime(Buffs.PowerSurge) < 15);
+
+            if (disembowelPath && LevelChecked(ChaosThrust))
+                ReportUpcomingPositional(PositionalDirection.Rear, OriginalHook(ChaosThrust), 2);
+        }
     }
 
     #endregion

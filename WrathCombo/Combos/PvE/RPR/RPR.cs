@@ -97,6 +97,8 @@ internal partial class RPR : Melee
             if (CanUseShadowOfDeath())
                 return ShadowOfDeath;
 
+            ReportRPRPositionalHints(simpleMode: true);
+
             //Gibbet/Gallows
             if (LevelChecked(Gibbet) && !HasStatusEffect(Buffs.Enshrouded) &&
                 (HasStatusEffect(Buffs.SoulReaver) || HasStatusEffect(Buffs.Executioner)))
@@ -379,6 +381,8 @@ internal partial class RPR : Melee
             if (IsEnabled(Preset.RPR_ST_SoD) &&
                 CanUseShadowOfDeath() && GetTargetHPPercent() > RPR_SoDHPThreshold)
                 return ShadowOfDeath;
+
+            ReportRPRPositionalHints();
 
             //Gibbet/Gallows
             if (IsEnabled(Preset.RPR_ST_GibbetGallows) &&

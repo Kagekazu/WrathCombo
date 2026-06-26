@@ -7,6 +7,7 @@ using WrathCombo.CustomComboNS;
 using WrathCombo.CustomComboNS.Functions;
 using WrathCombo.Data;
 using WrathCombo.Extensions;
+using WrathCombo.API.Enum;
 using static WrathCombo.Combos.PvE.NIN.Config;
 using static WrathCombo.CustomComboNS.Functions.CustomComboFunctions;
 namespace WrathCombo.Combos.PvE;
@@ -81,6 +82,31 @@ internal partial class NIN
     internal static bool CanThrowingDaggersAoE => !MudraPhase && ActionReady(ThrowingDaggers) && HasTarget() && GetTargetDistance() >= 4.5 && InActionRange(ThrowingDaggers) &&
                                                   !HasStatusEffect(Buffs.RaijuReady);
     internal static bool CanRaiju => !MudraPhase && HasStatusEffect(Buffs.RaijuReady);
+
+    internal static void ReportNINPositionalHints()
+    {
+        if (MudraPhase || !TargetNeedsPositionals() || !HasBattleTarget() || ComboTimer <= 1f)
+            return;
+
+        switch (ComboAction)
+        {
+            case GustSlash when LevelChecked(ArmorCrush):
+                if (gauge.Kazematoi is 0)
+                    ReportUpcomingPositional(PositionalDirection.Flank, ArmorCrush, 1);
+                else if (gauge.Kazematoi >= 4 && LevelChecked(AeolianEdge))
+                    ReportUpcomingPositional(PositionalDirection.Rear, AeolianEdge, 1);
+                break;
+
+            case SpinningEdge when LevelChecked(GustSlash) && LevelChecked(ArmorCrush) && gauge.Kazematoi is 0:
+                ReportUpcomingPositional(PositionalDirection.Flank, ArmorCrush, 2);
+                break;
+
+            case SpinningEdge when LevelChecked(GustSlash) && !LevelChecked(ArmorCrush) && LevelChecked(AeolianEdge):
+                ReportUpcomingPositional(PositionalDirection.Rear, AeolianEdge, 2);
+                break;
+        }
+    }
+
     #endregion
 
     #region Buff Window Logic
