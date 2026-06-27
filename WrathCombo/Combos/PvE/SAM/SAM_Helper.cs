@@ -23,7 +23,7 @@ internal partial class SAM
         bool useGekko = true,
         int trueNorthCharges = 0)
     {
-        ReportSAMPositionalHints(simpleMode);
+        ReportSAMPositionalHints(useGekko, useKasha);
 
         int tnCharges = IsNotEnabled(Preset.SAM_ST_SimpleMode) ? SAM_ST_ManualTN : 0;
 
@@ -75,7 +75,7 @@ internal partial class SAM
         return OriginalHook(Hakaze);
     }
 
-    private static void ReportSAMPositionalHints(bool simpleMode)
+    private static void ReportSAMPositionalHints(bool useGekko, bool useKasha)
     {
         if (!TargetNeedsPositionals() || !HasBattleTarget() || ComboTimer <= 0)
             return;
@@ -86,7 +86,7 @@ internal partial class SAM
             ReportUpcomingPositional(PositionalDirection.Flank, Kasha, 1);
         else if (ComboAction is Hakaze or Gyofu)
         {
-            if ((simpleMode || IsEnabled(Preset.SAM_ST_Gekko)) &&
+            if (useGekko &&
                 LevelChecked(Jinpu) &&
                 (!LevelChecked(Kasha) && LevelChecked(Gekko) ||
                  (OnTargetsRear() || OnTargetsFront()) && !HasGetsu && LevelChecked(Gekko) ||
@@ -94,7 +94,7 @@ internal partial class SAM
                  !HasStatusEffect(Buffs.Fugetsu)))
                 ReportUpcomingPositional(PositionalDirection.Rear, Gekko, 2);
 
-            else if ((simpleMode || IsEnabled(Preset.SAM_ST_Kasha)) &&
+            else if (useKasha &&
                      LevelChecked(Shifu) &&
                      ((OnTargetsFlank() || OnTargetsFront()) && !HasKa && LevelChecked(Kasha) ||
                       OnTargetsRear() && HasGetsu && LevelChecked(Kasha) ||
