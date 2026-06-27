@@ -21,6 +21,7 @@ using WrathCombo.CustomComboNS;
 using WrathCombo.CustomComboNS.Functions;
 using WrathCombo.Data;
 using WrathCombo.Extensions;
+using WrathCombo.Native;
 using WrathCombo.Services;
 using WrathCombo.Services.IPC_Subscriber;
 using WrathCombo.Window.Functions;
@@ -800,6 +801,11 @@ internal unsafe class AutoRotationController
             if (LocalPlayer is not { } player)
                 return false;
 
+            var target = !cfg.DPSSettings.AoEIgnoreManual && cfg.DPSRotationMode == DPSRotationMode.Manual ?
+    Svc.Targets.Target : DPSTargeting.BaseSelection.MaxBy(x => NumberOfEnemiesInRange(OriginalHook(gameAct), x, true));
+
+            if (target is null && cfg.PauseWhenNoTarget) return true;
+
             if (attributes.AutoAction!.IsHeal)
             {
                 LockedAoE = false;
@@ -831,9 +837,6 @@ internal unsafe class AutoRotationController
             }
             else
             {
-                var target = !cfg.DPSSettings.AoEIgnoreManual && cfg.DPSRotationMode == DPSRotationMode.Manual ?
-                    Svc.Targets.Target : DPSTargeting.BaseSelection.MaxBy(x => NumberOfEnemiesInRange(OriginalHook(gameAct), x, true));
-
                 if (!NIN.InMudra)
                 {
                     var st = GetSingleTarget(mode);
@@ -854,6 +857,7 @@ internal unsafe class AutoRotationController
                         LockedST = false;
                     }
                 }
+
                 OverrideTarget = target ?? OverrideTarget;
                 uint outAct = OriginalHook(InvokeCombo(preset, attributes, ref gameAct, OverrideTarget));
                 if (outAct is All.SavageBlade) return true;
@@ -923,6 +927,9 @@ internal unsafe class AutoRotationController
                 return false;
 
             var target = GetSingleTarget(mode);
+
+            if (target is null && cfg.PauseWhenNoTarget) return true;
+
             OverrideTarget = target ?? OverrideTarget;
             var outAct = OriginalHook(InvokeCombo(preset, attributes, ref gameAct, target));
             if (!ActionReady(outAct))
@@ -1009,9 +1016,13 @@ internal unsafe class AutoRotationController
         {
             if (attributes.ReplaceSkill is null) return originalAct;
             var outAct = attributes.ReplaceSkill.ActionIDs.FirstOrDefault();
-            foreach (var actToCheck in attributes.ReplaceSkill.ActionIDs)
+            var customReplaceType = CustomActionHelper.GetTypeByAttribute(attributes.AutoAction!);
+            var customReplaced = CustomActionHelper.CustomActionEnabled(customReplaceType);
+            var customCombo = Service.ActionReplacer.CustomCombos.FirstOrDefault(x => x.Preset == preset);
+            foreach (var act in attributes.ReplaceSkill.ActionIDs)
             {
-                var customCombo = Service.ActionReplacer.CustomCombos.FirstOrDefault(x => x.Preset == preset);
+                var actToCheck = customReplaced ? CustomActionHelper.GetActionId(customReplaceType) : act;
+
                 if (customCombo != null)
                 {
                     if (customCombo.TryInvoke(actToCheck, out var changedAct, optionalTarget))
@@ -1033,6 +1044,7 @@ internal unsafe class AutoRotationController
         private static bool Query(IGameObject x) =>
             x is IBattleChara chara &&
             !chara.IsDead &&
+            GetTargetCurrentHP(chara, true) > 0 &&
             chara.IsTargetable &&
             chara.IsHostile() &&
             IsInRange(chara, InBossEncounter() && cfg.DPSSettings.IgnoreRangeInBoss ? 50f : cfg.DPSSettings.MaxDistance) &&

@@ -1,4 +1,6 @@
+using Dalamud.Bindings.ImPlot;
 using Dalamud.Game.ClientState.Objects.Types;
+using ECommons.DalamudServices;
 using ECommons.GameFunctions;
 using System.Linq;
 using WrathCombo.AutoRotation;
@@ -6,6 +8,7 @@ using WrathCombo.Core;
 using WrathCombo.CustomComboNS;
 using WrathCombo.Data;
 using WrathCombo.Extensions;
+using WrathCombo.Native;
 using static WrathCombo.Combos.PvE.SCH.Config;
 using EZ = ECommons.Throttlers.EzThrottler;
 using TS = System.TimeSpan;
@@ -20,8 +23,7 @@ internal partial class SCH : Healer
 
         protected override uint Invoke(uint actionID)
         {
-            if (!BroilList.Contains(actionID))
-                return actionID;
+            if (!CustomActionHelper.OneButtonRotationChecker(actionID, CustomActionType.SingleTargetDPS, BroilList.ToArray())) return actionID;
 
             if (NeedToSummon)
                 return SummonEos;
@@ -57,7 +59,7 @@ internal partial class SCH : Healer
             //Bio/Biolysis
             var dotAction = OriginalHook(Bio);
             BioList.TryGetValue(dotAction, out var dotDebuffID);
-            var target = SimpleTarget.DottableEnemy(dotAction, dotDebuffID, 0, 3, 2);
+            var target = SimpleTarget.DottableEnemy(dotAction, dotDebuffID, 0, 3, 99);
             
             if (target is not null && ActionReady(dotAction) && CanApplyStatus(target, dotDebuffID) && !JustUsedOn(dotAction, target) && PartyInCombat())
                 return dotAction.Retarget(BroilList.ToArray(), target);
@@ -66,7 +68,7 @@ internal partial class SCH : Healer
             if (ActionReady(Ruin2) && IsMoving() && InCombat())
                 return OriginalHook(Ruin2);
 
-            return actionID;
+            return OriginalHook(Broil);
         }
     }
     
@@ -76,8 +78,7 @@ internal partial class SCH : Healer
 
         protected override uint Invoke(uint actionID)
         {
-            if (actionID is not (ArtOfWar or ArtOfWarII))
-                return actionID;
+            if (!CustomActionHelper.OneButtonRotationChecker(actionID, CustomActionType.AoEDPS, ArtOfWar, ArtOfWarII)) return actionID;
 
             if (NeedToSummon)
                 return SummonEos;
@@ -111,12 +112,12 @@ internal partial class SCH : Healer
                 SimpleTarget.DottableEnemy(dotAction, dotDebuffID, 30, 3, 4);
 
             if (ActionReady(dotAction) && target != null)
-                return OriginalHook(Bio).Retarget([ArtOfWar, ArtOfWarII], target);
+                return OriginalHook(Bio).Retarget(actionID, target);
 
             if (Role.CanLucidDream(SCH_AoE_DPS_LucidOption) && CanWeave())
                 return Role.LucidDreaming;
 
-            return actionID;
+            return OriginalHook(ArtOfWar);
         }
     }
 
@@ -129,9 +130,8 @@ internal partial class SCH : Healer
 
         protected override uint Invoke(uint actionID)
         {
-            if (actionID is not Physick)
-                return actionID;
-            
+            if (!CustomActionHelper.OneButtonRotationChecker(actionID, CustomActionType.SingleTargetHeals, Physick)) return actionID;
+
             #region Variables
             var healTarget = SimpleTarget.Stack.OneButtonHealLogic;
             #endregion
@@ -145,7 +145,7 @@ internal partial class SCH : Healer
             
             if (ActionReady(Role.Esuna) && GetTargetHPPercent(healTarget) >= 40 &&
                 cleansableTarget)
-                return Role.Esuna.RetargetIfEnabled(Physick);
+                return Role.Esuna.RetargetIfEnabled(actionID);
             
             if (ActionReady(Aetherflow) && !HasAetherflow &&
                 InCombat())
@@ -163,21 +163,21 @@ internal partial class SCH : Healer
             
             if (ActionReady(Excogitation) &&
                 GetTargetHPPercent(healTarget) <= 50)
-                return Excogitation.RetargetIfEnabled(Physick);
+                return Excogitation.RetargetIfEnabled(actionID);
             
             if (ActionReady(Lustrate) &&
                 GetTargetHPPercent(healTarget) <= 50)
-                return Lustrate.RetargetIfEnabled(Physick);
+                return Lustrate.RetargetIfEnabled(actionID);
             
             if (ActionReady(SacredSoil) && !InBossEncounter() &&
                 TimeStoodStill >= TS.FromSeconds(5))
-                return SacredSoil.Retarget(Physick, SimpleTarget.Self);
+                return SacredSoil.Retarget(actionID, SimpleTarget.Self);
             
             if (ActionReady(Protraction) && (healTarget.IsInParty() && healTarget.Role is CombatRole.Tank || !IsInParty())) 
-                return Protraction.RetargetIfEnabled(Physick);
+                return Protraction.RetargetIfEnabled(actionID);
             
             if (Gauge.FairyGauge >= 50 && IsOriginal(Aetherpact) && !FairyBusy && ActionReady(Aetherpact))
-                return Aetherpact.RetargetIfEnabled(Physick);
+                return Aetherpact.RetargetIfEnabled(actionID);
 
             if (!InBossEncounter() && HasPetPresent() && !FairyBusy)
             {
@@ -203,9 +203,9 @@ internal partial class SCH : Healer
             if (ActionReady(OriginalHook(Adloquium)))
                 return ActionReady(OriginalHook(EmergencyTactics)) && (HasStatusEffect(Buffs.Galvanize, healTarget, true) || !HasStatusEffect(Buffs.EmergencyTactics))
                     ? OriginalHook(EmergencyTactics)
-                    : OriginalHook(Adloquium).RetargetIfEnabled(Physick);
+                    : OriginalHook(Adloquium).RetargetIfEnabled(actionID);
             
-            return actionID.RetargetIfEnabled();
+            return Physick.RetargetIfEnabled();
         }
     }
     
@@ -215,9 +215,8 @@ internal partial class SCH : Healer
 
         protected override uint Invoke(uint actionID)
         {
-            if (actionID is not (Succor or Concitation))
-                return actionID;
-            
+            if (!CustomActionHelper.OneButtonRotationChecker(actionID, CustomActionType.AoEHeals, Succor, Concitation)) return actionID;
+
             if (EndAetherpact)
                 return DissolveUnion;
             
@@ -225,7 +224,7 @@ internal partial class SCH : Healer
                 return Expedient;
             
             if (ActionReady(SacredSoil) && GroupDamageIncoming())
-                return SacredSoil.Retarget([Succor, Concitation], SimpleTarget.Self);
+                return SacredSoil.Retarget(actionID, SimpleTarget.Self);
             
             if (ActionReady(Aetherflow) && !HasAetherflow &&
                 InCombat())
@@ -262,7 +261,7 @@ internal partial class SCH : Healer
             
             return ActionReady(OriginalHook(EmergencyTactics)) && (GetPartyBuffPercent(Buffs.Galvanize) >= 50 || GetPartyBuffPercent(SGE.Buffs.EukrasianPrognosis) >= 50)
                 ? OriginalHook(EmergencyTactics)
-                : actionID;
+                : OriginalHook(Succor);
         }
     }
     #endregion
@@ -282,8 +281,10 @@ internal partial class SCH : Healer
                 _ => BroilList.ToArray(),
             };
 
-            if (!replacedActions.Contains(actionID))
-                return actionID;
+            if (!CustomActionHelper.OneButtonRotationChecker(actionID, CustomActionType.SingleTargetDPS, replacedActions.ToArray())) return actionID;
+
+            if (CustomActionHelper.CustomActionEnabled(CustomActionType.SingleTargetDPS))
+                replacedActions = [All.SingleTargetDPS];
 
             #region Variables
             int chainThreshold = SCH_ST_DPS_ChainStratagemSubOption == 1 || !InBossEncounter() ? SCH_ST_DPS_ChainStratagemOption : 0;
@@ -319,6 +320,8 @@ internal partial class SCH : Healer
                 if (IsEnabled(Preset.SCH_ST_ADV_DPS_BanefulImpact) && HasStatusEffect(Buffs.ImpactImminent) && !JustUsed(ChainStratagem))
                     return BanefulImpaction;
 
+
+                Svc.Log.Debug($"{IsEnabled(Preset.SCH_ST_ADV_DPS_ChainStrat)} {ActionWatching.NumberOfGcdsUsed > 3} {CanChainStrategem} {GetTargetHPPercent()} {chainThreshold}");
                 if (IsEnabled(Preset.SCH_ST_ADV_DPS_ChainStrat) && ActionWatching.NumberOfGcdsUsed > 3 && CanChainStrategem &&
                     GetTargetHPPercent() > chainThreshold)
                     return ChainStratagem;
@@ -357,7 +360,7 @@ internal partial class SCH : Healer
             if (alternateMode)
                 return OriginalHook(Ruin);
 
-            return actionID;
+            return OriginalHook(replacedActions.First());
         }
     }
     
@@ -371,8 +374,7 @@ internal partial class SCH : Healer
             int chainThreshold = SCH_AoE_DPS_ChainStratagemSubOption == 1 || !InBossEncounter() ? SCH_AoE_DPS_ChainStratagemOption : 0;
             #endregion
 
-            if (actionID is not (ArtOfWar or ArtOfWarII))
-                return actionID;
+            if (!CustomActionHelper.OneButtonRotationChecker(actionID, CustomActionType.AoEDPS, ArtOfWar, ArtOfWarII)) return actionID;
 
             if (IsEnabled(Preset.SCH_AoE_ADV_DPS_FairyReminder) &&
                 NeedToSummon)
@@ -421,12 +423,12 @@ internal partial class SCH : Healer
 
             if (IsEnabled(Preset.SCH_AoE_ADV_DPS_DoT) &&
                 ActionReady(dotAction) && target != null)
-                return OriginalHook(Bio).Retarget([ArtOfWar, ArtOfWarII], target);
+                return OriginalHook(Bio).Retarget(actionID, target);
 
             if (IsEnabled(Preset.SCH_AoE_ADV_DPS_Lucid) && Role.CanLucidDream(SCH_AoE_DPS_LucidOption) && CanWeave())
                 return Role.LucidDreaming;
 
-            return actionID;
+            return OriginalHook(ArtOfWar);
         }
     }
 
@@ -439,8 +441,7 @@ internal partial class SCH : Healer
 
         protected override uint Invoke(uint actionID)
         {
-            if (actionID is not Physick)
-                return actionID;
+            if (!CustomActionHelper.OneButtonRotationChecker(actionID, CustomActionType.SingleTargetHeals, Physick)) return actionID;
 
             #region Variables
             var healTarget = SimpleTarget.Stack.OneButtonHealLogic;
@@ -456,7 +457,7 @@ internal partial class SCH : Healer
                 ActionReady(Role.Esuna) && cleansableTarget &&
                 GetTargetHPPercent(healTarget, SCH_ST_Heal_IncludeShields) >= SCH_ST_Heal_EsunaOption)
                 return Role.Esuna
-                    .RetargetIfEnabled(Physick);
+                    .RetargetIfEnabled(actionID);
 
             #endregion
 
@@ -506,11 +507,10 @@ internal partial class SCH : Healer
 
                     if (GetTargetHPPercent(healTarget, SCH_ST_Heal_IncludeShields) <= config &&
                         ActionReady(spell))
-                        return spell.RetargetIfEnabled(Physick);
+                        return spell.RetargetIfEnabled(actionID);
                 }
             }
-            return actionID
-                .RetargetIfEnabled(Physick);
+            return Physick.RetargetIfEnabled();
         }
     }
     
@@ -520,8 +520,7 @@ internal partial class SCH : Healer
 
         protected override uint Invoke(uint actionID)
         {
-            if (actionID is not (Succor or Concitation or Accession))
-                return actionID;
+            if (!CustomActionHelper.OneButtonRotationChecker(actionID, CustomActionType.AoEHeals, Succor, Concitation)) return actionID;
 
             #region Healing Helpers
             if (EndAetherpact)
@@ -567,7 +566,7 @@ internal partial class SCH : Healer
 
             return !LevelChecked(Succor) ?
                 WhisperingDawn :
-                actionID;
+                OriginalHook(Succor);
         }
     }
 

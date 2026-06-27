@@ -5,6 +5,7 @@ using System.Linq;
 using WrathCombo.CustomComboNS;
 using WrathCombo.Data;
 using WrathCombo.Extensions;
+using WrathCombo.Native;
 using static WrathCombo.Combos.PvE.NIN.Config;
 
 namespace WrathCombo.Combos.PvE;
@@ -18,9 +19,8 @@ internal partial class NIN : Melee
         protected internal override Preset Preset => Preset.NIN_ST_SimpleMode;
         protected override uint Invoke(uint actionID)
         {
-            if (actionID is not SpinningEdge)
-                return actionID;
-            
+            if (!CustomActionHelper.OneButtonRotationChecker(actionID, CustomActionType.SingleTargetDPS, SpinningEdge)) return actionID;
+
             //if (ActionWatching.TimeSinceLastAction.TotalSeconds >= 5 && !InCombat() ||
             //    ActionWatching.LastAction == OriginalHook(Ninjutsu) ||
             //    ActionWatching.LastAction == Raiton || //added because oddly, raiton and katon were not resetting the mudra state with original hook. 
@@ -141,11 +141,9 @@ internal partial class NIN : Melee
         protected internal MudraCasting MudraState = new();
         protected internal override Preset Preset => Preset.NIN_AoE_SimpleMode;
         protected override uint Invoke(uint actionID)
-
         {
-            if (actionID is not DeathBlossom)
-                return actionID;
-            
+            if (!CustomActionHelper.OneButtonRotationChecker(actionID, CustomActionType.AoEDPS, DeathBlossom)) return actionID;
+
             //if (ActionWatching.TimeSinceLastAction.TotalSeconds >= 5 && !InCombat() ||
             //    ActionWatching.LastAction == OriginalHook(Ninjutsu) ||
             //    ActionWatching.LastAction == Raiton || //added because oddly, raiton and katon were not resetting the mudra state with original hook. 
@@ -260,12 +258,11 @@ internal partial class NIN : Melee
         protected internal override Preset Preset => Preset.NIN_ST_AdvancedMode;
         protected override uint Invoke(uint actionID)
         {
-            if (actionID is not SpinningEdge)
-                return actionID;
-            
+            if (!CustomActionHelper.OneButtonRotationChecker(actionID, CustomActionType.SingleTargetDPS, SpinningEdge)) return actionID;
+
             //Troubleshooting tool Do Not Remove Please
             //PluginLog.Debug($"Current MudraState: {MudraState.CurrentMudra}");
-            
+
             //if (ActionWatching.TimeSinceLastAction.TotalSeconds >= 5 && !InCombat() ||
             //    ActionWatching.LastAction == OriginalHook(Ninjutsu) ||
             //    ActionWatching.LastAction == Raiton || //added because oddly, raiton and katon were not resetting the mudra state with original hook. 
@@ -409,7 +406,7 @@ internal partial class NIN : Melee
                         return TNAeolianEdge && NIN_ST_AdvancedMode_TrueNorth ? Role.TrueNorth : AeolianEdge;
                 }
             }
-            return actionID;
+            return OriginalHook(SpinningEdge);
             #endregion
         }
     }
@@ -420,9 +417,8 @@ internal partial class NIN : Melee
         protected internal override Preset Preset => Preset.NIN_AoE_AdvancedMode;
         protected override uint Invoke(uint actionID)
         {
-            if (actionID is not DeathBlossom)
-                return actionID;
-            
+            if (!CustomActionHelper.OneButtonRotationChecker(actionID, CustomActionType.AoEDPS, DeathBlossom)) return actionID;
+
             //if (ActionWatching.TimeSinceLastAction.TotalSeconds >= 5 && !InCombat() ||
             //    ActionWatching.LastAction == OriginalHook(Ninjutsu) ||
             //    ActionWatching.LastAction == Raiton || //added because oddly, raiton and katon were not resetting the mudra state with original hook. 
