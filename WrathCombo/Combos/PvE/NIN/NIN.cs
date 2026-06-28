@@ -21,6 +21,8 @@ internal partial class NIN : Melee
         {
             if (!CustomActionHelper.OneButtonRotationChecker(actionID, CustomActionType.SingleTargetDPS, SpinningEdge)) return actionID;
 
+            ReportNINPositionalHints();
+
             //if (ActionWatching.TimeSinceLastAction.TotalSeconds >= 5 && !InCombat() ||
             //    ActionWatching.LastAction == OriginalHook(Ninjutsu) ||
             //    ActionWatching.LastAction == Raiton || //added because oddly, raiton and katon were not resetting the mudra state with original hook. 
@@ -107,8 +109,6 @@ internal partial class NIN : Melee
 
             if (CanPhantomKamaitachi)
                 return PhantomKamaitachi;
-
-            ReportNINPositionalHints();
 
             if (ComboTimer > 1f)
             {
@@ -260,6 +260,8 @@ internal partial class NIN : Melee
         {
             if (!CustomActionHelper.OneButtonRotationChecker(actionID, CustomActionType.SingleTargetDPS, SpinningEdge)) return actionID;
 
+            ReportNINPositionalHints();
+
             //Troubleshooting tool Do Not Remove Please
             //PluginLog.Debug($"Current MudraState: {MudraState.CurrentMudra}");
 
@@ -382,8 +384,6 @@ internal partial class NIN : Melee
 
             if (IsEnabled(Preset.NIN_ST_AdvancedMode_PhantomKamaitachi) && CanPhantomKamaitachi)
                 return PhantomKamaitachi;
-
-            ReportNINPositionalHints();
 
             if (ComboTimer > 1f)
             {

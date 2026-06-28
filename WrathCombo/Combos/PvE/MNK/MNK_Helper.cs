@@ -108,8 +108,6 @@ internal partial class MNK
 
     private static uint DoBasicCombo(uint actionId, bool useTrueNorth = true, bool onAoE = false, int trueNorthCharges = 0)
     {
-        ReportMNKPositionalHints();
-
         int tnCharges = IsNotEnabled(Preset.MNK_ST_SimpleMode) ? MNK_ManualTN : 0;
         if (onAoE)
         {
@@ -165,6 +163,18 @@ internal partial class MNK
     private static void ReportMNKPositionalHints()
     {
         if (!TargetNeedsPositionals() || !HasBattleTarget() || !LevelChecked(TrueStrike))
+        {
+            ClearUpcomingPositional();
+            return;
+        }
+
+        if (HasStatusEffect(Buffs.PerfectBalance) || HasStatusEffect(Buffs.FormlessFist))
+        {
+            ClearUpcomingPositional();
+            return;
+        }
+
+        if (TryReportOpenerPositionalHint(Opener(), TryReportMNKActionPositional))
             return;
 
         if (HasStatusEffect(Buffs.CoeurlForm))
@@ -173,6 +183,8 @@ internal partial class MNK
                 ReportUpcomingPositional(PositionalDirection.Rear, Demolish, 1);
             else if (LevelChecked(SnapPunch))
                 ReportUpcomingPositional(PositionalDirection.Flank, OriginalHook(SnapPunch), 1);
+            else
+                ClearUpcomingPositional();
         }
         else if (HasStatusEffect(Buffs.RaptorForm) && LevelChecked(TrueStrike))
         {
@@ -180,7 +192,28 @@ internal partial class MNK
                 ReportUpcomingPositional(PositionalDirection.Rear, Demolish, 2);
             else if (LevelChecked(SnapPunch))
                 ReportUpcomingPositional(PositionalDirection.Flank, OriginalHook(SnapPunch), 2);
+            else
+                ClearUpcomingPositional();
         }
+        else
+            ClearUpcomingPositional();
+    }
+
+    private static bool TryReportMNKActionPositional(uint action, int gcdsUntil)
+    {
+        if (action == Demolish)
+        {
+            ReportUpcomingPositional(PositionalDirection.Rear, Demolish, gcdsUntil);
+            return true;
+        }
+
+        if (action == OriginalHook(SnapPunch))
+        {
+            ReportUpcomingPositional(PositionalDirection.Flank, OriginalHook(SnapPunch), gcdsUntil);
+            return true;
+        }
+
+        return false;
     }
 
     #endregion

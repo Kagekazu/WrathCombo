@@ -14,6 +14,8 @@ internal partial class RPR : Melee
         {
             if (!CustomActionHelper.OneButtonRotationChecker(actionID, CustomActionType.SingleTargetDPS, Slice)) return actionID;
 
+            ReportRPRPositionalHints(simpleMode: true);
+
             //Soulsow
             if (LevelChecked(Soulsow) &&
                 !HasStatusEffect(Buffs.Soulsow) &&
@@ -70,8 +72,6 @@ internal partial class RPR : Melee
 
             if (CanUseShadowOfDeath())
                 return ShadowOfDeath;
-
-            ReportRPRPositionalHints(simpleMode: true);
 
             //Gibbet/Gallows
             if (LevelChecked(Gibbet) && !HasStatusEffect(Buffs.Enshrouded) &&
@@ -175,6 +175,8 @@ internal partial class RPR : Melee
         {
             if (!CustomActionHelper.OneButtonRotationChecker(actionID, CustomActionType.SingleTargetDPS, Slice)) return actionID;
 
+            ReportRPRPositionalHints();
+
             int positionalChoice = RPR_Positional;
 
             //Soulsow
@@ -260,8 +262,6 @@ internal partial class RPR : Melee
                     IsEnabled(Preset.RPR_ST_ArcaneCircle)) &&
                 GetTargetHPPercent() > RPR_SoDHPThreshold)
                 return ShadowOfDeath;
-
-            ReportRPRPositionalHints();
 
             //Gibbet/Gallows
             if (IsEnabled(Preset.RPR_ST_GibbetGallows) &&

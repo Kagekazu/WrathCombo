@@ -23,8 +23,6 @@ internal partial class SAM
         bool useGekko = true,
         int trueNorthCharges = 0)
     {
-        ReportSAMPositionalHints(useGekko, useKasha);
-
         int tnCharges = IsNotEnabled(Preset.SAM_ST_SimpleMode) ? SAM_ST_ManualTN : 0;
 
         if (ComboTimer > 0)

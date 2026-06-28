@@ -14,6 +14,8 @@ internal partial class SAM : Melee
         {
             if (!CustomActionHelper.OneButtonRotationChecker(actionID, CustomActionType.SingleTargetDPS, Hakaze, Gyofu)) return actionID;
 
+            ReportSAMPositionalHints(true, true);
+
             //Meikyo to start before combat
             if (ActionReady(MeikyoShisui) &&
                 !HasStatusEffect(Buffs.MeikyoShisui) &&
@@ -161,6 +163,10 @@ internal partial class SAM : Melee
         protected override uint Invoke(uint actionID)
         {
             if (!CustomActionHelper.OneButtonRotationChecker(actionID, CustomActionType.SingleTargetDPS, Hakaze, Gyofu)) return actionID;
+
+            ReportSAMPositionalHints(
+                IsEnabled(Preset.SAM_ST_Gekko),
+                IsEnabled(Preset.SAM_ST_Kasha));
 
             // Opener for SAM
             if (IsEnabled(Preset.SAM_ST_Opener) &&

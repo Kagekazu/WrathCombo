@@ -14,6 +14,8 @@ internal partial class MNK : Melee
         {
             if (!CustomActionHelper.OneButtonRotationChecker(actionID, CustomActionType.SingleTargetDPS, Bootshine, LeapingOpo)) return actionID;
 
+            ReportMNKPositionalHints();
+
             if (CanMeditate())
                 return OriginalHook(SteeledMeditation);
 
@@ -152,6 +154,8 @@ internal partial class MNK : Melee
         protected override uint Invoke(uint actionID)
         {
             if (!CustomActionHelper.OneButtonRotationChecker(actionID, CustomActionType.SingleTargetDPS, Bootshine, LeapingOpo)) return actionID;
+
+            ReportMNKPositionalHints();
 
             if (IsEnabled(Preset.MNK_STUseOpener) &&
                 Opener().FullOpener(ref actionID))
