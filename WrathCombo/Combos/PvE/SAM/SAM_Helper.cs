@@ -646,8 +646,7 @@ internal partial class SAM
 
         protected static bool TendoKaeshiUnavailable() =>
             !HasStatusEffect(Buffs.TsubameReady) &&
-            !HasStatusEffect(Buffs.TendoKaeshiSetsugekkaReady) &&
-            !JustUsed(TendoSetsugekka);
+            !HasStatusEffect(Buffs.TendoKaeshiSetsugekkaReady);
 
         protected static bool ShohaUnavailable() =>
             MeditationStacks < 3 &&
